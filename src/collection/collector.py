@@ -2,21 +2,17 @@ import json
 import os
 from src.data.manager import get_games, get_comments, save_comments
 
-def search_for_comments(game_id, coach_name):
+def search_for_comments(game_id, coach_name, date):
     """
     Real mechanism: This function is intended to be called by an LLM-powered agent.
-    Since this is a script, we provide the interface for an agent to fill.
+    The date is used as a filter to ensure the correct match is identified.
     """
-    # In a production environment, this would call a Tool/Agent that:
-    # 1. Constructs a query: "coach_name interview la liga game_id"
-    # 2. Searches Google/Bing for recent articles.
-    # 3. Extracts the specific quotes about the referee using an LLM.
+    print(f"Searching for comments from {coach_name} for game {game_id} (Date: {date})...")
     
-    print(f"Searching for comments from {coach_name} for game {game_id}...")
+    # In a production environment, the agent would use the date in the query:
+    # "Search for {coach_name} interview after {date} for match {game_id}"
     
-    # We return a special token that the main pipeline can recognize 
-    # to trigger an actual Agentic Task if running in an agent-enabled environment.
-    return "AGENT_REQUIRED: Please fetch the latest interview for " + coach_name
+    return f"AGENT_REQUIRED: Please fetch the latest interview for {coach_name} from {date}"
 
 def collect_matchday_comments():
     games = get_games()
@@ -29,12 +25,12 @@ def collect_matchday_comments():
         for coach_key in ["home_coach", "away_coach"]:
             coach_name = game[coach_key]
             game_id = game["game_id"]
+            game_date = game["date"]
             
             if not any(c["game_id"] == game_id and c["coach"] == coach_name for c in comments):
                 sought_count += 1
-                quote = search_for_comments(game_id, coach_name)
+                quote = search_for_comments(game_id, coach_name, game_date)
                 
-                # Only add if it's a real quote and not the requirement token
                 if quote and not quote.startswith("AGENT_REQUIRED"):
                     found_count += 1
                     comments.append({
@@ -45,7 +41,6 @@ def collect_matchday_comments():
     
     save_comments(comments)
     
-    # Report generation
     num_matches = len(games)
     existing_comments_count = len(comments)
     print(f"--- Collection Report ---")
@@ -55,6 +50,7 @@ def collect_matchday_comments():
     print(f"Comments found: {found_count}")
     print(f"Comments not found/Agent required: {sought_count - found_count}")
     print(f"----------------------------")
+
 
 
 
