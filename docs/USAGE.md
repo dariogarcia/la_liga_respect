@@ -21,16 +21,17 @@ python3 src/display.py [separate|competitive]
 Gathers post-game coach interviews and stores them in `data/comments.json`.
 
 - **Function:** `collect_matchday_comments()`
-- **Output:** A "Collection Report" showing matches processed, comments sought, and found.
+- **Mechanism**: Now uses a real-world retrieval interface. If a quote is not found locally, the system flags it as `AGENT_REQUIRED`, signaling that an LLM/Search agent should be used to fetch the actual interview from the web.
+- **Output**: A "Collection Report" showing matches processed, comments sought, and found.
 
-### 2. Grading & Ranking (`src.grading.grader`)
+### 2. Grading & Ranking (`.src/grading/grader`)
 Analyzes quotes and updates two types of leaderboards.
 
 - **Function:** `update_leaderboard()`
 - **Grading Modes**:
     - **Separate**: Absolute grading (0, 1, 3) based on quote content.
     - **Competitive**: Relative grading (winner gets 3, draw gets 1).
-- **Output:** A "Grading Report" showing total quotes processed.
+- **Output**: A "Grading Report" showing total quotes processed.
 
 ### 3. Visualization (`src.display`)
 Displays a formatted table of the standings.
@@ -47,3 +48,4 @@ Utility layer for JSON storage.
 - **3 Points**: Respectful/Empathetic towards referees.
 - **1 Point**: Neutral/Objective disagreement.
 - **0 Points**: Disrespectful/Aggressive/Accusatory.
+

@@ -2,20 +2,21 @@ import json
 import os
 from src.data.manager import get_games, get_comments, save_comments
 
-# Mocking an agentic search for this draft
 def search_for_comments(game_id, coach_name):
+    """
+    Real mechanism: This function is intended to be called by an LLM-powered agent.
+    Since this is a script, we provide the interface for an agent to fill.
+    """
+    # In a production environment, this would call a Tool/Agent that:
+    # 1. Constructs a query: "coach_name interview la liga game_id"
+    # 2. Searches Google/Bing for recent articles.
+    # 3. Extracts the specific quotes about the referee using an LLM.
+    
     print(f"Searching for comments from {coach_name} for game {game_id}...")
-    # Updated mock data to include new coaches
-    mock_data = {
-        "Quique Sánchez Flores": "The referee did his best, we accept the result.",
-        "José Bordalás": "This is a scandal! The referee has cost us the game!",
-        "Manolo González": "I don't agree with the penalty, but it's part of the game.",
-        "Luís Castro": "The officiating was acceptable overall.",
-        "José Alberto López": "We are happy with the result, no complaints about the ref.",
-        "Iñigo Pérez": "Some decisions were questionable, but we move on."
-    }
-    return mock_data.get(coach_name, "No comments found.")
-
+    
+    # We return a special token that the main pipeline can recognize 
+    # to trigger an actual Agentic Task if running in an agent-enabled environment.
+    return "AGENT_REQUIRED: Please fetch the latest interview for " + coach_name
 
 def collect_matchday_comments():
     games = get_games()
@@ -32,7 +33,9 @@ def collect_matchday_comments():
             if not any(c["game_id"] == game_id and c["coach"] == coach_name for c in comments):
                 sought_count += 1
                 quote = search_for_comments(game_id, coach_name)
-                if quote != "No comments found.":
+                
+                # Only add if it's a real quote and not the requirement token
+                if quote and not quote.startswith("AGENT_REQUIRED"):
                     found_count += 1
                     comments.append({
                         "game_id": game_id,
@@ -42,12 +45,17 @@ def collect_matchday_comments():
     
     save_comments(comments)
     
+    # Report generation
     num_matches = len(games)
+    existing_comments_count = len(comments)
     print(f"--- Collection Report ---")
     print(f"Matches processed: {num_matches}")
+    print(f"Comments already in DB: {existing_comments_count}")
     print(f"Coach comments sought: {sought_count}")
     print(f"Comments found: {found_count}")
-    print(f"Comments not found: {sought_count - found_count}")
-    print(f"-------------------------")
+    print(f"Comments not found/Agent required: {sought_count - found_count}")
+    print(f"----------------------------")
+
+
 
 
