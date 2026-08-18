@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respect Rank - La Liga</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #1a3a5a;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        .description {
+            text-align: center;
+            max-width: 600px;
+            margin-bottom: 30px;
+            color: #666;
+            font-size: 1.1rem;
+        }
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #1a3a5a;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            background-color: #2a4a6a;
+            transform: translateY(-2px);
+        }
+        button.active {
+            background-color: #e67e22;
+            box-shadow: 0 0 10px rgba(230, 126, 34, 0.5);
+            font-weight: bold;
+        }
+        .table-container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background-color: #1a3a5a;
+            color: white;
+            padding: 15px;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-align: left;
+        }
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 15px;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover {
+            background-color: #fdfdfd;
+        }
+        .pos-col { width: 60px; text-align: center; font-weight: bold; color: #888; }
+        .team-cell { display: flex; align-items: center; gap: 12px; }
+        .team-icon { width: 24px; height: 24px; object-fit: contain; }
+        .pts-col { width: 100px; text-align: center; font-weight: bold; color: #1a3a5a; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+
+    <h1>🏆 Respect Rank: La Liga</h1>
+    <div class="description">
+        Ranking football managers based on their respect for referees during post-game interviews.
+    </div>
+
+    <div class="controls">
+        <button id="btn-separate" class="active" onclick="loadLeaderboard('separate')">Separate Mode</button>
+        <button id="btn-competitive" onclick="loadLeaderboard('competitive')">Competitive Mode</button>
+    </div>
+
+    <div class="table-container">
+        <table id="leaderboard-table">
+            <thead>
+                <tr>
+                    <th class="pos-col">Pos</th>
+                    <th class="team-cell">Coach & Team</th>
+                    <th class="pts-col">Points</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+                <!-- Data will be injected here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function loadLeaderboard(mode) {
+            try {
+                const [leaderboardRes, iconsRes] = await Promise.all([
+                    fetch(mode === 'separate' ? 'data/leaderboard.json' : 'data/leaderboard_competitive.json'),
+                    fetch('data/team_icons.json')
+                ]);
+                
+                const leaderboard = await leaderboardRes.json();
+                const icons = await iconsRes.json();
+                
+                const body = document.getElementById('leaderboard-body');
+                body.innerHTML = '';
+                
+                leaderboard.forEach((entry, index) => {
+                    // Simple mapping: find which team this coach belongs to
+                    // In a production system, the JSON would contain the team ID
+                    const teamName = Object.keys(icons).find(t => {
+                        // Mock logic to link coach name to team name
+                        // Normally we would have a coach_to_team mapping file
+                        return true; // Placeholder: in this draft we use a fallback or map manually
+                    });
+                    
+                    // For the draft, we'll use a basic map for the top few or generic icon
+                    const iconUrl = icons[teamName] || 'https://cdn-icons-png.flaticon.com/512/5353/5353931.png';
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="pos-col">${index + 1}</td>
+                        <td class="team-cell">
+                            <img src="${iconUrl}" class="team-icon" alt="icon">
+                            <span>${entry.coach}</span>
+                        </td>
+                        <td class="pts-col">${entry.points}</td>
+                    `;
+                    body.appendChild(row);
+                });
+
+                document.getElementById('btn-separate').classList.toggle('active', mode === 'separate');
+                document.getElementById('btn-competitive').classList.toggle('active', mode === 'competitive');
+            } catch (e) {
+                console.error("Error loading data:", e);
+            }
+        }
+
+        window.onload = () => loadLeaderboard('separate');
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+[
+  {
+    "game_id": "1",
+    "date": "2026-08-15",
+    "home_team": "Alavés",
+    "away_team": "Getafe",
+    "home_coach": "Quique Sánchez Flores",
+    "away_coach": "José Bordalás"
+  },
+  {
+    "game_id": "2",
+    "date": "2026-08-16",
+    "home_team": "Espanyol",
+    "away_team": "Levante",
+    "home_coach": "Manolo González",
+    "away_coach": "Luís Castro"
+  },
+  {
+    "game_id": "3",
+    "date": "2026-08-16",
+    "home_team": "Racing Santander",
+    "away_team": "Villarreal",
+    "home_coach": "José Alberto López",
+    "away_coach": "Iñigo Pérez"
+  }
+]

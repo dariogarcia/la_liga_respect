@@ -1,0 +1,32 @@
+[
+  {
+    "game_id": "1",
+    "coach": "Quique S\u00e1nchez Flores",
+    "quote": "The referee did his best, we accept the result."
+  },
+  {
+    "game_id": "1",
+    "coach": "Jos\u00e9 Bordal\u00e1s",
+    "quote": "This is a scandal! The referee has cost us the game!"
+  },
+  {
+    "game_id": "2",
+    "coach": "Manolo Gonz\u00e1lez",
+    "quote": "I don't agree with the penalty, but it's part of the game."
+  },
+  {
+    "game_id": "2",
+    "coach": "Lu\u00eds Castro",
+    "quote": "The officiating was acceptable overall."
+  },
+  {
+    "game_id": "3",
+    "coach": "Jos\u00e9 Alberto L\u00f3pez",
+    "quote": "We are happy with the result, no complaints about the ref."
+  },
+  {
+    "game_id": "3",
+    "coach": "I\u00f1igo P\u00e9rez",
+    "quote": "Some decisions were questionable, but we move on."
+  }
+]
