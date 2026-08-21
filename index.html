@@ -87,7 +87,12 @@
         }
         .pos-col { width: 60px; text-align: center; font-weight: bold; color: #888; }
         .team-cell { display: flex; align-items: center; gap: 12px; }
-        .team-icon { width: 24px; height: 24px; object-fit: contain; }
+        .team-icon { 
+            width: 24px; 
+            height: 24px; 
+            display: block;
+            object-fit: contain; 
+        }
         .pts-col { width: 100px; text-align: center; font-weight: bold; color: #1a3a5a; font-size: 1.1rem; }
     </style>
 </head>
@@ -137,7 +142,8 @@
                 leaderboard.forEach((entry, index) => {
                     const coach = entry.coach;
                     const teamData = teams.find(t => t.coach === coach);
-                    const teamName = teamData ? teamData.team : null;
+                    const teamName = teamData ? teamData.team : 'Unknown Team';
+                    const prevCoach = teamData ? teamData.previous_coach : 'N/A';
                     
                     const iconUrl = (teamName && icons[teamName]) ? icons[teamName] : 'https://cdn-icons-png.flaticon.com/512/5353/5353931.png';
                     
@@ -146,7 +152,7 @@
                         <td class="pos-col">${index + 1}</td>
                         <td class="team-cell">
                             <img src="${iconUrl}" class="team-icon" alt="icon">
-                            <span>${entry.coach}</span>
+                            <span>${teamName} (${coach} / ${prevCoach})</span>
                         </td>
                         <td class="pts-col">${entry.points}</td>
                     `;

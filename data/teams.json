@@ -1,82 +1,102 @@
 [
   {
     "team": "Alavés",
-    "coach": "Quique Sánchez Flores"
+    "coach": "Quique Sánchez Flores",
+    "previous_coach": "Luis García Plaza"
   },
   {
     "team": "Athletic Bilbao",
-    "coach": "Edin Terzić"
+    "coach": "Edin Terzić",
+    "previous_coach": "Ernesto Valverde"
   },
   {
     "team": "Atlético Madrid",
-    "coach": "Diego Simeone"
+    "coach": "Diego Simeone",
+    "previous_coach": "Diego Simeone"
   },
   {
     "team": "Barcelona",
-    "coach": "Hansi Flick"
+    "coach": "Hansi Flick",
+    "previous_coach": "Xavi Hernández"
   },
   {
     "team": "Celta Vigo",
-    "coach": "Claudio Giráldez"
+    "coach": "Claudio Giráldez",
+    "previous_coach": "Luis C rodríguez"
   },
   {
     "team": "Deportivo A Coruña",
-    "coach": "Antonio Hidalgo"
+    "coach": "Antonio Hidalgo",
+    "previous_coach": "Josétخ"
   },
   {
     "team": "Elche",
-    "coach": "Martín Anselmi"
+    "coach": "Martín Anselmi",
+    "previous_coach": "Eibar coach"
   },
   {
     "team": "Espanyol",
-    "coach": "Manolo González"
+    "coach": "Manolo González",
+    "previous_coach": "Manolo González"
   },
   {
     "team": "Getafe",
-    "coach": "José Bordalás"
+    "coach": "José Bordalás",
+    "previous_coach": "José Bordalás"
   },
   {
     "team": "Levante",
-    "coach": "Luís Castro"
+    "coach": "Luís Castro",
+    "previous_coach": "Luís Castro"
   },
   {
     "team": "Málaga",
-    "coach": "Juan Francisco Funes"
+    "coach": "Juan Francisco Funes",
+    "previous_coach": "Juan Francisco Funes"
   },
   {
     "team": "Osasuna",
-    "coach": "Luis Miguel Ramis"
+    "coach": "Luis Miguel Ramis",
+    "previous_coach": "Jagoba Arrasate"
   },
   {
     "team": "Racing Santander",
-    "coach": "José Alberto López"
+    "coach": "José Alberto López",
+    "previous_coach": "José Alberto López"
   },
   {
     "team": "Rayo Vallecano",
-    "coach": "Beñat San José"
+    "coach": "Beñat San José",
+    "previous_coach": "Íñigo Pérez"
   },
   {
     "team": "Real Betis",
-    "coach": "Manuel Pellegrini"
+    "coach": "Manuel Pellegrini",
+    "previous_coach": "Manuel Pellegrini"
   },
   {
     "team": "Real Sociedad",
-    "coach": "Pellegrino Matarazzo"
+    "coach": "Pellegrino Matarazzo",
+    "previous_coach": "Imanol Alguacil"
   },
   {
     "team": "Real Madrid",
-    "coach": "José Mourinho"
+    "coach": "José Mourinho",
+    "previous_coach": "Carlo Ancelotti"
   },
   {
     "team": "Sevilla",
-    "coach": "Luis García"
+    "coach": "Luis García",
+    "previous_coach": "Pablo Longoria"
   },
   {
     "team": "Valencia",
-    "coach": "Carlos Corberán"
+    "coach": "Carlos Corberán",
+    "previous_coach": "Rubén Baraja"
   },
   {
     "team": "Villarreal",
-    "coach": "Iñigo Pérez"
+    "coach": "Iñigo Pérez",
+    "previous_coach": "Marcelino"
   }
 ]

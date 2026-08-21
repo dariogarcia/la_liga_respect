@@ -1,7 +1,6 @@
 import json
 from src.data.manager import get_games, get_comments, load_json, DATA_DIR
 import os
-from src.grading.grader import grade_quote
 
 def show_leaderboard(mode="separate"):
     games = get_games()
@@ -38,7 +37,7 @@ def show_leaderboard(mode="separate"):
         # Separate mode calculations
         if mode == "separate":
             for c in game_comments:
-                score = grade_quote(c["quote"])
+                score = c.get("score", 1)
                 if c["coach"] == h_coach:
                     team_stats[h_team]["home"] += score
                     team_stats[h_team]["total"] += score
@@ -49,8 +48,8 @@ def show_leaderboard(mode="separate"):
         # Competitive mode calculations
         else:
             if h_comment and a_comment:
-                s_h = grade_quote(h_comment["quote"])
-                s_a = grade_quote(a_comment["quote"])
+                s_h = h_comment.get("score", 1)
+                s_a = a_comment.get("score", 1)
                 
                 if s_h > s_a:
                     team_stats[h_team]["home"] += 3
