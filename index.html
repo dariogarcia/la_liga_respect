@@ -139,14 +139,12 @@
     <script>
         async function loadLeaderboard(mode) {
             try {
-                const [leaderboardRes, iconsRes, teamsRes] = await Promise.all([
+                const [leaderboardRes, teamsRes] = await Promise.all([
                     fetch(mode === 'separate' ? 'data/leaderboard.json' : 'data/leaderboard_competitive.json'),
-                    fetch('data/team_icons.json'),
                     fetch('data/teams.json')
                 ]);
                 
                 const leaderboard = await leaderboardRes.json();
-                const icons = await iconsRes.json();
                 const teams = await teamsRes.json();
                 
                 const body = document.getElementById('leaderboard-body');

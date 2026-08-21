@@ -4,8 +4,13 @@ from .models import SourceDocument
 class QuoteExtractor:
     def extract(self, coach: str, game_id: str, document: SourceDocument) -> List[Dict[str, Any]]:
         """
-        This method should call an LLM to extract verbatim quotes.
-        For now, it returns a placeholder to maintain the pipeline.
+        Extracts verbatim referee-related quotes for a specific coach.
+        Returns a request for the LLM agent to perform the extraction.
         """
-        # In the agentic version, the LLM handles this logic.
-        return []
+        return [{
+            "status": "AGENT_REQUIRED",
+            "coach": coach,
+            "document_text": document.text,
+            "instruction": "Extract verbatim quotes from the text where the coach discusses the referee. "
+                            "Return as JSON: [{'text': '...', 'referee_related': True}]"
+        }]

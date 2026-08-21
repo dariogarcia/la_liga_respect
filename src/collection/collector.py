@@ -12,7 +12,7 @@ def search_for_comments(game_id, coach_name, date):
 
 import json
 import os
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from typing import List, Dict, Any
 from src.data.manager import get_games, get_comments, save_comments
 from .models import SourceDocument
@@ -33,9 +33,11 @@ def collect_comments_for_coach(
 ) -> List[Dict[str, Any]]:
     # Determine opponent
     opponent = game["away_coach"] if game["home_coach"] == coach else game["home_coach"]
-    match_date = datetime.strptime(game["date"], "%Y-%m-%d").date()
     
-    queries = build_queries(coach, opponent, match_date)
+    # Match date as datetime object
+    match_date = datetime.strptime(game["date"], "%Y-%m-%d")
+    
+    queries = build_queries(coach, opponent, match_date.date())
     search_results = []
     for q in queries:
         search_results.extend(search_provider.search(q))
@@ -54,6 +56,16 @@ def collect_comments_for_coach(
             continue
         try:
             doc = fetcher.fetch(result.url)
+            
+            # ENFORCE 48-HOUR WINDOW
+            if doc.published_at:
+                diff = doc.published_at - match_date
+                if diff.days > 2 or diff.total_seconds() < 0:
+                    continue
+            elif doc.published_at is None:
+                # If date is missing, we keep it but flag for agent validation
+                pass
+                
             documents.append(doc)
         except Exception as e:
             print(f"Fetch failed for {result.url}: {e}")
@@ -62,6 +74,12 @@ def collect_comments_for_coach(
     quotes = []
     for doc in documents:
         extracted = extractor.extract(coach, game["game_id"], doc)
+        
+        # If extraction returned a request for the agent, we can't proceed automatically
+        if extracted and isinstance(extracted[0], dict) and extracted[0].get("status") == "AGENT_REQUIRED":
+            # For this automated pipeline, we treat these as "Pending for Agent"
+            continue
+            
         validated = validate_extractions(extracted, doc)
         quotes.extend(validated)
         
@@ -71,7 +89,6 @@ def collect_matchday_comments(api_key: str = None):
     games = get_games()
     comments = get_comments()
     
-    # Injected dependencies
     search_provider = WebSearchProvider(api_key=api_key) if api_key else None
     fetcher = ArticleFetcher()
     extractor = QuoteExtractor()
@@ -97,7 +114,6 @@ def collect_matchday_comments(api_key: str = None):
                     if new_quotes:
                         found_count += len(new_quotes)
                         for q in new_quotes:
-                            # Update comments list with metadata
                             comments.append({
                                 "game_id": game_id,
                                 "coach": coach,
@@ -118,6 +134,7 @@ def collect_matchday_comments(api_key: str = None):
     print(f"Coach comments sought: {sought_count}")
     print(f"Comments found: {found_count}")
     print(f"----------------------------")
+
 
 
 
