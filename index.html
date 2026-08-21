@@ -86,12 +86,25 @@
             background-color: #fdfdfd;
         }
         .pos-col { width: 60px; text-align: center; font-weight: bold; color: #888; }
-        .team-cell { display: flex; align-items: center; gap: 12px; }
+        .team-logo {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 44px;
+        }
         .team-icon { 
-            width: 24px; 
-            height: 24px; 
+            width: 40px; 
+            height: 40px; 
             display: block;
             object-fit: contain; 
+        }
+        .team-cell { 
+            display: flex; 
+            align-items: center; 
+            gap: 14px; 
+            min-width: 0;
         }
         .pts-col { width: 100px; text-align: center; font-weight: bold; color: #1a3a5a; font-size: 1.1rem; }
     </style>
@@ -144,14 +157,15 @@
                     const teamData = teams.find(t => t.coach === coach);
                     const teamName = teamData ? teamData.team : 'Unknown Team';
                     const prevCoach = teamData ? teamData.previous_coach : 'N/A';
-                    
-                    const iconUrl = (teamName && icons[teamName]) ? icons[teamName] : 'https://cdn-icons-png.flaticon.com/512/5353/5353931.png';
+                    const logoUrl = teamData ? teamData.logo : 'assets/teams/default.svg';
                     
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td class="pos-col">${index + 1}</td>
                         <td class="team-cell">
-                            <img src="${iconUrl}" class="team-icon" alt="icon">
+                            <div class="team-logo">
+                                <img src="${logoUrl}" class="team-icon" alt="${teamName} logo" loading="lazy">
+                            </div>
                             <div>
                                 <div style="font-weight: bold;">${teamName}</div>
                                 <div style="font-size: 0.8rem; color: #666;">${coach} <span style="font-style: italic; opacity: 0.8;">(Prev: ${prevCoach})</span></div>

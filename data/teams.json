@@ -1,102 +1,142 @@
 [
   {
+    "id": "alaves",
     "team": "Alavés",
     "coach": "Quique Sánchez Flores",
-    "previous_coach": "Luis García Plaza"
+    "previous_coach": "Luis García Plaza",
+    "logo": "assets/teams/alaves.svg"
   },
   {
+    "id": "athletic-bilbao",
     "team": "Athletic Bilbao",
     "coach": "Edin Terzić",
-    "previous_coach": "Ernesto Valverde"
+    "previous_coach": "Ernesto Valverde",
+    "logo": "assets/teams/athletic-bilbao.svg"
   },
   {
+    "id": "atletico-madrid",
     "team": "Atlético Madrid",
     "coach": "Diego Simeone",
-    "previous_coach": "Diego Simeone"
+    "previous_coach": "Diego Simeone",
+    "logo": "assets/teams/atletico-madrid.svg"
   },
   {
+    "id": "barcelona",
     "team": "Barcelona",
     "coach": "Hansi Flick",
-    "previous_coach": "Xavi Hernández"
+    "previous_coach": "Xavi Hernández",
+    "logo": "assets/teams/barcelona.svg"
   },
   {
+    "id": "celta-vigo",
     "team": "Celta Vigo",
     "coach": "Claudio Giráldez",
-    "previous_coach": "TBD"
+    "previous_coach": "TBD",
+    "logo": "assets/teams/celta-vigo.svg"
   },
   {
+    "id": "deportivo-a-coruna",
     "team": "Deportivo A Coruña",
     "coach": "Antonio Hidalgo",
-    "previous_coach": "TBD"
+    "previous_coach": "TBD",
+    "logo": "assets/teams/deportivo-a-coruna.svg"
   },
   {
+    "id": "elche",
     "team": "Elche",
     "coach": "Martín Anselmi",
-    "previous_coach": "TBD"
+    "previous_coach": "TBD",
+    "logo": "assets/teams/elche.svg"
   },
   {
+    "id": "espanyol",
     "team": "Espanyol",
     "coach": "Manolo González",
-    "previous_coach": "Manolo González"
+    "previous_coach": "Manolo González",
+    "logo": "assets/teams/espanyol.svg"
   },
   {
+    "id": "getafe",
     "team": "Getafe",
     "coach": "José Bordalás",
-    "previous_coach": "José Bordalás"
+    "previous_coach": "José Bordalás",
+    "logo": "assets/teams/getafe.svg"
   },
   {
+    "id": "levante",
     "team": "Levante",
     "coach": "Luís Castro",
-    "previous_coach": "Luís Castro"
+    "previous_coach": "Luís Castro",
+    "logo": "assets/teams/levante.svg"
   },
   {
+    "id": "malaga",
     "team": "Málaga",
     "coach": "Juan Francisco Funes",
-    "previous_coach": "Juan Francisco Funes"
+    "previous_coach": "Juan Francisco Funes",
+    "logo": "assets/teams/malaga.svg"
   },
   {
+    "id": "osasuna",
     "team": "Osasuna",
     "coach": "Luis Miguel Ramis",
-    "previous_coach": "Jagoba Arrasate"
+    "previous_coach": "Jagoba Arrasate",
+    "logo": "assets/teams/osasuna.svg"
   },
   {
+    "id": "racing-santander",
     "team": "Racing Santander",
     "coach": "José Alberto López",
-    "previous_coach": "José Alberto López"
+    "previous_coach": "José Alberto López",
+    "logo": "assets/teams/racing-santander.svg"
   },
   {
+    "id": "rayo-vallecano",
     "team": "Rayo Vallecano",
     "coach": "Beñat San José",
-    "previous_coach": "Íñigo Pérez"
+    "previous_coach": "Íñigo Pérez",
+    "logo": "assets/teams/rayo-vallecano.svg"
   },
   {
+    "id": "real-betis",
     "team": "Real Betis",
     "coach": "Manuel Pellegrini",
-    "previous_coach": "Manuel Pellegrini"
+    "previous_coach": "Manuel Pellegrini",
+    "logo": "assets/teams/real-betis.svg"
   },
   {
+    "id": "real-sociedad",
     "team": "Real Sociedad",
     "coach": "Pellegrino Matarazzo",
-    "previous_coach": "Imanol Alguacil"
+    "previous_coach": "Imanol Alguacil",
+    "logo": "assets/teams/real-sociedad.svg"
   },
   {
+    "id": "real-madrid",
     "team": "Real Madrid",
     "coach": "José Mourinho",
-    "previous_coach": "Carlo Ancelotti"
+    "previous_coach": "Carlo Ancelotti",
+    "logo": "assets/teams/real-madrid.svg"
   },
   {
+    "id": "sevilla",
     "team": "Sevilla",
     "coach": "Luis García",
-    "previous_coach": "Pablo Longoria"
+    "previous_coach": "Pablo Longoria",
+    "logo": "assets/teams/sevilla.svg"
   },
   {
+    "id": "valencia",
     "team": "Valencia",
     "coach": "Carlos Corberán",
-    "previous_coach": "Rubén Baraja"
+    "previous_coach": "Rubén Baraja",
+    "logo": "assets/teams/valencia.svg"
   },
   {
+    "id": "villarreal",
     "team": "Villarreal",
     "coach": "Iñigo Pérez",
-    "previous_coach": "Marcelino"
+    "previous_coach": "Marcelino",
+    "logo": "assets/teams/villarreal.svg"
   }
 ]
