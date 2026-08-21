@@ -1,0 +1,38 @@
+[
+  {
+    "game_id": "1",
+    "coach": "Quique S\u00e1nchez Flores",
+    "date": "2026-08-15",
+    "query": "Quique S\u00e1nchez Flores la liga interview 2026-08-15 referee"
+  },
+  {
+    "game_id": "1",
+    "coach": "Jos\u00e9 Bordal\u00e1s",
+    "date": "2026-08-15",
+    "query": "Jos\u00e9 Bordal\u00e1s la liga interview 2026-08-15 referee"
+  },
+  {
+    "game_id": "2",
+    "coach": "Manolo Gonz\u00e1lez",
+    "date": "2026-08-16",
+    "query": "Manolo Gonz\u00e1lez la liga interview 2026-08-16 referee"
+  },
+  {
+    "game_id": "2",
+    "coach": "Lu\u00eds Castro",
+    "date": "2026-08-16",
+    "query": "Lu\u00eds Castro la liga interview 2026-08-16 referee"
+  },
+  {
+    "game_id": "3",
+    "coach": "Jos\u00e9 Alberto L\u00f3pez",
+    "date": "2026-08-16",
+    "query": "Jos\u00e9 Alberto L\u00f3pez la liga interview 2026-08-16 referee"
+  },
+  {
+    "game_id": "3",
+    "coach": "I\u00f1igo P\u00e9rez",
+    "date": "2026-08-16",
+    "query": "I\u00f1igo P\u00e9rez la liga interview 2026-08-16 referee"
+  }
+]

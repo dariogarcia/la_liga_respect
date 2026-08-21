@@ -121,28 +121,25 @@
     <script>
         async function loadLeaderboard(mode) {
             try {
-                const [leaderboardRes, iconsRes] = await Promise.all([
+                const [leaderboardRes, iconsRes, teamsRes] = await Promise.all([
                     fetch(mode === 'separate' ? 'data/leaderboard.json' : 'data/leaderboard_competitive.json'),
-                    fetch('data/team_icons.json')
+                    fetch('data/team_icons.json'),
+                    fetch('data/teams.json')
                 ]);
                 
                 const leaderboard = await leaderboardRes.json();
                 const icons = await iconsRes.json();
+                const teams = await teamsRes.json();
                 
                 const body = document.getElementById('leaderboard-body');
                 body.innerHTML = '';
                 
                 leaderboard.forEach((entry, index) => {
-                    // Simple mapping: find which team this coach belongs to
-                    // In a production system, the JSON would contain the team ID
-                    const teamName = Object.keys(icons).find(t => {
-                        // Mock logic to link coach name to team name
-                        // Normally we would have a coach_to_team mapping file
-                        return true; // Placeholder: in this draft we use a fallback or map manually
-                    });
+                    const coach = entry.coach;
+                    const teamData = teams.find(t => t.coach === coach);
+                    const teamName = teamData ? teamData.team : null;
                     
-                    // For the draft, we'll use a basic map for the top few or generic icon
-                    const iconUrl = icons[teamName] || 'https://cdn-icons-png.flaticon.com/512/5353/5353931.png';
+                    const iconUrl = (teamName && icons[teamName]) ? icons[teamName] : 'https://cdn-icons-png.flaticon.com/512/5353/5353931.png';
                     
                     const row = document.createElement('tr');
                     row.innerHTML = `

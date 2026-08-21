@@ -8,8 +8,15 @@ LEADERBOARD_FILE = os.path.join(DATA_DIR, "leaderboard.json")
 LEADERBOARD_COMPETITIVE_FILE = os.path.join(DATA_DIR, "leaderboard_competitive.json")
 
 def load_json(filepath):
-    with open(filepath, 'r') as f:
-        return json.load(f)
+    try:
+        with open(filepath, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"Error: File {filepath} not found.")
+        return [] if "leaderboard" in filepath or "comments" in filepath or "games" in filepath else {}
+    except json.JSONDecodeError:
+        print(f"Error: File {filepath} contains malformed JSON.")
+        return [] if "leaderboard" in filepath or "comments" in filepath or "games" in filepath else {}
 
 def save_json(filepath, data):
     with open(filepath, 'w') as f:

@@ -11,6 +11,7 @@ def grade_quote(quote):
 
 def calculate_rankings(comments, mode="separate"):
     leaderboard = {}
+    incomplete_games = []
     
     if mode == "separate":
         for c in comments:
@@ -42,45 +43,42 @@ def calculate_rankings(comments, mode="separate"):
                 else:
                     leaderboard[q1["coach"]] = leaderboard.get(q1["coach"], 0) + 1
                     leaderboard[q2["coach"]] = leaderboard.get(q2["coach"], 0) + 1
+            elif len(quotes) == 1:
+                # If only one coach has a quote, they get their absolute score and the game is flagged
+                q = quotes[0]
+                score = grade_quote(q["quote"])
+                leaderboard[q["coach"]] = leaderboard.get(q["coach"], 0) + score
+                incomplete_games.append(f"Game {gid} (only {q['coach']} provided a quote)")
             else:
-                # If only one coach has a quote, they effectively "win" by default or we skip
-                # For this draft, we skip incomplete games in competitive mode
-                pass
-
+                incomplete_games.append(f"Game {gid} (no quotes found)")
+    
     sorted_leaderboard = [
         {"coach": coach, "points": points} 
         for coach, points in sorted(leaderboard.items(), key=lambda x: x[1], reverse=True)
     ]
-    return sorted_leaderboard
+    return sorted_leaderboard, incomplete_games
+
 
 def update_leaderboard():
     comments = get_comments()
     
     # Update separate leaderboard
-    separate_rankings = calculate_rankings(comments, mode="separate")
+    separate_rankings, _ = calculate_rankings(comments, mode="separate")
     save_leaderboard(separate_rankings, mode="separate")
     
     # Update competitive leaderboard
-    competitive_rankings = calculate_rankings(comments, mode="competitive")
+    competitive_rankings, incomplete = calculate_rankings(comments, mode="competitive")
     save_leaderboard(competitive_rankings, mode="competitive")
     
     print(f"--- Grading Report ---")
     print(f"Quotes processed: {len(comments)}")
     print(f"Separate leaderboard updated.")
     print(f"Competitive leaderboard updated.")
+    if incomplete:
+        print(f"Incomplete games flagged: {len(incomplete)}")
+        for msg in incomplete:
+            print(f"  - {msg}")
     print(f"----------------------")
 
 
-
-# Overriding the mock grader to be more specific for the test data
-def grade_quote_v2(quote):
-    q = quote.lower()
-    if any(word in q for word in ["respect", "fair", "balanced", "happy", "accept"]):
-        return 3
-    if any(word in q for word in ["scandal", "robbery", "joke", "unacceptable", "disappointed"]):
-        return 0
-    return 1
-
-# Replace the function in the module
-grade_quote = grade_quote_v2
 

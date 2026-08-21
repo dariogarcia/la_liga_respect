@@ -1,13 +1,14 @@
 import json
-from src.data.manager import get_games, get_comments, load_json
+from src.data.manager import get_games, get_comments, load_json, DATA_DIR
+import os
 from src.grading.grader import grade_quote
 
 def show_leaderboard(mode="separate"):
     games = get_games()
     comments = get_comments()
     # Load teams to map coach -> team
-    with open("data/teams.json", "r") as f:
-        teams_data = json.load(f)
+    teams_path = os.path.join(DATA_DIR, "teams.json")
+    teams_data = load_json(teams_path)
     
     coach_to_team = {t["coach"]: t["team"] for t in teams_data}
     team_stats = {t["team"]: {"games": 0, "home": 0, "away": 0, "total": 0} for t in teams_data}
