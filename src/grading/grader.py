@@ -1,16 +1,19 @@
 import json
-from src.data.manager import get_comments, get_leaderboard, save_leaderboard
+from src.data.manager import get_comments, get_leaderboard, save_leaderboard, get_teams
 
 def calculate_rankings(comments, mode="separate"):
-    leaderboard = {}
+    teams_data = get_teams()
+    all_coaches = [t["coach"] for t in teams_data]
+    
+    leaderboard = {coach: 0 for coach in all_coaches}
     incomplete_games = []
     
     if mode == "separate":
         for c in comments:
             coach = c["coach"]
-            # Use score assigned by Agent, fallback to 1 (neutral) if missing
-            score = c.get("score", 1)
-            leaderboard[coach] = leaderboard.get(coach, 0) + score
+            if coach in leaderboard:
+                score = c.get("score", 1)
+                leaderboard[coach] += score
     else:
         # Competitive mode: For every game, we compare home vs away
         game_quotes = {}
