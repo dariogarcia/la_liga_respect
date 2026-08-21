@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "game_id": "1",
+    "coach": "Quique S\u00e1nchez Flores",
+    "quote": "Hoy lo quiero m\u00e1s que ayer. Se lo he dicho",
+    "score": 3
+  },
+  {
+    "game_id": "1",
+    "coach": "Jos\u00e9 Bordal\u00e1s",
+    "quote": "No nos tratan de la misma manera pero no podemos hacer nada",
+    "score": 0
+  },
+  {
+    "game_id": "2",
+    "coach": "Manolo Gonz\u00e1lez",
+    "quote": "Era importante empezar ganando y estoy muy contento por la imagen del equipo",
+    "score": 1
+  },
+  {
+    "game_id": "2",
+    "coach": "Lu\u00eds Castro",
+    "quote": "El partido no tiene discusi\u00f3n, ellos han merecido ganar. Lo han querido m\u00e1s que nosotros",
+    "score": 3
+  },
+  {
+    "game_id": "3",
+    "coach": "Jos\u00e9 Alberto L\u00f3pez",
+    "quote": "No quiero excusar absolutamente nada de lo que ha ocurrido con el tema arbitral, pero creo que hay dos cosas que no se pueden pasar por alto. Una es la disparidad en el criterio... y luego la falta de respeto hacia mi equipo",
+    "score": 0
+  },
+  {
+    "game_id": "3",
+    "coach": "I\u00f1igo P\u00e9rez",
+    "quote": "No me preocupa ese tipo de errores... sobre los \u00e1rbitros, he cambiado de equipo, pero la idea es la misma.",
+    "score": 1
+  }
+]
