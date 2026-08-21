@@ -5,6 +5,14 @@ import os
 def show_leaderboard(mode="separate"):
     games = get_games()
     comments = get_comments()
+    
+    # Validation: Check for missing scores
+    missing_scores = [c["coach"] for c in comments if "score" not in c]
+    if missing_scores:
+        print(f"WARNING: {len(missing_scores)} quotes are missing Agent scores! This may skew results.")
+        print(f"Missing scores for: {', '.join(set(missing_scores))}")
+        print("-" * 58)
+
     # Load teams to map coach -> team
     teams_path = os.path.join(DATA_DIR, "teams.json")
     teams_data = load_json(teams_path)

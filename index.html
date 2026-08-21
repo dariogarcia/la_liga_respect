@@ -152,7 +152,10 @@
                         <td class="pos-col">${index + 1}</td>
                         <td class="team-cell">
                             <img src="${iconUrl}" class="team-icon" alt="icon">
-                            <span>${teamName} (${coach} / ${prevCoach})</span>
+                            <div>
+                                <div style="font-weight: bold;">${teamName}</div>
+                                <div style="font-size: 0.8rem; color: #666;">${coach} <span style="font-style: italic; opacity: 0.8;">(Prev: ${prevCoach})</span></div>
+                            </div>
                         </td>
                         <td class="pts-col">${entry.points}</td>
                     `;

@@ -35,7 +35,7 @@ Displays a formatted leaderboard including:
 
 ### Prerequisites
 - Python 3.x
-- No external dependencies required (uses standard library).
+- External Dependencies: `requests` (install via `pip install -r requirements.txt`)
 
 ### Setup
 Clone the repository and ensure your `PYTHONPATH` is set to the root directory:

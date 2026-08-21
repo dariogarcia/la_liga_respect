@@ -10,52 +10,114 @@ def search_for_comments(game_id, coach_name, date):
     print(f"Searching for comments from {coach_name} for game {game_id} (Date: {date})...")
     return f"AGENT_REQUIRED: {coach_name} | {game_id} | {date}"
 
-def collect_matchday_comments():
+import json
+import os
+from datetime import datetime, date
+from typing import List, Dict, Any
+from src.data.manager import get_games, get_comments, save_comments
+from .models import SourceDocument
+from .queries import build_queries
+from .search import WebSearchProvider
+from .filtering import is_allowed_source
+from .fetcher import ArticleFetcher
+from .extractor import QuoteExtractor
+from .validation import validate_extractions
+from .deduplication import deduplicate_quotes
+
+def collect_comments_for_coach(
+    game: Dict[str, Any],
+    coach: str,
+    search_provider: Any,
+    fetcher: Any,
+    extractor: Any,
+) -> List[Dict[str, Any]]:
+    # Determine opponent
+    opponent = game["away_coach"] if game["home_coach"] == coach else game["home_coach"]
+    match_date = datetime.strptime(game["date"], "%Y-%m-%d").date()
+    
+    queries = build_queries(coach, opponent, match_date)
+    search_results = []
+    for q in queries:
+        search_results.extend(search_provider.search(q))
+    
+    # Deduplicate URLs
+    seen_urls = set()
+    unique_results = []
+    for r in search_results:
+        if r.url not in seen_urls:
+            seen_urls.add(r.url)
+            unique_results.append(r)
+            
+    documents = []
+    for result in unique_results:
+        if not is_allowed_source(result.url):
+            continue
+        try:
+            doc = fetcher.fetch(result.url)
+            documents.append(doc)
+        except Exception as e:
+            print(f"Fetch failed for {result.url}: {e}")
+            continue
+            
+    quotes = []
+    for doc in documents:
+        extracted = extractor.extract(coach, game["game_id"], doc)
+        validated = validate_extractions(extracted, doc)
+        quotes.extend(validated)
+        
+    return deduplicate_quotes(quotes)
+
+def collect_matchday_comments(api_key: str = None):
     games = get_games()
     comments = get_comments()
     
+    # Injected dependencies
+    search_provider = WebSearchProvider(api_key=api_key) if api_key else None
+    fetcher = ArticleFetcher()
+    extractor = QuoteExtractor()
+    
+    if not search_provider:
+        print("Error: API key required for collection. Skipping.")
+        return
+
     sought_count = 0
     found_count = 0
-    pending = []
     
     for game in games:
         for coach_key in ["home_coach", "away_coach"]:
-            coach_name = game[coach_key]
+            coach = game[coach_key]
             game_id = game["game_id"]
-            game_date = game["date"]
             
-            if not any(c["game_id"] == game_id and c["coach"] == coach_name for c in comments):
+            if not any(c["game_id"] == game_id and c["coach"] == coach for c in comments):
                 sought_count += 1
-                quote = search_for_comments(game_id, coach_name, game_date)
-                
-                if quote and not quote.startswith("AGENT_REQUIRED"):
-                    found_count += 1
-                    comments.append({
-                        "game_id": game_id,
-                        "coach": coach_name,
-                        "quote": quote
-                    })
-                else:
-                    pending.append({
-                        "game_id": game_id,
-                        "coach": coach_name,
-                        "date": game_date,
-                        "query": f"{coach_name} la liga interview {game_date} referee"
-                    })
-    
+                try:
+                    new_quotes = collect_comments_for_coach(
+                        game, coach, search_provider, fetcher, extractor
+                    )
+                    if new_quotes:
+                        found_count += len(new_quotes)
+                        for q in new_quotes:
+                            # Update comments list with metadata
+                            comments.append({
+                                "game_id": game_id,
+                                "coach": coach,
+                                "quote": q["text"],
+                                "source_url": q["url"],
+                                "source_name": q["source"],
+                                "published_at": q.get("published_at"),
+                                "retrieved_at": datetime.utcnow().isoformat()
+                            })
+                except Exception as e:
+                    print(f"Failed to collect for {coach} in game {game_id}: {e}")
+
     save_comments(comments)
     
-    with open("data/pending_requests.json", "w") as f:
-        json.dump(pending, f, indent=2)
-    
-    num_matches = len(games)
     print(f"--- Collection Report ---")
-    print(f"Matches processed: {num_matches}")
-    print(f"Comments already in DB: {len(comments)}")
+    print(f"Matches processed: {len(games)}")
+    print(f"Comments already in DB: {len(comments) - found_count}")
     print(f"Coach comments sought: {sought_count}")
     print(f"Comments found: {found_count}")
-    print(f"Comments pending for Agent: {len(pending)}")
-    print(f"---------------------------")
+    print(f"----------------------------")
 
 
 

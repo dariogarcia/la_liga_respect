@@ -24,10 +24,20 @@ def save_json(filepath, data):
         json.dump(data, f, indent=2)
 
 def get_games():
-    return load_json(GAMES_FILE)
+    games = load_json(GAMES_FILE)
+    # Validate essential fields
+    valid_games = [g for g in games if all(k in g for k in ["game_id", "home_coach", "away_coach"])]
+    if len(valid_games) < len(games):
+        print(f"Warning: Dropped {len(games) - len(valid_games)} malformed games from {GAMES_FILE}")
+    return valid_games
 
 def get_comments():
-    return load_json(COMMENTS_FILE)
+    comments = load_json(COMMENTS_FILE)
+    # Validate essential fields
+    valid_comments = [c for c in comments if all(k in c for k in ["game_id", "coach", "quote"])]
+    if len(valid_comments) < len(comments):
+        print(f"Warning: Dropped {len(comments) - len(valid_comments)} malformed comments from {COMMENTS_FILE}")
+    return valid_comments
 
 def save_comments(comments):
     save_json(COMMENTS_FILE, comments)
