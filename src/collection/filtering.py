@@ -6,6 +6,8 @@ TRUSTED_DOMAINS = {
     "marca.com",
     "sport.es",
     "mundodeportivo.com",
+    "relevo.com",
+    "cope.es",
 }
 
 def get_domain(url: str) -> str:

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <circle cx="32" cy="32" r="30" fill="#0E4E9C"/>
+  <path d="M 32 2 A 30 30 0 0 1 32 62 Z" fill="#FFFFFF"/>
+  <circle cx="32" cy="32" r="30" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="2"/>
+  <text x="32" y="40" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="21" fill="#FFFFFF">MAL</text>
+</svg>

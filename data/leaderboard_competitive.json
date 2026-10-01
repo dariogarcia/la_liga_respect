@@ -1,82 +1,122 @@
 [
   {
-    "coach": "Quique S\u00e1nchez Flores",
-    "points": 3
+    "coach": "Iñigo Pérez",
+    "team": "Villarreal",
+    "points": 3,
+    "games_played": 1
   },
   {
-    "coach": "Lu\u00eds Castro",
-    "points": 3
+    "coach": "Luís Castro",
+    "team": "Levante",
+    "points": 3,
+    "games_played": 1
   },
   {
-    "coach": "I\u00f1igo P\u00e9rez",
-    "points": 3
-  },
-  {
-    "coach": "Edin Terzi\u0107",
-    "points": 0
+    "coach": "Quique Sánchez Flores",
+    "team": "Alavés",
+    "points": 3,
+    "games_played": 1
   },
   {
     "coach": "Diego Simeone",
-    "points": 0
-  },
-  {
-    "coach": "Hansi Flick",
-    "points": 0
-  },
-  {
-    "coach": "Claudio Gir\u00e1ldez",
-    "points": 0
+    "team": "Atlético Madrid",
+    "points": 1,
+    "games_played": 1
   },
   {
     "coach": "Antonio Hidalgo",
-    "points": 0
+    "team": "Deportivo A Coruña",
+    "points": 0,
+    "games_played": 0
   },
   {
-    "coach": "Mart\u00edn Anselmi",
-    "points": 0
+    "coach": "Beñat San José",
+    "team": "Rayo Vallecano",
+    "points": 0,
+    "games_played": 0
   },
   {
-    "coach": "Manolo Gonz\u00e1lez",
-    "points": 0
+    "coach": "Carlos Corberán",
+    "team": "Valencia",
+    "points": 0,
+    "games_played": 0
   },
   {
-    "coach": "Jos\u00e9 Bordal\u00e1s",
-    "points": 0
+    "coach": "Claudio Giráldez",
+    "team": "Celta Vigo",
+    "points": 0,
+    "games_played": 0
+  },
+  {
+    "coach": "Edin Terzić",
+    "team": "Athletic Bilbao",
+    "points": 0,
+    "games_played": 0
+  },
+  {
+    "coach": "Hansi Flick",
+    "team": "Barcelona",
+    "points": 0,
+    "games_played": 0
+  },
+  {
+    "coach": "José Alberto López",
+    "team": "Racing Santander",
+    "points": 0,
+    "games_played": 1
+  },
+  {
+    "coach": "José Bordalás",
+    "team": "Getafe",
+    "points": 0,
+    "games_played": 1
+  },
+  {
+    "coach": "José Mourinho",
+    "team": "Real Madrid",
+    "points": 0,
+    "games_played": 0
   },
   {
     "coach": "Juan Francisco Funes",
-    "points": 0
+    "team": "Málaga",
+    "points": 0,
+    "games_played": 0
+  },
+  {
+    "coach": "Luis García",
+    "team": "Sevilla",
+    "points": 0,
+    "games_played": 0
   },
   {
     "coach": "Luis Miguel Ramis",
-    "points": 0
+    "team": "Osasuna",
+    "points": 0,
+    "games_played": 0
   },
   {
-    "coach": "Jos\u00e9 Alberto L\u00f3pez",
-    "points": 0
-  },
-  {
-    "coach": "Be\u00f1at San Jos\u00e9",
-    "points": 0
+    "coach": "Manolo González",
+    "team": "Espanyol",
+    "points": 0,
+    "games_played": 1
   },
   {
     "coach": "Manuel Pellegrini",
-    "points": 0
+    "team": "Real Betis",
+    "points": 0,
+    "games_played": 0
+  },
+  {
+    "coach": "Martín Anselmi",
+    "team": "Elche",
+    "points": 0,
+    "games_played": 0
   },
   {
     "coach": "Pellegrino Matarazzo",
-    "points": 0
-  },
-  {
-    "coach": "Jos\u00e9 Mourinho",
-    "points": 0
-  },
-  {
-    "coach": "Luis Garc\u00eda",
-    "points": 0
-  },
-  {
-    "coach": "Carlos Corber\u00e1n",
-    "points": 0
+    "team": "Real Sociedad",
+    "points": 0,
+    "games_played": 0
   }
 ]

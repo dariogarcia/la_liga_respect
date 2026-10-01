@@ -107,6 +107,40 @@
             min-width: 0;
         }
         .pts-col { width: 100px; text-align: center; font-weight: bold; color: #1a3a5a; font-size: 1.1rem; }
+        .gp-col { width: 70px; text-align: center; color: #666; }
+        .notice {
+            max-width: 900px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 15px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+        .notice.warning {
+            background: #fdf3e3;
+            border: 1px solid #e67e22;
+            color: #9c5a12;
+        }
+        .notice.info {
+            background: #eaf2f8;
+            border: 1px solid #2a70a5;
+            color: #1a4a6a;
+        }
+        .pending-table td, .pending-table th {
+            font-size: 13px;
+            padding: 8px 12px;
+        }
+        .pending-section {
+            max-width: 900px;
+            width: 100%;
+            margin-top: 30px;
+        }
+        .pending-section h2 {
+            color: #1a3a5a;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
@@ -127,6 +161,7 @@
                 <tr>
                     <th class="pos-col">Pos</th>
                     <th class="team-cell">Coach & Team</th>
+                    <th class="gp-col">GP</th>
                     <th class="pts-col">Points</th>
                 </tr>
             </thead>
@@ -134,6 +169,27 @@
                 <!-- Data will be injected here -->
             </tbody>
         </table>
+    </div>
+
+    <div id="grading-notice" class="notice warning"></div>
+    <div id="pending-summary" class="notice info"></div>
+
+    <div class="pending-section" id="pending-section" style="display: none;">
+        <h2>Pending collection (will be retried)</h2>
+        <div class="table-container">
+            <table class="pending-table">
+                <thead>
+                    <tr>
+                        <th>Game</th>
+                        <th>Date</th>
+                        <th>Coach</th>
+                        <th>Reason</th>
+                        <th>Attempts</th>
+                    </tr>
+                </thead>
+                <tbody id="pending-body"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
@@ -162,13 +218,15 @@
                         <td class="pos-col">${index + 1}</td>
                         <td class="team-cell">
                             <div class="team-logo">
-                                <img src="${logoUrl}" class="team-icon" alt="${teamName} logo" loading="lazy">
+                                <img src="${logoUrl}" class="team-icon" alt="${teamName} logo" loading="lazy"
+                                     onerror="this.onerror=null; this.src='assets/teams/default.svg';">
                             </div>
                             <div>
                                 <div style="font-weight: bold;">${teamName}</div>
                                 <div style="font-size: 0.8rem; color: #666;">${coach} <span style="font-style: italic; opacity: 0.8;">(Prev: ${prevCoach})</span></div>
                             </div>
                         </td>
+                        <td class="gp-col">${entry.games_played}</td>
                         <td class="pts-col">${entry.points}</td>
                     `;
                     body.appendChild(row);
@@ -181,7 +239,55 @@
             }
         }
 
-        window.onload = () => loadLeaderboard('separate');
+        async function loadNotices() {
+            // Heuristic-grading warning from comments.json
+            try {
+                const comments = await (await fetch('data/comments.json')).json();
+                const heuristic = comments.filter(c => c.graded_by === 'heuristic').length;
+                const llm = comments.filter(c => c.graded_by === 'llm').length;
+                const notice = document.getElementById('grading-notice');
+                if (heuristic > 0) {
+                    notice.style.display = 'block';
+                    notice.textContent = `Data quality: ${heuristic} of ${comments.length} quotes were graded by the low-confidence heuristic fallback (${llm} by LLM). Treat those scores with caution.`;
+                }
+            } catch (e) {
+                console.warn("Could not load comments.json:", e);
+            }
+
+            // Pending collection requests
+            try {
+                const pending = await (await fetch('data/pending_requests.json')).json();
+                const MAX_ATTEMPTS = 5;
+                const active = pending.filter(p => (p.attempts || 0) < MAX_ATTEMPTS);
+                const summary = document.getElementById('pending-summary');
+                const section = document.getElementById('pending-section');
+                const body = document.getElementById('pending-body');
+                body.innerHTML = '';
+                if (active.length > 0) {
+                    summary.style.display = 'block';
+                    summary.textContent = `Collection incomplete: ${active.length} coach/game pair(s) still pending and will be retried on the next run.`;
+                    section.style.display = 'block';
+                    active.forEach(p => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${p.game_id}</td>
+                            <td>${p.date}</td>
+                            <td>${p.coach}</td>
+                            <td>${p.reason}</td>
+                            <td>${p.attempts}</td>
+                        `;
+                        body.appendChild(row);
+                    });
+                }
+            } catch (e) {
+                console.warn("Could not load pending_requests.json:", e);
+            }
+        }
+
+        window.onload = () => {
+            loadLeaderboard('separate');
+            loadNotices();
+        };
     </script>
 </body>
 </html>

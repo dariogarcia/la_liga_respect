@@ -1,11 +1,21 @@
 from datetime import date
 from typing import List
 
+# Site-restricted variants are included because the keyless engines
+# answer them more reliably, and they target the trusted outlets.
+SITE_RESTRICTED_DOMAINS = ["marca.com", "as.com", "sport.es", "mundodeportivo.com"]
+
+
 def build_queries(coach: str, opponent: str, match_date: date) -> List[str]:
-    date_str = match_date.isoformat()
-    return [
-        f'"{coach}" "{opponent}" referee interview La Liga {date_str}',
-        f'"{coach}" "{opponent}" árbitro rueda de prensa {date_str}',
-        f'"{coach}" "{opponent}" árbitro declaraciones {date_str}',
-        f'"{coach}" "{opponent}" referee post match {date_str}',
+    queries = [
+        # Quoted variants work best on Google News and DuckDuckGo.
+        f'"{coach}" "{opponent}" árbitro rueda de prensa',
+        f'"{coach}" "{opponent}" arbitraje declaraciones',
+        # Unquoted variants are needed for Bing.
+        f"{coach} {opponent} árbitro rueda de prensa",
+        f"{coach} rueda de prensa tras el partido {opponent}",
+        f'"{coach}" "{opponent}" referee post match interview',
     ]
+    for domain in SITE_RESTRICTED_DOMAINS:
+        queries.append(f"{coach} {opponent} rueda de prensa árbitro site:{domain}")
+    return queries

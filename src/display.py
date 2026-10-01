@@ -1,82 +1,79 @@
 import json
-from src.data.manager import get_games, get_comments, load_json, DATA_DIR
 import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.data.manager import get_games, get_comments, get_teams, load_json, DATA_DIR
+
 
 def show_leaderboard(mode="separate"):
     games = get_games()
     comments = get_comments()
-    
-    # Validation: Check for missing scores
+    teams_data = get_teams()
+
     missing_scores = [c["coach"] for c in comments if "score" not in c]
     if missing_scores:
-        print(f"WARNING: {len(missing_scores)} quotes are missing Agent scores! This may skew results.")
+        print(f"WARNING: {len(missing_scores)} quotes are missing scores! This may skew results.")
         print(f"Missing scores for: {', '.join(set(missing_scores))}")
         print("-" * 58)
 
-    # Load teams to map coach -> team
-    teams_path = os.path.join(DATA_DIR, "teams.json")
-    teams_data = load_json(teams_path)
-    
+    heuristic_scores = [c["coach"] for c in comments if c.get("graded_by") == "heuristic"]
+    if heuristic_scores:
+        print(f"NOTE: {len(heuristic_scores)} quotes graded by keyword heuristic (run the grader with an LLM key for better accuracy).")
+        print("-" * 58)
+
     coach_to_team = {t["coach"]: t["team"] for t in teams_data}
     team_stats = {t["team"]: {"games": 0, "home": 0, "away": 0, "total": 0} for t in teams_data}
-    
-    # We need to know which coach played where in each game
+
     for game in games:
         gid = game["game_id"]
         h_coach = game["home_coach"]
         a_coach = game["away_coach"]
         h_team = game["home_team"]
         a_team = game["away_team"]
-        
-        # Find comments for this game
+
         game_comments = [c for c in comments if c["game_id"] == gid]
-        
-        # Track games played (where a comment was processed)
-        # For simplicity, we count the game if either coach has a comment, 
-        # but typically we track per team.
-        h_comment = next((c for c in game_comments if c["coach"] == h_coach), None)
-        a_comment = next((c for c in game_comments if c["coach"] == a_coach), None)
-        
-        if h_comment:
+
+        def _score_for(coach):
+            return sum(c["score"] for c in game_comments if c["coach"] == coach and "score" in c)
+
+        h_has = any(c["coach"] == h_coach for c in game_comments)
+        a_has = any(c["coach"] == a_coach for c in game_comments)
+
+        if h_has:
             team_stats[h_team]["games"] += 1
-        if a_comment:
+        if a_has:
             team_stats[a_team]["games"] += 1
-        
-        # Separate mode calculations
+
         if mode == "separate":
-            for c in game_comments:
-                score = c.get("score", 1)
-                if c["coach"] == h_coach:
-                    team_stats[h_team]["home"] += score
-                    team_stats[h_team]["total"] += score
-                elif c["coach"] == a_coach:
-                    team_stats[a_team]["away"] += score
-                    team_stats[a_team]["total"] += score
-        
-        # Competitive mode calculations
+            if h_has:
+                score = _score_for(h_coach)
+                team_stats[h_team]["home"] += score
+                team_stats[h_team]["total"] += score
+            if a_has:
+                score = _score_for(a_coach)
+                team_stats[a_team]["away"] += score
+                team_stats[a_team]["total"] += score
         else:
-            if h_comment and a_comment:
-                s_h = h_comment.get("score", 1)
-                s_a = a_comment.get("score", 1)
-                
+            if h_has and a_has:
+                s_h = _score_for(h_coach)
+                s_a = _score_for(a_coach)
+
                 if s_h > s_a:
                     team_stats[h_team]["home"] += 3
                     team_stats[h_team]["total"] += 3
-                    team_stats[a_team]["away"] += 0
                 elif s_a > s_h:
                     team_stats[a_team]["away"] += 3
                     team_stats[a_team]["total"] += 3
-                    team_stats[h_team]["home"] += 0
                 else:
                     team_stats[h_team]["home"] += 1
                     team_stats[h_team]["total"] += 1
                     team_stats[a_team]["away"] += 1
                     team_stats[a_team]["total"] += 1
 
-    # Sort teams by total points
     sorted_teams = sorted(team_stats.items(), key=lambda x: x[1]["total"], reverse=True)
-    
-    # Print table
+
     print(f"\n--- Respect Leaderboard ({mode}) ---")
     print(f"{'Pos':<4} | {'Team':<20} | {'Total':<6} | {'GP':<4} | {'Home':<6} | {'Away':<6}")
     print("-" * 58)
@@ -85,8 +82,9 @@ def show_leaderboard(mode="separate"):
     print("-" * 58)
 
 
-
 if __name__ == "__main__":
-    import sys
     mode = sys.argv[1] if len(sys.argv) > 1 else "separate"
+    if mode not in ("separate", "competitive"):
+        print(f"Unknown mode '{mode}'. Use 'separate' or 'competitive'.")
+        sys.exit(1)
     show_leaderboard(mode)

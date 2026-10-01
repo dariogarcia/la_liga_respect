@@ -7,6 +7,9 @@ class SearchResult:
     url: str
     title: str
     snippet: str
+    # Publication date from the discovery source (e.g. Google News RSS
+    # pubDate); used as a fallback when the article page is undated.
+    published: Optional[datetime] = None
 
 @dataclass
 class SourceDocument:
