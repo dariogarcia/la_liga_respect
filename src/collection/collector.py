@@ -185,6 +185,8 @@ def collect_matchday_comments(api_key: str = None, search_provider: Any = None, 
         for p in exhausted:
             p["attempts"] = 0
         print(f"Retry requested: reset {len(exhausted)} exhausted pending request(s).")
+        if exhausted:
+            save_pending_requests(pending)
 
     if search_provider is None:
         search_provider = get_search_provider(api_key)
@@ -246,6 +248,11 @@ def collect_matchday_comments(api_key: str = None, search_provider: Any = None, 
                 _drop_pending(pending, game_id, coach)
             else:
                 _update_pending(pending, game, coach, reason)
+
+            # Persist after every sought target so an interruption
+            # (crash, Ctrl-C, reboot) never loses collected work.
+            save_comments(comments)
+            save_pending_requests(pending)
 
     save_comments(comments)
     save_pending_requests(pending)

@@ -186,6 +186,40 @@ class TestPendingRetrySemantics(unittest.TestCase):
         self.assertEqual(entry["attempts"], 1)
 
 
+class TestIncrementalPersistence(unittest.TestCase):
+    def _run(self, games):
+        calls = {"comments": 0, "pending": 0}
+
+        def count(key):
+            return lambda _: calls.__setitem__(key, calls[key] + 1)
+
+        with mock.patch("src.collection.collector.get_games", return_value=games), \
+             mock.patch("src.collection.collector.get_comments", return_value=[]), \
+             mock.patch("src.collection.collector.get_pending_requests", return_value=[]), \
+             mock.patch("src.collection.collector.save_comments", side_effect=count("comments")), \
+             mock.patch("src.collection.collector.save_pending_requests", side_effect=count("pending")), \
+             mock.patch("src.collection.collector.fetch_sitemap_entries", return_value=[]), \
+             mock.patch("src.collection.collector.ArticleFetcher"), \
+             mock.patch("src.collection.collector.get_extractor"):
+            collect_matchday_comments(search_provider=FakeSearchProvider([]))
+        return calls
+
+    def test_saves_after_each_sought_target(self):
+        # Two coach targets in one game -> one save per target during the
+        # loop plus the final save, so an interruption mid-run keeps the
+        # results already collected.
+        calls = self._run([GAME])
+        self.assertGreaterEqual(calls["comments"], 3)
+        self.assertGreaterEqual(calls["pending"], 3)
+
+    def test_no_saves_when_nothing_sought(self):
+        # Future games are skipped entirely: nothing to persist.
+        future_game = dict(GAME, date=(date.today() + timedelta(days=1)).isoformat())
+        calls = self._run([future_game])
+        self.assertEqual(calls["comments"], 1)  # final save only
+        self.assertEqual(calls["pending"], 1)
+
+
 class TestRetryPending(unittest.TestCase):
     PENDING = [{
         "game_id": "1",

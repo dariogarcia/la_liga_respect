@@ -27,8 +27,10 @@ def load_json(filepath):
 
 def save_json(filepath, data):
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    with open(filepath, 'w') as f:
+    tmp_path = f"{filepath}.tmp"
+    with open(tmp_path, 'w') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
+    os.replace(tmp_path, filepath)
 
 
 def get_games():
