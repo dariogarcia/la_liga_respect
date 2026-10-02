@@ -672,7 +672,7 @@
             </div>
             <div class="mode-switch metric-switch" role="group" aria-label="Points display">
                 <button id="btn-total" class="mode-btn active" aria-pressed="true" onclick="setMetric('total')">Total Points</button>
-                <button id="btn-pergame" class="mode-btn" aria-pressed="false" onclick="setMetric('pergame')" title="Average points over the games where a quote was retrieved">Per Game*</button>
+                <button id="btn-pergame" class="mode-btn" aria-pressed="false" onclick="setMetric('pergame')" title="Average points per quoted game, scaled to the games played so far — same magnitude as the league table">Projected*</button>
             </div>
             <p id="mode-explainer" class="mode-explainer"></p>
         </div>
@@ -705,10 +705,13 @@
         </div>
 
         <p id="pergame-note" class="pending-note" hidden>
-            * Average points over the games where a quote was retrieved; an asterisk marks
-            coaches with fewer than 5 such games (small sample). Coaches with no retrieved
-            quotes yet are listed without a value. Switch to <em>Total Points</em> to see
-            season-long accumulation including respectful silences.
+            * Projected points: the average score over the games where a quote was
+            retrieved, scaled to the number of games played so far — the same magnitude
+            as the league table (a perfectly respectful coach projects to 3 points per
+            game, like a team winning every match), so respect points can be compared
+            with league points. An asterisk marks coaches with fewer than 5 quoted
+            games (small sample). Coaches with no retrieved quotes yet are listed
+            without a value.
         </p>
 
         <div id="coach-detail" class="detail-panel" hidden></div>
@@ -795,12 +798,15 @@
                 points and the other 0, and a tie gives 1 point each. It reads like a league
                 table built from respect instead of goals, and rewards showing up your
                 counterpart.</p>
-            <p><strong>Per Game view</strong> — absolute points grow with the number of
-                games coached, so the ranking can also be normalized: <em>Per Game</em>
-                shows the average score over the games where a quote was retrieved for
-                that coach. An asterisk marks coaches with fewer than 5 such games — a
-                small sample — and coaches with no retrieved quotes yet are listed
-                without a value.</p>
+            <p><strong>Projected view</strong> — absolute points grow with the number of
+                games coached, so the ranking can also be normalized: the average score
+                over the games where a quote was retrieved for that coach is scaled to
+                the number of games they have played so far. The result sits on the
+                same scale as the league table — a perfectly respectful coach projects
+                to 3 points per game, like a team winning every match — so respect
+                points can be compared directly with league points. An asterisk marks
+                coaches with fewer than 5 quoted games — a small sample — and coaches
+                with no retrieved quotes yet are listed without a value.</p>
 
             <h3>Limitations</h3>
             <ul>
@@ -976,18 +982,24 @@
         const hasSplit = STATE.entries.some(e => 'home_points' in e);
         document.getElementById('th-homeaway').style.display = hasSplit ? '' : 'none';
 
-        // Per-game normalization: average points over the games where
-        // a quote was retrieved (silences are excluded from this view
-        // — they carry no quote to average). Older leaderboard files
-        // without the quote counters fall back to the total view.
+        // Projected points (normalization): the average score over the
+        // games where a quote was retrieved (silences are excluded —
+        // they carry no quote to average), scaled up to the games the
+        // coach has played. The result sits on the league-table scale
+        // (max 3 per game), comparable with actual league points.
+        // Older leaderboard files without the quote counters fall back
+        // to the total view.
         const perGame = STATE.metric === 'pergame'
             && STATE.entries.some(e => 'quoted_games' in e);
-        const avgOf = e => (Number(e.quoted_games) > 0)
-            ? (Number(e.quoted_points) || 0) / e.quoted_games
-            : null;
+        const projectedOf = e => {
+            const quoted = Number(e.quoted_games) || 0;
+            if (!quoted) return null;
+            const avg = (Number(e.quoted_points) || 0) / quoted;
+            return avg * (Number(e.games_played) || 0);
+        };
         if (perGame) {
             shown = shown.slice().sort((a, b) => {
-                const aa = avgOf(a), bb = avgOf(b);
+                const aa = projectedOf(a), bb = projectedOf(b);
                 if (aa === null && bb === null) return (b.points - a.points) || a.coach.localeCompare(b.coach);
                 if (aa === null) return 1;
                 if (bb === null) return -1;
@@ -996,9 +1008,9 @@
         }
 
         const thPoints = document.getElementById('th-points');
-        thPoints.textContent = perGame ? 'Avg / Game*' : 'Points';
+        thPoints.textContent = perGame ? 'Projected*' : 'Points';
         thPoints.title = perGame
-            ? 'Average points over games with a retrieved quote (asterisk: fewer than 5)'
+            ? 'Average points per quoted game, scaled to games played so far (asterisk: fewer than 5 quoted games)'
             : 'Total respect points';
         document.getElementById('pergame-note').hidden = !perGame;
 
@@ -1011,7 +1023,7 @@
         }
 
         const maxPoints = perGame
-            ? Math.max(...shown.map(avgOf).filter(v => v !== null), 1)
+            ? Math.max(...shown.map(projectedOf).filter(v => v !== null), 1)
             : Math.max(...STATE.entries.map(e => Number(e.points) || 0), 1);
 
         shown.forEach((entry, index) => {
@@ -1030,19 +1042,20 @@
 
             const points = Number(entry.points) || 0;
             const quotedGames = Number(entry.quoted_games) || 0;
-            const avg = avgOf(entry);
+            const gamesPlayed = Number(entry.games_played) || 0;
+            const projected = projectedOf(entry);
             const barPct = perGame
-                ? (avg === null ? 0 : Math.round((avg / maxPoints) * 100))
+                ? (projected === null ? 0 : Math.round((projected / maxPoints) * 100))
                 : Math.round((points / maxPoints) * 100);
             const ptsDisplay = perGame
-                ? (avg === null
+                ? (projected === null
                     ? '—'
-                    : avg.toFixed(2) + (quotedGames < 5 ? '*' : ''))
+                    : projected.toFixed(1) + (quotedGames < 5 ? '*' : ''))
                 : String(points);
             const ptsTitle = perGame
-                ? (avg === null
+                ? (projected === null
                     ? 'No retrieved quotes yet'
-                    : `${quotedGames} game${quotedGames === 1 ? '' : 's'} with quotes · ${points} total points`)
+                    : `avg ${((Number(entry.quoted_points) || 0) / quotedGames).toFixed(2)} per quoted game × ${gamesPlayed} games played`)
                 : `${points} points`;
 
             const row = document.createElement('tr');
@@ -1088,8 +1101,8 @@
         renderLeaderboard();
     }
 
-    // Points display toggle: season-long totals vs the per-game
-    // average over games with retrieved quotes.
+    // Points display toggle: season-long totals vs projected points
+    // (average per quoted game scaled to games played).
     function setMetric(metric) {
         if (STATE.metric === metric) return;
         STATE.metric = metric;
