@@ -266,7 +266,7 @@ class HeuristicQuoteExtractor:
 class LLMQuoteExtractor:
     """
     Extracts verbatim referee-related quotes for a specific coach using an LLM.
-    Requires LLM_API_KEY (or PROVIDER_API_KEY).
+    Requires LLM_API_KEY, LLM_BASE_URL and LLM_MODEL.
 
     Cost controls:
     - B4: uses the cheaper model named in LLM_EXTRACT_MODEL when set

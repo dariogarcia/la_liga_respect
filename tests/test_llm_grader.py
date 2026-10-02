@@ -1,5 +1,6 @@
 """Unit tests for grade_quote with a mocked LLM backend."""
 import unittest
+from unittest import mock
 from unittest.mock import patch
 
 from src.grading.grader import grade_quote, heuristic_grade
@@ -75,3 +76,15 @@ class TestGradeQuoteLLMPath(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestLLMConfig(unittest.TestCase):
+    def test_requires_all_three_variables(self):
+        import os
+        from src.utils.llm import llm_available
+        with mock.patch.dict(os.environ, {"LLM_API_KEY": "k"}, clear=True):
+            self.assertFalse(llm_available())
+        with mock.patch.dict(os.environ, {
+            "LLM_API_KEY": "k", "LLM_BASE_URL": "https://llm.example", "LLM_MODEL": "m",
+        }, clear=True):
+            self.assertTrue(llm_available())

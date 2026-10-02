@@ -4,8 +4,9 @@ import re
 
 import requests
 
-DEFAULT_BASE_URL = "https://llm.example.invalid/api"
-DEFAULT_MODEL = "llm-model"
+# The endpoint, model and key are configuration, not code: nothing is
+# hardcoded so the repo never leaks provider details. All three env
+# vars are required for LLM-backed extraction and grading.
 DEFAULT_TIMEOUT = 90
 MAX_DOC_CHARS = 12000
 
@@ -19,14 +20,23 @@ class LLMBudgetExceeded(RuntimeError):
 
 def llm_config():
     return {
-        "base_url": os.getenv("LLM_BASE_URL", DEFAULT_BASE_URL).rstrip("/"),
-        "api_key": os.getenv("LLM_API_KEY") or os.getenv("PROVIDER_API_KEY"),
-        "model": os.getenv("LLM_MODEL", DEFAULT_MODEL),
+        "base_url": (os.getenv("LLM_BASE_URL") or "").rstrip("/"),
+        "api_key": os.getenv("LLM_API_KEY"),
+        "model": os.getenv("LLM_MODEL"),
     }
 
 
 def llm_available() -> bool:
-    return bool(llm_config()["api_key"])
+    cfg = llm_config()
+    missing = [name for name, value in (
+        ("LLM_API_KEY", cfg["api_key"]),
+        ("LLM_BASE_URL", cfg["base_url"]),
+        ("LLM_MODEL", cfg["model"]),
+    ) if not value]
+    if missing and cfg["api_key"]:
+        print(f"Warning: LLM_API_KEY is set but {', '.join(missing)} is not; "
+              "falling back to heuristic mode.")
+    return not missing
 
 
 def _max_llm_calls() -> int:
@@ -99,8 +109,10 @@ def llm_chat(
       callers are expected to degrade gracefully.
     """
     cfg = llm_config()
-    if not cfg["api_key"]:
-        raise RuntimeError("No LLM API key configured (set LLM_API_KEY or PROVIDER_API_KEY)")
+    if not (cfg["api_key"] and cfg["base_url"] and cfg["model"]):
+        raise RuntimeError(
+            "LLM not configured (set LLM_API_KEY, LLM_BASE_URL and LLM_MODEL)"
+        )
 
     limit = _max_llm_calls()
     if limit and _LLM_USAGE["calls"] >= limit:

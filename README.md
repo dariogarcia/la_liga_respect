@@ -62,9 +62,9 @@ No `PYTHONPATH` configuration is needed.
 | Variable | Required | Purpose |
 |---|---|---|
 | `FOOTBALL_DATA_API_KEY` | For calendar sync (optional) | [football-data.org](https://www.football-data.org/) key (free tier covers La Liga); without it, an ESPN keyless fallback is used |
-| `LLM_API_KEY` | Recommended | OpenAI-compatible LLM key for quote extraction and grading (e.g. the LLM provider) |
-| `LLM_BASE_URL` | No | Defaults to `https://llm.example.invalid/api` |
-| `LLM_MODEL` | No | Defaults to `llm-model` |
+| `LLM_API_KEY` | Recommended | OpenAI-compatible LLM key for quote extraction and grading |
+| `LLM_BASE_URL` | With `LLM_API_KEY` | Your OpenAI-compatible endpoint; nothing is hardcoded |
+| `LLM_MODEL` | With `LLM_API_KEY` | Model name served by your endpoint |
 | `LLM_EXTRACT_MODEL` | No | Different model for quote extraction only (e.g. a cheaper one); falls back to `LLM_MODEL` |
 | `SERPAPI_KEY` | No | SerpApi key; without it the system uses news-sitemap discovery plus keyless Google News RSS search |
 | `ENABLE_HTML_SCRAPERS` | No | Set `1` to also use the DuckDuckGo/Bing HTML scrapers (off by default: scraping consumer search pages is legally gray) |

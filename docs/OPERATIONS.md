@@ -8,7 +8,9 @@ and what to do when things break.
 La Liga plays weekends. Monday morning, after the matchday:
 
 ```bash
-export PROVIDER_API_KEY=...          # your LLM key
+export LLM_API_KEY=...              # your LLM key
+export LLM_BASE_URL=...             # your OpenAI-compatible endpoint
+export LLM_MODEL=...                # model name it serves
 python3 src/main.py                # sync calendar, collect, grade, report
 git add data/ && git commit -m "data: matchday N" && git push
 ```

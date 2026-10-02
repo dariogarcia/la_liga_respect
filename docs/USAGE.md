@@ -23,13 +23,13 @@ All configuration is done via environment variables:
 | `FOOTBALL_DATA_API_KEY` | Sync finished matches from football-data.org | Keyless ESPN scoreboard fallback used instead |
 | `SERPAPI_KEY` | SerpApi web search | News-sitemap discovery plus keyless Google News RSS / DuckDuckGo / Bing search (lower quality) |
 | `LLM_API_KEY` | LLM quote extraction + grading via an OpenAI-compatible endpoint | Keyword heuristics (flagged `graded_by: heuristic`) |
-| `LLM_BASE_URL` | LLM endpoint (default `https://llm.example.invalid/api`) | — |
-| `LLM_MODEL` | Model name (default `llm-model`) | — |
+| `LLM_BASE_URL` | Your OpenAI-compatible LLM endpoint | — |
+| `LLM_MODEL` | Model name served by your endpoint | — |
 | `RATE_LIMIT_FETCH` | Seconds between article fetches (default `1.0`, `0` disables) | — |
 | `RATE_LIMIT_SEARCH` | Seconds between keyless searches (default `2.0`, `0` disables) | — |
 | `RATE_LIMIT_SITEMAP` | Seconds between sitemap fetches (default `1.0`, `0` disables) | — |
 
-`PROVIDER_API_KEY` is accepted as an alias for `LLM_API_KEY`.
+All three LLM variables (`LLM_API_KEY`, `LLM_BASE_URL`, `LLM_MODEL`) must be set for LLM mode; the endpoint and model are configuration, never hardcoded.
 
 Outbound HTTP (article fetches, keyless searches, sitemap downloads) is rate-limited to be polite to publishers and avoid DuckDuckGo throttling.
 
