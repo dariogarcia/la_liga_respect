@@ -14,7 +14,7 @@ from .search import get_search_provider
 from .sitemap import fetch_sitemap_entries, find_coach_articles
 from .filtering import is_allowed_source
 from .fetcher import ArticleFetcher
-from .extractor import get_extractor
+from .extractor import get_extractor, is_candidate_document
 from .validation import validate_extractions
 from .deduplication import deduplicate_quotes
 
@@ -128,10 +128,22 @@ def collect_comments_for_coach(
         return None, REASON_FETCH_FAILED
 
     quotes = []
+    skipped_prefilter = 0
     for doc in documents:
+        # Cheap local check before (potentially LLM-backed) extraction:
+        # skip documents that cannot yield referee quotes from this coach.
+        if not is_candidate_document(coach, doc):
+            skipped_prefilter += 1
+            continue
         extracted = extractor.extract(coach, game["game_id"], doc)
         validated = validate_extractions(extracted, doc)
         quotes.extend(validated)
+
+    if skipped_prefilter:
+        print(
+            f"Pre-filter skipped {skipped_prefilter}/{len(documents)} document(s) "
+            f"for {coach} (no coach mention or no referee keywords)."
+        )
 
     quotes = deduplicate_quotes(quotes)
     if not quotes:

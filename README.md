@@ -88,6 +88,10 @@ python3 src/main.py --retry-pending    # retry requests that exhausted all attem
 
 Pending requests that fail 5 times are normally given up on; `--retry-pending` resets their attempt counters so the next collection run tries them again. Old games are not special-cased: search queries are date-bounded to each game's own 48h publication window, so they stay collectable at any time.
 
+**Weekly cadence**: a [GitHub Actions workflow](.github/workflows/weekly-reminder.yml) opens a `weekly-update` issue every Monday reminding you to run the pipeline locally (the LLM API key never leaves your machine, so the actual run cannot happen in CI). Close the issue once the updated `data/` is pushed.
+
+**LLM cost control**: before extraction, each fetched document passes a cheap local pre-filter — documents whose text never mentions the coach or contains no referee keywords are skipped without an LLM call, typically cutting extraction from up to 6 calls per coach to 1–2.
+
 To view the standings:
 ```bash
 python3 src/display.py separate

@@ -78,6 +78,28 @@ def _name_tokens(coach: str) -> List[str]:
     return [_normalize(t) for t in coach.split() if len(t) > 2]
 
 
+def is_candidate_document(coach: str, document: SourceDocument) -> bool:
+    """
+    Cheap local pre-filter run before (potentially LLM-backed) extraction.
+
+    A document can only yield referee-related quotes from the coach if
+    the article text mentions the coach (attribution needs a name
+    mention) and talks about officiating (REFEREE_RE). Documents failing
+    either check are skipped without an extraction call, which typically
+    cuts LLM extraction from up to 6 calls per coach to 1-2.
+
+    This is behavior-preserving for the heuristic extractor: its
+    attribution and referee-keyword logic could never produce quotes
+    from a document failing either check.
+    """
+    tokens = _name_tokens(coach)
+    if not tokens:
+        # No usable name tokens: cannot pre-filter safely.
+        return True
+    norm = _normalize(document.text)
+    return _mentions(norm, tokens) and bool(REFEREE_RE.search(document.text))
+
+
 def _mentions(text_normalized: str, tokens: List[str]) -> bool:
     return any(t in text_normalized for t in tokens)
 

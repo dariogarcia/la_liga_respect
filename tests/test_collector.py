@@ -6,6 +6,7 @@ from src.collection.collector import (
     collect_comments_for_coach,
     collect_matchday_comments,
     MAX_ATTEMPTS,
+    REASON_NO_QUOTES,
     REASON_NO_RESULTS,
     REASON_NO_TRUSTED,
     REASON_WINDOW_FILTERED,
@@ -39,7 +40,10 @@ class FakeFetcher:
         return SourceDocument(
             url=url,
             title="t",
-            text=self.text or "«El árbitro lo hizo bien, fue un trabajo complicado»",
+            text=self.text or (
+                "Coach A compareció tras el partido. "
+                "«El árbitro lo hizo bien, fue un trabajo complicado»"
+            ),
             published_at=self.published_at,
             source_name="as.com",
         )
@@ -117,6 +121,39 @@ class TestCollectCommentsForCoach(unittest.TestCase):
         merged, reason = self._run(provider, fetcher)
         self.assertIsNotNone(merged)
         self.assertEqual(merged["published_at"], datetime(2026, 8, 16, 7, 0))
+
+    def test_prefilter_skips_document_without_coach_mention(self):
+        # B1: a document that never mentions the coach cannot yield his
+        # quotes, so the (potentially LLM-backed) extractor is never
+        # called for it.
+        calls = []
+
+        class RecordingExtractor:
+            def extract(self, coach, game_id, document):
+                calls.append(document.url)
+                return []
+
+        provider = FakeSearchProvider([
+            SearchResult("https://www.as.com/no-coach", "t", "s"),
+            SearchResult("https://www.as.com/with-coach", "t", "s"),
+        ])
+
+        class SelectiveFetcher:
+            def fetch(self, url):
+                text = (
+                    "El técnico del rival analizó el papeleo del árbitro."
+                    if "no-coach" in url else
+                    "Coach A habló del árbitro tras el partido."
+                )
+                return SourceDocument(
+                    url=url, title="t", text=text,
+                    published_at=datetime(2026, 8, 16, 8, 0), source_name="as.com",
+                )
+
+        merged, reason = self._run(provider, SelectiveFetcher(), RecordingExtractor())
+        self.assertEqual(calls, ["https://www.as.com/with-coach"])
+        self.assertIsNone(merged)
+        self.assertEqual(reason, REASON_NO_QUOTES)
 
 
 class TestQuerySelection(unittest.TestCase):

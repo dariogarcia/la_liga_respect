@@ -1,6 +1,10 @@
 import unittest
 
-from src.collection.extractor import HeuristicQuoteExtractor, REFEREE_RE
+from src.collection.extractor import (
+    HeuristicQuoteExtractor,
+    REFEREE_RE,
+    is_candidate_document,
+)
 from src.collection.models import SourceDocument
 
 
@@ -119,6 +123,30 @@ class TestHeuristicExtractor(unittest.TestCase):
     def test_var_keyword(self):
         self.assertTrue(REFEREE_RE.search("el VAR revisó la jugada"))
         self.assertFalse(REFEREE_RE.search("hubo varias ocasiones de gol"))
+
+
+class TestIsCandidateDocument(unittest.TestCase):
+    def test_keep_when_coach_mentioned_and_referee_keywords(self):
+        doc = make_doc("Simeone analizó el partido y defendió al árbitro tras la polémica del VAR.")
+        self.assertTrue(is_candidate_document("Diego Simeone", doc))
+
+    def test_skip_when_coach_not_mentioned(self):
+        doc = make_doc("Mourinho analizó el partido y criticó duramente al árbitro del encuentro.")
+        self.assertFalse(is_candidate_document("Diego Simeone", doc))
+
+    def test_skip_when_no_referee_keywords(self):
+        doc = make_doc("Simeone habló de la táctica, las bajas y la preparación del derbi.")
+        self.assertFalse(is_candidate_document("Diego Simeone", doc))
+
+    def test_coach_name_match_tolerates_accents(self):
+        doc = make_doc("Siméone elogió al árbitro del partido.")
+        self.assertTrue(is_candidate_document("Diego Simeone", doc))
+
+    def test_no_usable_name_tokens_passes_through(self):
+        # "Ed" (<= 2 chars) yields no usable tokens: the filter cannot
+        # judge safely, so the document is kept.
+        doc = make_doc("El árbitro pitó un penalti dudoso.")
+        self.assertTrue(is_candidate_document("Ed", doc))
 
 
 if __name__ == "__main__":
