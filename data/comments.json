@@ -3,37 +3,49 @@
     "game_id": "1",
     "coach": "Quique Sánchez Flores",
     "quote": "Hoy lo quiero más que ayer. Se lo he dicho",
-    "score": 3
+    "score": 3,
+    "graded_by": "llm",
+    "justification": "The quote expresses affection and appreciation ('Hoy lo quiero más que ayer. Se lo he dicho' - 'Today I love him more than yesterday. I've told him'), which, if directed at the referee, constitutes praise rather than criticism. There is no blame, aggression, or implication of bias, so it falls on the respectful end of the scale."
   },
   {
     "game_id": "1",
     "coach": "José Bordalás",
     "quote": "No nos tratan de la misma manera pero no podemos hacer nada",
-    "score": 0
+    "score": 0,
+    "graded_by": "llm",
+    "justification": "The quote ('They don't treat us the same way but we can't do anything about it') implies the referee is biased against the speaker's team, suggesting unequal or unfair treatment. This constitutes an accusation of bias, even if expressed with resignation rather than aggression, which falls under the disrespectful category."
   },
   {
     "game_id": "2",
     "coach": "Manolo González",
     "quote": "Era importante empezar ganando y estoy muy contento por la imagen del equipo",
-    "score": 1
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The quote makes no mention of the referee or officiating at all; it focuses entirely on the team's performance and the importance of winning. Since it neither praises nor criticizes the referee, it is neutral with no aggressive or disrespectful content."
   },
   {
     "game_id": "2",
     "coach": "Luís Castro",
     "quote": "El partido no tiene discusión, ellos han merecido ganar. Lo han querido más que nosotros",
-    "score": 3
+    "score": 3,
+    "graded_by": "llm",
+    "justification": "The coach does not mention or blame the referee at all, instead taking responsibility by admitting the opponent deserved to win and wanted it more. By attributing the result to his own team's performance rather than the officiating, he avoids blaming the referee for the outcome, which meets the criteria for a respectful quote."
   },
   {
     "game_id": "3",
     "coach": "José Alberto López",
     "quote": "No quiero excusar absolutamente nada de lo que ha ocurrido con el tema arbitral, pero creo que hay dos cosas que no se pueden pasar por alto. Una es la disparidad en el criterio... y luego la falta de respeto hacia mi equipo",
-    "score": 0
+    "score": 0,
+    "graded_by": "llm",
+    "justification": "Although the coach frames it with 'I don't want to excuse anything,' the quote openly criticizes the officiating by pointing out a 'disparity in criteria' and accusing the referee of showing 'a lack of respect toward my team.' Claiming the officials disrespected his team is an aggressive accusation that goes beyond neutral disagreement, implying improper conduct or bias by the referee."
   },
   {
     "game_id": "3",
     "coach": "Iñigo Pérez",
     "quote": "No me preocupa ese tipo de errores... sobre los árbitros, he cambiado de equipo, pero la idea es la misma.",
-    "score": 1
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach mentions referee errors but explicitly states they are not worried about them, avoiding blame for the result. The cryptic remark about changing teams 'but the idea is the same' is ambiguous and could hint at a critical stance, but contains no aggression, accusations of bias, or calls for sanctions. This is neutral disagreement at most."
   },
   {
     "game_id": "espn-401882865",
