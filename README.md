@@ -4,6 +4,8 @@
 
 Respect Rank is an agentic system designed to monitor and rank La Liga football managers based on their level of respect for referees during post-game interviews.
 
+> ⚠️ **Read [NOTICE.md](NOTICE.md) before relying on this data.** The system is fully automated: quotes may be misattributed, scores are subjective machine-generated judgments, and quoted text remains the property of its publishers (takedown requests welcome). Code is MIT-licensed; compiled data is not covered — see `LICENSE` and `NOTICE.md`.
+
 ## 🌟 Overview
 
 The system transforms qualitative interview data into a quantitative leaderboard, mimicking the structure of official league standings. It allows users to track which coaches maintain professionalism and which are frequently critical of officiating.
