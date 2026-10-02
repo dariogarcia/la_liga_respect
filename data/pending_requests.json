@@ -542,5 +542,93 @@
     "attempts": 1,
     "last_attempt": "2026-10-02T08:47:37.675912",
     "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882884",
+    "coach": "José Bordalás",
+    "date": "2026-09-13",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:48:06.179934",
+    "reason": "publication_window_filtered"
+  },
+  {
+    "game_id": "espn-401882884",
+    "coach": "Antonio Hidalgo",
+    "date": "2026-09-13",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:48:40.308598",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882885",
+    "coach": "Claudio Giráldez",
+    "date": "2026-09-13",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:49:15.898464",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882885",
+    "coach": "Juan Francisco Funes",
+    "date": "2026-09-13",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:49:48.409528",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882877",
+    "coach": "Iñigo Pérez",
+    "date": "2026-09-14",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:50:25.552843",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882877",
+    "coach": "Manuel Pellegrini",
+    "date": "2026-09-14",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:50:54.542490",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882868",
+    "coach": "Beñat San José",
+    "date": "2026-09-15",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:51:24.527354",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882868",
+    "coach": "Manolo González",
+    "date": "2026-09-15",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:51:58.701692",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882872",
+    "coach": "Martín Anselmi",
+    "date": "2026-09-15",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:52:25.179536",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882872",
+    "coach": "José Mourinho",
+    "date": "2026-09-15",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:53:02.474036",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882876",
+    "coach": "Quique Sánchez Flores",
+    "date": "2026-09-15",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:53:28.813452",
+    "reason": "no_quotes_extracted"
   }
 ]

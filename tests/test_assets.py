@@ -39,6 +39,36 @@ class TestTeamAssets(unittest.TestCase):
         html = (ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("assets/teams/default.svg", html)
 
+    def test_logos_are_local_no_external_crests(self):
+        # C7 regression: badges must stay locally generated files, never
+        # hot-linked club crests (copyright + tracking + availability).
+        for team in self.teams:
+            logo = team["logo"]
+            self.assertFalse(
+                logo.startswith(("http://", "https://", "//")),
+                f"{team['id']} points to an external logo: {logo}",
+            )
+            self.assertTrue(
+                logo.startswith("assets/teams/"),
+                f"{team['id']} logo is not under assets/teams/: {logo}",
+            )
+
+    def test_badges_are_initials_style_not_club_crests(self):
+        # C7: generated badges are text/initials based SVGs; a real club
+        # crest smuggled in would typically be a heavy embedded raster.
+        for team in self.teams:
+            content = (ROOT / team["logo"]).read_text(encoding="utf-8")
+            self.assertNotIn(
+                "data:image",
+                content,
+                f"{team['id']} logo embeds raster data (club crest?)",
+            )
+            self.assertLess(
+                len(content),
+                20000,
+                f"{team['id']} logo is suspiciously large for an initials badge",
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

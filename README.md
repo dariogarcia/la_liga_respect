@@ -65,10 +65,19 @@ No `PYTHONPATH` configuration is needed.
 | `LLM_API_KEY` | Recommended | OpenAI-compatible LLM key for quote extraction and grading (e.g. the LLM provider) |
 | `LLM_BASE_URL` | No | Defaults to `https://llm.example.invalid/api` |
 | `LLM_MODEL` | No | Defaults to `llm-model` |
+| `LLM_EXTRACT_MODEL` | No | Different model for quote extraction only (e.g. a cheaper one); falls back to `LLM_MODEL` |
 | `SERPAPI_KEY` | No | SerpApi key; without it the system uses news-sitemap discovery plus keyless Google News RSS / DuckDuckGo / Bing search |
+| `SINCE` | No | Default collection window for weekly runs: `YYYY-MM-DD`. CLI `--since` wins; without either, the window is the last run's date minus a 3-day overlap (`--full-history` overrides) |
+| `MAX_REQUESTS_PER_RUN` | No | Hard cap on HTTP fetches per run across all sources (default `600`, `0` disables) |
+| `MAX_LLM_CALLS_PER_RUN` | No | Hard cap on LLM calls per run (default `300`); when exhausted, extraction/grading degrade to the heuristic fallback |
+| `LLM_BATCH_EXTRACTION` | No | Set `0` to disable batched quote extraction (one LLM call per document instead of one per coach) |
 | `RATE_LIMIT_FETCH` | No | Seconds between article fetches (default `1.0`, `0` disables) |
 | `RATE_LIMIT_SEARCH` | No | Seconds between keyless searches (default `2.0`, `0` disables) |
 | `RATE_LIMIT_SITEMAP` | No | Seconds between sitemap fetches (default `1.0`, `0` disables) |
+| `RATE_LIMIT_FETCH_DOMAIN` | No | Minimum seconds between requests to the *same domain* (default `3.0`, `0` disables) |
+| `HTTP_CACHE_DIR` | No | On-disk HTTP cache directory (default `.cache/http`, gitignored) |
+| `HTTP_CACHE_DISABLE` | No | Set `1` to bypass the on-disk HTTP cache |
+| `GOOGLE_NEWS_DECODE` | No | Set `0` to skip the Google News base64 URL decoder (the batchexecute endpoint it queries is undocumented) |
 
 Everything degrades gracefully: without keys the system still runs using news-sitemap discovery, keyless search, and heuristic extraction/grading (lower quality, clearly flagged).
 
@@ -86,9 +95,15 @@ python3 src/main.py --no-sync          # skip football-data.org sync
 python3 src/main.py --no-collect       # only re-grade and re-rank
 python3 src/main.py --no-grade         # only sync and collect
 python3 src/main.py --retry-pending    # retry requests that exhausted all attempts
+python3 src/main.py --since 2026-09-25 # only process games from this date on
+python3 src/main.py --full-history     # ignore the incremental window
 ```
 
-Pending requests that fail 5 times are normally given up on; `--retry-pending` resets their attempt counters so the next collection run tries them again. Old games are not special-cased: search queries are date-bounded to each game's own 48h publication window, so they stay collectable at any time.
+**Incremental weekly runs**: by default each run only seeks comments for games since the last run (minus a 3-day overlap), so a weekly run costs minutes, not hours. Games more than 14 days old with no collected quotes are marked terminally `no_coverage` in `pending_requests.json` — the 48h publication window is long gone, so they are never retried again (not even by `--retry-pending`).
+
+Pending requests that fail 5 times are normally given up on; `--retry-pending` resets their attempt counters so the next collection run tries them again (terminal `no_coverage` entries excepted).
+
+Every run writes `data/run_report.json` (run timestamp, window used, collection and grading stats, LLM usage); the web UI shows it as a "data last updated" banner.
 
 **Weekly cadence**: a [GitHub Actions workflow](.github/workflows/weekly-reminder.yml) opens a `weekly-update` issue every Monday reminding you to run the pipeline locally (the LLM API key never leaves your machine, so the actual run cannot happen in CI). Close the issue once the updated `data/` is pushed.
 
@@ -100,7 +115,7 @@ python3 src/display.py separate
 python3 src/display.py competitive
 ```
 
-Or open the web UI (serves the leaderboard with team badges, games played, data-quality notices and pending-collection status):
+Or open the web UI (serves the leaderboard with team badges, games played, a coach/team search filter, per-week quote filtering, light/dark mode, data-quality notices, "data last updated" banner and pending-collection status):
 ```bash
 python3 -m http.server 8000   # then open http://localhost:8000
 ```
