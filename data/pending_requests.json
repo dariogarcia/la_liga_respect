@@ -1,45 +1,5 @@
 [
   {
-    "game_id": "espn-401882871",
-    "coach": "José Alberto López",
-    "date": "2026-09-16",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:55:40.921572",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882873",
-    "coach": "Antonio Hidalgo",
-    "date": "2026-09-16",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:56:19.551028",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882873",
-    "coach": "Luis García",
-    "date": "2026-09-16",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:56:59.811657",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882875",
-    "coach": "Diego Simeone",
-    "date": "2026-09-16",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:57:36.155179",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882869",
-    "coach": "Juan Francisco Funes",
-    "date": "2026-09-17",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:58:47.062860",
-    "reason": "no_quotes_extracted"
-  },
-  {
     "game_id": "espn-401882869",
     "coach": "Iñigo Pérez",
     "date": "2026-09-17",

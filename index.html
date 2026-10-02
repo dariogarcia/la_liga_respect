@@ -341,6 +341,9 @@
         .grader-llm { background: var(--notice-info-bg); color: var(--notice-info-fg); border: 1px solid var(--notice-info-border); }
         .grader-heuristic { background: var(--notice-warn-bg); color: var(--notice-warn-fg); border: 1px solid var(--notice-warn-border); }
         .grader-coverage { background: var(--notice-ok-bg, #e8f6ee); color: var(--notice-ok-fg, #1d7a43); border: 1px solid var(--notice-ok-border, #bfe5cf); }
+        .movement { display: inline-block; margin-left: 0.3em; font-size: 0.7rem; font-weight: bold; }
+        .movement.up { color: #1d7a43; }
+        .movement.down { color: #c0392b; }
         .quote-text {
             margin: 6px 0 10px 0;
             padding-left: 12px;
@@ -478,7 +481,7 @@
         const DATA = { teams: [], comments: [], games: [], pending: [], seasonStart: null };
         const MAX_ATTEMPTS = 5;
         // Current UI state: shown mode, fetched entries, search filter.
-        const STATE = { mode: 'separate', entries: [], filter: '' };
+        const STATE = { mode: 'separate', entries: [], filter: '', movement: null };
 
         // --- XSS hardening (F2): every dynamic value goes through esc()
         // before being placed in an innerHTML template, and every URL is
@@ -590,6 +593,12 @@
                 const homeAway = hasSplit
                     ? `<td class="ha-col" title="Home / Away points">${Number(entry.home_points) || 0} / ${Number(entry.away_points) || 0}</td>`
                     : '';
+                const mvKey = entry.coach + '|' + (entry.team || teamName);
+                const mv = (STATE.movement && STATE.mode === 'separate')
+                    ? STATE.movement[mvKey] : undefined;
+                const mvHtml = (mv === undefined || mv === 0)
+                    ? ''
+                    : `<span class="movement ${mv > 0 ? 'up' : 'down'}" title="Moved ${mv > 0 ? 'up' : 'down'} ${Math.abs(mv)} place${Math.abs(mv) === 1 ? '' : 's'} since the previous run">${mv > 0 ? '▲' : '▼'}${Math.abs(mv)}</span>`;
 
                 const row = document.createElement('tr');
                 row.className = 'leaderboard-row';
@@ -597,7 +606,7 @@
                 row.setAttribute('role', 'button');
                 row.setAttribute('aria-label', `Show quotes for ${teamName} coach ${entry.coach}`);
                 row.innerHTML = `
-                    <td class="pos-col">${index + 1}</td>
+                    <td class="pos-col">${index + 1}${mvHtml}</td>
                     <td class="team-cell">
                         <div class="team-logo">
                             <img src="${esc(logoUrl)}" class="team-icon" alt="${esc(teamName)} logo" loading="lazy"
@@ -647,6 +656,39 @@
             }
             return `<div title="Referee-related quotes found vs games resolved without a referee comment (presumed = nothing found within the 14-day window)" ` +
                    `style="font-size: 0.72rem; color: var(--fg-muted);">${parts.join(' · ')}</div>`;
+        }
+
+        // F5: position movement between the last two recorded runs.
+        // Reads data/history/runs.jsonl (one run per line); older lines
+        // without leaderboard snapshots are skipped gracefully.
+        async function loadMovement() {
+            STATE.movement = {};
+            try {
+                const res = await fetch('data/history/runs.jsonl');
+                if (!res.ok) return;
+                const text = await res.text();
+                const runs = text.split('\n')
+                    .filter(line => line.trim())
+                    .map(line => { try { return JSON.parse(line); } catch (e) { return null; } })
+                    .filter(r => r && r.leaderboards && Array.isArray(r.leaderboards.separate));
+                if (runs.length < 2) return;
+                const posOf = lb => {
+                    const m = {};
+                    lb.forEach((row, i) => { m[row.coach + '|' + row.team] = i + 1; });
+                    return m;
+                };
+                const prev = posOf(runs[runs.length - 2].leaderboards.separate);
+                const now = posOf(runs[runs.length - 1].leaderboards.separate);
+                const mv = {};
+                for (const key of Object.keys(now)) {
+                    if (prev[key] !== undefined && prev[key] !== now[key]) {
+                        mv[key] = prev[key] - now[key];
+                    }
+                }
+                STATE.movement = mv;
+            } catch (e) {
+                /* history is optional: arrows simply stay hidden */
+            }
         }
 
         async function loadLeaderboard(mode) {
@@ -870,6 +912,7 @@
             loadLeaderboard('separate');
             loadNotices();
             loadRunReport();
+            loadMovement();
         };
     </script>
 </body>

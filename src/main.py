@@ -105,6 +105,12 @@ def main():
         "grading": grading_stats,
         "llm_usage": llm.llm_usage(),
         "http_requests": http.request_budget().count,
+        # F5: snapshots of both leaderboards so the GUI can compute
+        # position movement between runs from the run history.
+        "leaderboards": {
+            "separate": rankings,
+            "competitive": get_leaderboard("competitive"),
+        },
     }
     save_run_report(report)
     print(f"Run report written to data/run_report.json "
