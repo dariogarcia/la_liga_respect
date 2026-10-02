@@ -103,6 +103,8 @@ Or open the web UI (serves the leaderboard with team badges, games played, data-
 python3 -m http.server 8000   # then open http://localhost:8000
 ```
 
+The UI is also deployed to **GitHub Pages** on every push to `main` ([workflow](.github/workflows/deploy.yml)). One-time setup: repo *Settings → Pages → Source: GitHub Actions*. Clicking a leaderboard row opens the coach drill-down: every collected quote with its game, score, grader, justification and source links. All data displayed in the UI is escaped; URLs are validated before use.
+
 Team badges in `assets/teams/` are generated stylized initials (no club crests). Regenerate them after changing `data/teams.json`:
 ```bash
 python3 scripts/generate_badges.py
