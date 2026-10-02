@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-10-02T09:22:35.697493",
+  "last_run": null,
+  "since_used": null,
+  "sync": null,
+  "collection": null,
+  "grading": {
+    "quotes": 32,
+    "newly_graded": 0,
+    "heuristic": 0,
+    "llm_calls": 0
+  },
+  "llm_usage": {
+    "calls": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "by_purpose": {}
+  },
+  "http_requests": 0
+}
