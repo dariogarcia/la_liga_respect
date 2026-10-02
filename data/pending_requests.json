@@ -1,29 +1,5 @@
 [
   {
-    "game_id": "espn-401882884",
-    "coach": "Antonio Hidalgo",
-    "date": "2026-09-13",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:48:40.308598",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882885",
-    "coach": "Claudio Giráldez",
-    "date": "2026-09-13",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:49:15.898464",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882885",
-    "coach": "Juan Francisco Funes",
-    "date": "2026-09-13",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:49:48.409528",
-    "reason": "no_quotes_extracted"
-  },
-  {
     "game_id": "espn-401882877",
     "coach": "Iñigo Pérez",
     "date": "2026-09-14",

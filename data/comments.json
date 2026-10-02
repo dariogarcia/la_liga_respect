@@ -1600,5 +1600,50 @@
     "source_name": null,
     "published_at": null,
     "retrieved_at": "2026-10-02T10:23:31.484674"
+  },
+  {
+    "game_id": "espn-401882884",
+    "coach": "Antonio Hidalgo",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "presumed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "No referee-related comment found within 14 days of the game; presumed respectful.",
+    "sources": [],
+    "source_url": null,
+    "source_name": null,
+    "published_at": null,
+    "retrieved_at": "2026-10-02T10:23:49.485529"
+  },
+  {
+    "game_id": "espn-401882885",
+    "coach": "Claudio Giráldez",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "presumed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "No referee-related comment found within 14 days of the game; presumed respectful.",
+    "sources": [],
+    "source_url": null,
+    "source_name": null,
+    "published_at": null,
+    "retrieved_at": "2026-10-02T10:24:09.486613"
+  },
+  {
+    "game_id": "espn-401882885",
+    "coach": "Juan Francisco Funes",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "presumed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "No referee-related comment found within 14 days of the game; presumed respectful.",
+    "sources": [],
+    "source_url": null,
+    "source_name": null,
+    "published_at": null,
+    "retrieved_at": "2026-10-02T10:24:27.487834"
   }
 ]

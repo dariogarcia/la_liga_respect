@@ -490,16 +490,28 @@ class CompositeSearchProvider:
         return []
 
 
+def html_scrapers_enabled() -> bool:
+    """U3: the DuckDuckGo/Bing HTML scrapers are legally gray (scraping
+    consumer pages against their ToS). They only run when explicitly
+    opted in with ENABLE_HTML_SCRAPERS=1."""
+    return os.environ.get("ENABLE_HTML_SCRAPERS", "") in ("1", "true", "yes")
+
+
 def get_search_provider(api_key: str = None) -> SearchProvider:
     providers: List[SearchProvider] = []
     if api_key:
         providers.append(WebSearchProvider(api_key=api_key))
-    else:
-        print("No SERPAPI_KEY provided, falling back to keyless search (Google News RSS, DuckDuckGo, Bing).")
-    # Google News RSS comes first: it is the only keyless engine that
-    # honours date-bounded queries, so it must not be shadowed by
-    # undated results from the scraped engines.
+    # Google News RSS comes right after any paid provider: it is the
+    # only keyless engine that honours date-bounded queries, so it must
+    # not be shadowed by undated results from the scraped engines.
     providers.append(GoogleNewsRSSSearchProvider())
-    providers.append(DuckDuckGoSearchProvider())
-    providers.append(BingSearchProvider())
+    if html_scrapers_enabled():
+        providers.append(DuckDuckGoSearchProvider())
+        providers.append(BingSearchProvider())
+        if not api_key:
+            print("Keyless search: Google News RSS + opt-in DuckDuckGo/Bing scrapers.")
+    elif not api_key:
+        print("No SERPAPI_KEY provided, falling back to keyless search "
+              "(Google News RSS). Set ENABLE_HTML_SCRAPERS=1 to also use "
+              "the DuckDuckGo/Bing HTML scrapers.")
     return CompositeSearchProvider(providers)

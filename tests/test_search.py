@@ -1,3 +1,4 @@
+import os
 import unittest
 from datetime import date, datetime
 from unittest import mock
@@ -100,11 +101,17 @@ class TestCompositeSearchProvider(unittest.TestCase):
         composite = get_search_provider(api_key="fake")
         self.assertIsInstance(composite, CompositeSearchProvider)
         self.assertEqual(type(composite.providers[0]).__name__, "WebSearchProvider")
-        self.assertEqual(len(composite.providers), 4)
+        self.assertEqual(len(composite.providers), 2)
 
     def test_get_search_provider_without_key_is_keyless(self):
         composite = get_search_provider(api_key=None)
         self.assertIsInstance(composite, CompositeSearchProvider)
+        names = [type(p).__name__ for p in composite.providers]
+        self.assertEqual(names, ["GoogleNewsRSSSearchProvider"])
+
+    def test_html_scrapers_require_opt_in(self):
+        with mock.patch.dict(os.environ, {"ENABLE_HTML_SCRAPERS": "1"}, clear=False):
+            composite = get_search_provider(api_key=None)
         names = [type(p).__name__ for p in composite.providers]
         self.assertEqual(
             names,

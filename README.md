@@ -17,7 +17,7 @@ Finished La Liga matches are automatically fetched from [football-data.org](http
 
 ### 2. Data Collection
 The system identifies pending matches from the calendar and searches for post-game comments from both the home and away coaches.
-- **Discovery**: Publisher news sitemaps (Mundo Deportivo, Relevo, Estadio Deportivo — keyless, covers the last ~48h of articles) plus web search: SerpApi (with `SERPAPI_KEY`) or keyless Google News RSS / DuckDuckGo / Bing fallbacks. Google News RSS queries are date-bounded to each game's 48h publication window (`after:`/`before:`), so games older than the window stay collectable.
+- **Discovery**: Publisher news sitemaps (Mundo Deportivo, Relevo, Estadio Deportivo — keyless, covers the last ~48h of articles) plus web search: SerpApi (with `SERPAPI_KEY`) or keyless Google News RSS (with opt-in DuckDuckGo / Bing HTML scrapers). Google News RSS queries are date-bounded to each game's 48h publication window (`after:`/`before:`), so games older than the window stay collectable.
 - **Fetching**: Articles from trusted sources (LaLiga.com, AS, Marca, Sport, Mundo Deportivo, Relevo, COPE) are downloaded and cleaned; only articles published within 48h of the match are accepted. The crawler identifies itself honestly (`RespectRankBot/1.0`), respects each site's robots.txt (fetched once per domain per run), rate-limits requests, honors `Retry-After` on 429/503 with capped exponential backoff, and circuit-breaks a domain after repeated 403/429 responses.
 - **Extraction**: Referee-related quotes are extracted verbatim by an LLM (or a keyword heuristic fallback) and validated against the source text.
 - **Output**: A `Collection Report` detailing how many quotes were successfully retrieved, plus `data/pending_requests.json` tracking what failed and why (retried on the next run, up to 5 attempts).
@@ -66,7 +66,8 @@ No `PYTHONPATH` configuration is needed.
 | `LLM_BASE_URL` | No | Defaults to `https://llm.example.invalid/api` |
 | `LLM_MODEL` | No | Defaults to `llm-model` |
 | `LLM_EXTRACT_MODEL` | No | Different model for quote extraction only (e.g. a cheaper one); falls back to `LLM_MODEL` |
-| `SERPAPI_KEY` | No | SerpApi key; without it the system uses news-sitemap discovery plus keyless Google News RSS / DuckDuckGo / Bing search |
+| `SERPAPI_KEY` | No | SerpApi key; without it the system uses news-sitemap discovery plus keyless Google News RSS search |
+| `ENABLE_HTML_SCRAPERS` | No | Set `1` to also use the DuckDuckGo/Bing HTML scrapers (off by default: scraping consumer search pages is legally gray) |
 | `SINCE` | No | Default collection window for weekly runs: `YYYY-MM-DD`. CLI `--since` wins; without either, the window is the last run's date minus a 3-day overlap (`--full-history` overrides) |
 | `MAX_REQUESTS_PER_RUN` | No | Hard cap on HTTP fetches per run across all sources (default `600`, `0` disables) |
 | `MAX_LLM_CALLS_PER_RUN` | No | Hard cap on LLM calls per run (default `300`); when exhausted, extraction/grading degrade to the heuristic fallback |
