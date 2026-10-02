@@ -8,12 +8,14 @@ from src.collection.collector import (
     KIND_CONFIRMED_CLEAN,
     KIND_PRESUMED_CLEAN,
     MAX_ATTEMPTS,
+    REASON_FETCH_FAILED,
     REASON_NO_QUOTES,
     REASON_NO_RESULTS,
     REASON_NO_TRUSTED,
     REASON_WINDOW_FILTERED,
 )
 from src.collection.models import SearchResult, SourceDocument
+from src.collection.search import SearchProviderError
 
 GAME = {
     "game_id": "1",
@@ -35,6 +37,13 @@ class FakeSearchProvider:
 
     def search(self, query, max_results=10, date_range=None):
         return self.results
+
+
+class FailingSearchProvider:
+    """Simulates an outage: every query raises (e.g. budget exhausted)."""
+
+    def search(self, query, max_results=10, date_range=None):
+        raise SearchProviderError(f"HTTP request budget exhausted (2000/2000 requests)")
 
 
 class FakeFetcher:
@@ -80,6 +89,16 @@ class TestCollectCommentsForCoach(unittest.TestCase):
         merged, reason = self._run(FakeSearchProvider([]), FakeFetcher())
         self.assertIsNone(merged)
         self.assertEqual(reason, REASON_NO_RESULTS)
+
+    def test_search_failure_is_fetch_failed_not_absence(self):
+        # G2 regression: a failed search (budget exhausted, network
+        # error, rate limit) must be reported as a fetch failure so the
+        # target stays pending — never as "no results", which could
+        # presume a respectful silence that was never verified.
+        provider = FailingSearchProvider()
+        merged, reason = self._run(provider, FakeFetcher())
+        self.assertIsNone(merged)
+        self.assertEqual(reason, REASON_FETCH_FAILED)
 
     def test_no_trusted_sources(self):
         provider = FakeSearchProvider([SearchResult("https://blog.example.com/a", "t", "s")])
@@ -298,7 +317,7 @@ class TestQuerySelection(unittest.TestCase):
 
 
 class TestPendingRetrySemantics(unittest.TestCase):
-    def _run(self, game, since=None, pending=None):
+    def _run(self, game, since=None, pending=None, provider=None):
         saved = {}
         with mock.patch("src.collection.collector.get_games", return_value=[game]), \
              mock.patch("src.collection.collector.get_comments", return_value=[]), \
@@ -310,7 +329,7 @@ class TestPendingRetrySemantics(unittest.TestCase):
              mock.patch("src.collection.collector.ArticleFetcher"), \
              mock.patch("src.collection.collector.get_extractor"):
             stats = collect_matchday_comments(
-                search_provider=FakeSearchProvider([]), since=since
+                search_provider=provider or FakeSearchProvider([]), since=since
             )
         saved["stats"] = stats
         return saved
@@ -337,6 +356,19 @@ class TestPendingRetrySemantics(unittest.TestCase):
         self.assertEqual(entry["attempts"], 1)
         self.assertFalse(entry.get("terminal"))
         self.assertEqual(saved["stats"]["pending_active"], 2)
+
+    def test_search_outage_never_presumes_stale_games(self):
+        # G2 regression: when every search query fails (budget
+        # exhausted, outage), stale games must stay pending for retry.
+        # They must NOT be presumed clean: silence can only be
+        # presumed from a search that ran and found nothing.
+        saved = self._run(GAME, provider=FailingSearchProvider())
+        self.assertEqual(saved["stats"]["presumed_clean"], 0)
+        self.assertEqual(saved["comments"], [])
+        self.assertEqual(len(saved["pending"]), 2)
+        for entry in saved["pending"]:
+            self.assertEqual(entry["reason"], REASON_FETCH_FAILED)
+            self.assertEqual(entry["attempts"], 1)
 
     def test_since_skips_older_fresh_games(self):
         # A3: a game inside the presumption window but before the

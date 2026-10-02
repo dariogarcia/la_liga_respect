@@ -11,7 +11,7 @@ from src.data.manager import (
 )
 from .models import SourceDocument
 from .queries import build_queries
-from .search import get_search_provider
+from .search import get_search_provider, SearchProviderError
 from .sitemap import fetch_sitemap_entries, find_coach_articles
 from .filtering import is_allowed_source
 from .fetcher import ArticleFetcher
@@ -100,6 +100,7 @@ def collect_comments_for_coach(
     # document budget (C3: prefer sitemaps over scraped engines).
     trusted_candidates = [r for r in candidates if is_allowed_source(r.url)]
     search_results = []
+    search_failures = 0
     if len(trusted_candidates) < MAX_DOCS_PER_COACH:
         date_range = (
             match_date.date(),
@@ -107,11 +108,21 @@ def collect_comments_for_coach(
         )
         queries = build_queries(coach, opponent_team, match_date.date())
         for q in queries:
-            search_results.extend(search_provider.search(q, date_range=date_range))
+            try:
+                search_results.extend(search_provider.search(q, date_range=date_range))
+            except SearchProviderError as e:
+                print(f"Search failed for query '{q}': {e}")
+                search_failures += 1
     candidates.extend(search_results)
 
     unique_results = _dedupe_results(candidates)
     if not unique_results:
+        if search_failures:
+            # A failed search (budget exhausted, network error, rate
+            # limit) is not evidence of absence: report a fetch failure
+            # so the target stays pending and is retried, never
+            # presumed clean.
+            return None, REASON_FETCH_FAILED
         return None, REASON_NO_RESULTS
 
     trusted = [r for r in unique_results if is_allowed_source(r.url)]
@@ -393,9 +404,14 @@ def collect_matchday_comments(
                     "retrieved_at": datetime.utcnow().isoformat(),
                 })
                 _drop_pending(pending, game_id, coach)
-            elif stale:
+            elif stale and reason in (REASON_NO_RESULTS, REASON_NO_QUOTES):
                 # Sought and still nothing: the presumption window has
-                # passed, resolve as respectful silence.
+                # passed, resolve as respectful silence. Only genuine
+                # absence (search ran and found nothing, or articles
+                # were read but contained no referee quotes) may
+                # presume: a failed search or fetch (budget exhausted,
+                # network error, rate limit) must stay pending and be
+                # retried, never silently presumed clean.
                 comments.append(_clean_comment(game, coach, KIND_PRESUMED_CLEAN))
                 _drop_pending(pending, game_id, coach)
                 presumed_clean += 1

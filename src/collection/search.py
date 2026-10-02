@@ -26,6 +26,13 @@ from ..utils.useragent import BROWSER_USER_AGENT
 USER_AGENT = BROWSER_USER_AGENT
 
 
+class SearchProviderError(RuntimeError):
+    """A search query failed (network error, rate limit, budget
+    exhaustion, or a broken response). Distinguishes a *failed* search
+    from a successful search that legitimately returned no results, so
+    the collector never mistakes an outage for absence of coverage."""
+
+
 class SearchProvider(Protocol):
     def search(
         self,
@@ -63,8 +70,7 @@ class WebSearchProvider:
                 ))
             return results
         except Exception as e:
-            print(f"Search error for query '{query}': {e}")
-            return []
+            raise SearchProviderError(f"SerpApi query '{query}' failed: {e}") from e
 
 
 class DuckDuckGoSearchProvider:
@@ -108,7 +114,7 @@ class DuckDuckGoSearchProvider:
 
     def search(self, query: str, max_results: int = 10, date_range=None) -> List[SearchResult]:
         if time.monotonic() < self._disabled_until:
-            return []
+            raise SearchProviderError("DuckDuckGo circuit breaker open")
         SEARCH_RATE_LIMITER.wait()
         try:
             response = http.http_post(
@@ -118,9 +124,10 @@ class DuckDuckGoSearchProvider:
                 timeout=15,
             )
             if response.status_code != 200:
-                print(f"DuckDuckGo returned HTTP {response.status_code} (likely rate-limited).")
-                self._register_failure()
-                return []
+                raise SearchProviderError(
+                    f"DuckDuckGo query '{query}' returned HTTP {response.status_code} "
+                    "(likely rate-limited)"
+                )
             self._register_success()
             soup = BeautifulSoup(response.text, "html.parser")
 
@@ -138,10 +145,12 @@ class DuckDuckGoSearchProvider:
                     snippet=snippet,
                 ))
             return results
-        except Exception as e:
-            print(f"Search error for query '{query}': {e}")
+        except SearchProviderError:
             self._register_failure()
-            return []
+            raise
+        except Exception as e:
+            self._register_failure()
+            raise SearchProviderError(f"DuckDuckGo query '{query}' failed: {e}") from e
 
 
 class BingSearchProvider:
@@ -179,8 +188,9 @@ class BingSearchProvider:
                 timeout=15,
             )
             if response.status_code != 200:
-                print(f"Bing returned HTTP {response.status_code}.")
-                return []
+                raise SearchProviderError(
+                    f"Bing query '{query}' returned HTTP {response.status_code}"
+                )
             soup = BeautifulSoup(response.text, "html.parser")
 
             results = []
@@ -199,9 +209,10 @@ class BingSearchProvider:
                     snippet=snippet_el.get_text(" ", strip=True) if snippet_el else "",
                 ))
             return results
+        except SearchProviderError:
+            raise
         except Exception as e:
-            print(f"Search error for query '{query}': {e}")
-            return []
+            raise SearchProviderError(f"Bing query '{query}' failed: {e}") from e
 
 
 GOOGLE_NEWS_RSS_URL = "https://news.google.com/rss/search"
@@ -277,7 +288,7 @@ class GoogleNewsRSSSearchProvider:
         date_range: Optional[Tuple[date_type, date_type]] = None,
     ) -> List[SearchResult]:
         if time.monotonic() < self._disabled_until:
-            return []
+            raise SearchProviderError("Google News RSS circuit breaker open")
         q = query
         if date_range:
             start, end = date_range
@@ -293,24 +304,26 @@ class GoogleNewsRSSSearchProvider:
             http.request_budget().acquire()
             response = self.session.get(GOOGLE_NEWS_RSS_URL, params=params, timeout=15)
             if response.status_code != 200:
-                print(f"Google News RSS returned HTTP {response.status_code}.")
-                self._register_failure()
-                return []
+                raise SearchProviderError(
+                    f"Google News RSS query '{query}' returned HTTP {response.status_code}"
+                )
             cache.cache_put(
                 GOOGLE_NEWS_RSS_URL, 200, response.content, ttl=cache.TTL_SITEMAP_SECONDS
             )
-        except Exception as e:
-            print(f"Search error for query '{query}': {e}")
+        except SearchProviderError:
             self._register_failure()
-            return []
+            raise
+        except Exception as e:
+            self._register_failure()
+            raise SearchProviderError(f"Google News RSS query '{query}' failed: {e}") from e
         self._register_success()
         return self._parse_feed(response.content, max_results)
 
     def _parse_feed(self, content: bytes, max_results: int) -> List[SearchResult]:
         try:
             root = ElementTree.fromstring(content)
-        except ElementTree.ParseError:
-            return []
+        except ElementTree.ParseError as e:
+            raise SearchProviderError(f"Google News RSS feed is not valid XML: {e}") from e
         items = []
         for item in root.findall(".//item")[:max_results]:
             link = item.findtext("link") or ""
@@ -476,6 +489,7 @@ class CompositeSearchProvider:
         max_results: int = 10,
         date_range: Optional[Tuple[date_type, date_type]] = None,
     ) -> List[SearchResult]:
+        failures = 0
         for provider in self.providers:
             try:
                 results = provider.search(query, max_results, date_range=date_range)
@@ -484,9 +498,17 @@ class CompositeSearchProvider:
                 results = provider.search(query, max_results)
             except Exception as e:
                 print(f"Provider {type(provider).__name__} failed: {e}")
+                failures += 1
                 continue
             if results:
                 return results
+        if failures and failures == len(self.providers):
+            # Every provider failed: this is an outage, not an absence
+            # of coverage. Propagate so the collector records a fetch
+            # failure (retryable) instead of "no results".
+            raise SearchProviderError(
+                f"all {len(self.providers)} search providers failed for query '{query}'"
+            )
         return []
 
 

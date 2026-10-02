@@ -11,6 +11,7 @@ from src.collection.search import (
     DuckDuckGoSearchProvider,
     GoogleNewsRSSSearchProvider,
     get_search_provider,
+    SearchProviderError,
 )
 
 
@@ -89,6 +90,18 @@ class TestCompositeSearchProvider(unittest.TestCase):
         results = composite.search("query")
         self.assertEqual(len(results), 1)
 
+    def test_all_providers_failing_raises(self):
+        # G2 regression: an outage across every provider must raise,
+        # not return [] — an empty list would read as "no coverage"
+        # and could presume a respectful silence that never was
+        # verified (e.g. after the HTTP budget is exhausted).
+        failing = MagicMock()
+        failing.search.side_effect = RuntimeError("budget exhausted")
+        composite = CompositeSearchProvider([failing, MagicMock()])
+        composite.providers[1].search.side_effect = RuntimeError("down")
+        with self.assertRaises(SearchProviderError):
+            composite.search("query")
+
     def test_forwards_date_range_to_providers(self):
         provider = self._provider_returning([])
         composite = CompositeSearchProvider([provider])
@@ -135,11 +148,13 @@ class TestDuckDuckGoCircuitBreaker(unittest.TestCase):
         with mock.patch("src.utils.http.http_post") as post_mock, self._patched():
             post_mock.return_value = response
             for _ in range(provider.FAILURE_THRESHOLD):
-                provider.search("query")
+                with self.assertRaises(SearchProviderError):
+                    provider.search("query")
             self.assertEqual(post_mock.call_count, provider.FAILURE_THRESHOLD)
-            # Circuit breaker open: further calls return instantly
+            # Circuit breaker open: further calls fail instantly
             # without touching the network.
-            provider.search("query")
+            with self.assertRaises(SearchProviderError):
+                provider.search("query")
             self.assertEqual(post_mock.call_count, provider.FAILURE_THRESHOLD)
 
     def test_closes_again_after_cooldown(self):
@@ -147,11 +162,13 @@ class TestDuckDuckGoCircuitBreaker(unittest.TestCase):
         with mock.patch("src.utils.http.http_post") as post_mock, self._patched():
             post_mock.return_value = response
             for _ in range(provider.FAILURE_THRESHOLD):
-                provider.search("query")
+                with self.assertRaises(SearchProviderError):
+                    provider.search("query")
             self.assertEqual(post_mock.call_count, provider.FAILURE_THRESHOLD)
             # Simulate cooldown expiry: the provider is probed again.
             provider._disabled_until = 0.0
-            provider.search("query")
+            with self.assertRaises(SearchProviderError):
+                provider.search("query")
             self.assertEqual(post_mock.call_count, provider.FAILURE_THRESHOLD + 1)
 
 
@@ -258,9 +275,11 @@ class TestGoogleNewsRSSProvider(unittest.TestCase):
         self.provider.session.get.return_value = self._response(status_code=429)
         with mock.patch("src.collection.search.SEARCH_RATE_LIMITER"):
             for _ in range(self.provider.FAILURE_THRESHOLD):
-                self.provider.search("q")
+                with self.assertRaises(SearchProviderError):
+                    self.provider.search("q")
             calls = self.provider.session.get.call_count
-            self.provider.search("q")
+            with self.assertRaises(SearchProviderError):
+                self.provider.search("q")
             self.assertEqual(self.provider.session.get.call_count, calls)
 
 
