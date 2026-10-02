@@ -1,9 +1,10 @@
 import unittest
-from datetime import datetime
+from datetime import date, datetime
 from unittest import mock
 
 from src.collection import calendar
 from src.collection.calendar import (
+    espn_scan_start,
     normalize_name,
     distinctive_tokens,
     match_score,
@@ -84,6 +85,29 @@ class TestResolveCoach(unittest.TestCase):
     def test_no_history_returns_current(self):
         team = {"team": "X", "coach": "Only Coach"}
         self.assertEqual(resolve_coach(team, "2026-01-01"), "Only Coach")
+
+
+class TestEspnScanStart(unittest.TestCase):
+    TODAY = date(2026, 10, 2)
+
+    def test_empty_calendar_scans_60_days_back(self):
+        self.assertEqual(espn_scan_start(None, self.TODAY), date(2026, 8, 3))
+
+    def test_recent_game_uses_one_week_margin(self):
+        # Latest known game is 2 days old: start a week before it.
+        self.assertEqual(espn_scan_start(date(2026, 9, 30), self.TODAY), date(2026, 9, 23))
+
+    def test_stale_game_capped_at_14_days(self):
+        # Latest known game is a month old (long break / missed syncs):
+        # never scan further back than 14 days.
+        self.assertEqual(espn_scan_start(date(2026, 9, 2), self.TODAY), date(2026, 9, 18))
+
+    def test_boundary_game_exactly_7_days_old(self):
+        self.assertEqual(espn_scan_start(date(2026, 9, 25), self.TODAY), date(2026, 9, 18))
+
+    def test_future_game_never_starts_after_today(self):
+        # Manually added future fixtures must not push the window forward.
+        self.assertEqual(espn_scan_start(date(2026, 11, 1), self.TODAY), self.TODAY)
 
 
 class TestSyncFinishedGames(unittest.TestCase):

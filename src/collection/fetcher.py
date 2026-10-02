@@ -1,14 +1,93 @@
 from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from typing import Optional
+import time
 
 import requests
 from bs4 import BeautifulSoup
 
 from .filtering import get_domain
 from .models import SourceDocument
+from .robots import RobotsPolicy, shared_robots_policy
 from ..utils.ratelimit import FETCH_RATE_LIMITER
+from ..utils.useragent import BOT_USER_AGENT
 
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
+USER_AGENT = BOT_USER_AGENT
+
+# Total attempts per article before giving up (1 initial + retries).
+MAX_ATTEMPTS = 3
+# Statuses that are worth retrying: throttling and temporary failures.
+RETRYABLE_STATUSES = {429, 503}
+SERVER_ERROR_STATUSES = frozenset(range(500, 600))
+BACKOFF_BASE_SECONDS = 2.0
+BACKOFF_CAP_SECONDS = 60.0
+# Retry-After is honored but capped so a huge value cannot stall a run.
+RETRY_AFTER_CAP_SECONDS = 120.0
+
+
+class RobotsDisallowedError(Exception):
+    """Raised when robots.txt forbids fetching a URL."""
+
+
+class DomainBlockedError(Exception):
+    """Raised when the per-domain circuit breaker is open."""
+
+
+def parse_retry_after(response: requests.Response) -> Optional[float]:
+    """Parses the Retry-After header (delta-seconds or HTTP-date)."""
+    value = response.headers.get("Retry-After")
+    if not value:
+        return None
+    try:
+        return max(0.0, float(value))
+    except ValueError:
+        pass
+    try:
+        when = parsedate_to_datetime(value)
+        if when.tzinfo is None:
+            when = when.replace(tzinfo=timezone.utc)
+        return max(0.0, (when - datetime.now(timezone.utc)).total_seconds())
+    except (TypeError, ValueError):
+        return None
+
+
+class DomainCircuitBreaker:
+    """Disables fetching from a domain after repeated block responses.
+
+    After FAILURE_THRESHOLD consecutive 403/429 responses a domain is
+    skipped for COOLDOWN_SECONDS, so a blocking publisher does not burn
+    one slow request per candidate article for the rest of the run.
+    Any successful response resets the counter.
+    """
+
+    FAILURE_THRESHOLD = 3
+    COOLDOWN_SECONDS = 900
+
+    def __init__(self):
+        self._consecutive_failures = {}
+        self._open_until = {}
+
+    def check(self, domain: str) -> None:
+        until = self._open_until.get(domain, 0.0)
+        if time.monotonic() < until:
+            raise DomainBlockedError(
+                f"domain {domain} is blocked for {int(until - time.monotonic())}s more "
+                f"({self.FAILURE_THRESHOLD} consecutive 403/429 responses)"
+            )
+
+    def register_failure(self, domain: str) -> None:
+        count = self._consecutive_failures.get(domain, 0) + 1
+        self._consecutive_failures[domain] = count
+        if count >= self.FAILURE_THRESHOLD:
+            self._open_until[domain] = time.monotonic() + self.COOLDOWN_SECONDS
+            print(
+                f"Fetcher: {domain} returned {self.FAILURE_THRESHOLD} consecutive block "
+                f"responses, skipping it for {self.COOLDOWN_SECONDS}s."
+            )
+
+    def register_success(self, domain: str) -> None:
+        self._consecutive_failures.pop(domain, None)
+        self._open_until.pop(domain, None)
 
 DATE_META_PROPERTIES = [
     "article:published_time",
@@ -54,20 +133,67 @@ def parse_date_string(raw: str) -> Optional[datetime]:
 
 
 class ArticleFetcher:
-    """Fetches an article URL and extracts clean text, title and publish date."""
+    """Fetches an article URL and extracts clean text, title and publish date.
+
+    Politeness: robots.txt is checked per origin (cached per process),
+    requests are rate limited, 429/503 responses are retried with the
+    server's Retry-After (capped) or exponential backoff, and a domain
+    that keeps answering 403/429 is circuit-broken for the rest of the
+    run.
+    """
+
+    def __init__(
+        self,
+        robots: Optional[RobotsPolicy] = None,
+        circuit_breaker: Optional[DomainCircuitBreaker] = None,
+    ):
+        self.robots = robots if robots is not None else shared_robots_policy()
+        self.circuit_breaker = circuit_breaker or DomainCircuitBreaker()
+
+    def _get_with_retries(self, url: str, headers: dict) -> requests.Response:
+        domain = get_domain(url)
+        for attempt in range(1, MAX_ATTEMPTS + 1):
+            self.circuit_breaker.check(domain)
+            FETCH_RATE_LIMITER.wait()
+            response = requests.get(url, timeout=15, headers=headers)
+            if response.status_code == 429:
+                self.circuit_breaker.register_failure(domain)
+            if response.status_code in RETRYABLE_STATUSES or (
+                response.status_code in SERVER_ERROR_STATUSES
+            ):
+                if attempt >= MAX_ATTEMPTS:
+                    response.raise_for_status()
+                time.sleep(self._retry_delay(response, attempt))
+                continue
+            if response.status_code == 403:
+                self.circuit_breaker.register_failure(domain)
+            if response.status_code < 400:
+                self.circuit_breaker.register_success(domain)
+            response.raise_for_status()
+            return response
+        raise requests.HTTPError(f"exhausted retries for {url}")
+
+    @staticmethod
+    def _retry_delay(response: requests.Response, attempt: int) -> float:
+        backoff = min(BACKOFF_CAP_SECONDS, BACKOFF_BASE_SECONDS * 2 ** (attempt - 1))
+        retry_after = parse_retry_after(response)
+        if retry_after is not None:
+            # Honor the server's hint, capped so a huge value cannot
+            # stall the whole run.
+            return min(retry_after, RETRY_AFTER_CAP_SECONDS)
+        return backoff
 
     def fetch(self, url: str) -> SourceDocument:
-        FETCH_RATE_LIMITER.wait()
-        response = requests.get(
+        if not self.robots.allowed(url):
+            raise RobotsDisallowedError(f"robots.txt disallows fetching {url}")
+        response = self._get_with_retries(
             url,
-            timeout=15,
             headers={
                 "User-Agent": USER_AGENT,
                 "Accept": "text/html,application/xhtml+xml",
                 "Accept-Language": "es-ES,es;q=0.9,en;q=0.5",
             },
         )
-        response.raise_for_status()
 
         soup = BeautifulSoup(response.text, "html.parser")
         return SourceDocument(

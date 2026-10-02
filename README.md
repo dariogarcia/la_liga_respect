@@ -11,12 +11,12 @@ The system transforms qualitative interview data into a quantitative leaderboard
 ## 🛠️ Core Functionalities
 
 ### 1. Calendar Sync
-Finished La Liga matches are automatically fetched from [football-data.org](https://www.football-data.org/) and added to the calendar. Requires a (free) API key. Without a key, the sync falls back to ESPN's public scoreboard API (keyless, day-by-day scan). Matches can also be added manually.
+Finished La Liga matches are automatically fetched from [football-data.org](https://www.football-data.org/) and added to the calendar. Requires a (free) API key. Without a key, the sync falls back to ESPN's public scoreboard API (keyless, day-by-day scan of a bounded window: one week before the latest known game, at most 14 days back). Matches can also be added manually.
 
 ### 2. Data Collection
 The system identifies pending matches from the calendar and searches for post-game comments from both the home and away coaches.
 - **Discovery**: Publisher news sitemaps (Sport, Mundo Deportivo, Relevo — keyless, covers the last ~48h of articles) plus web search: SerpApi (with `SERPAPI_KEY`) or keyless Google News RSS / DuckDuckGo / Bing fallbacks. Google News RSS queries are date-bounded to each game's 48h publication window (`after:`/`before:`), so games older than the window stay collectable.
-- **Fetching**: Articles from trusted sources (LaLiga.com, AS, Marca, Sport, Mundo Deportivo, Relevo, COPE) are downloaded and cleaned; only articles published within 48h of the match are accepted.
+- **Fetching**: Articles from trusted sources (LaLiga.com, AS, Marca, Sport, Mundo Deportivo, Relevo, COPE) are downloaded and cleaned; only articles published within 48h of the match are accepted. The crawler identifies itself honestly (`RespectRankBot/1.0`), respects each site's robots.txt (fetched once per domain per run), rate-limits requests, honors `Retry-After` on 429/503 with capped exponential backoff, and circuit-breaks a domain after repeated 403/429 responses.
 - **Extraction**: Referee-related quotes are extracted verbatim by an LLM (or a keyword heuristic fallback) and validated against the source text.
 - **Output**: A `Collection Report` detailing how many quotes were successfully retrieved, plus `data/pending_requests.json` tracking what failed and why (retried on the next run, up to 5 attempts).
 

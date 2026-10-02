@@ -13,8 +13,14 @@ from bs4 import BeautifulSoup
 
 from .models import SearchResult
 from ..utils.ratelimit import SEARCH_RATE_LIMITER
+from ..utils.useragent import BROWSER_USER_AGENT
 
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
+# Scraped-engine endpoints (DuckDuckGo HTML, Bing) reject non-browser
+# agents, so these two providers must send a browser User-Agent. This is
+# the only place a browser UA is allowed: everything that touches
+# publisher infrastructure identifies itself as RespectRankBot (see
+# src/utils/useragent.py).
+USER_AGENT = BROWSER_USER_AGENT
 
 
 class SearchProvider(Protocol):

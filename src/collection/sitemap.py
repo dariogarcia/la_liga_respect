@@ -14,8 +14,9 @@ import requests
 
 from .models import SearchResult
 from ..utils.ratelimit import SITEMAP_RATE_LIMITER
+from ..utils.useragent import BOT_USER_AGENT
 
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
+USER_AGENT = BOT_USER_AGENT
 
 NEWS_SITEMAPS = {
     # as.com also publishes https://as.com/sitemaps/news.xml but its

@@ -76,6 +76,24 @@ def resolve_coach(team_entry: Dict, game_date: str) -> str:
     return team_entry["coach"]
 
 
+def espn_scan_start(latest_game_date, today):
+    """
+    Bounded start date for the ESPN keyless fallback scan.
+
+    The scan only needs to cover matches finished since the last known
+    game, so it starts a week before the latest known game (margin for
+    matches that were still in progress at the previous sync) but never
+    looks further back than 14 days: with a weekly cadence that window
+    always covers any missed matchday while keeping the day-by-day scan
+    short. An empty calendar scans 60 days back.
+    """
+    if latest_game_date is None:
+        return today - timedelta(days=60)
+    start = max(latest_game_date - timedelta(days=7), today - timedelta(days=14))
+    # Never start after today (possible with future-dated manual games).
+    return min(start, today)
+
+
 def sync_finished_games(api_key: Optional[str] = None) -> Dict:
     """
     Syncs finished La Liga matches into games.json.
@@ -95,14 +113,13 @@ def sync_finished_games(api_key: Optional[str] = None) -> Dict:
         id_prefix = "fd"
         stats["source"] = "football-data.org"
     else:
-        # Keyless fallback: ESPN public scoreboard. Scan from a week before
-        # the earliest known game (or 60 days back on an empty calendar).
+        # Keyless fallback: ESPN public scoreboard. Scan a bounded
+        # window (see espn_scan_start): a week before the latest known
+        # game, at most 14 days back, 60 days on an empty calendar.
         today = datetime.now(timezone.utc).date()
-        if games:
-            earliest = min(g["date"] for g in games)
-            start = datetime.strptime(earliest, "%Y-%m-%d").date() - timedelta(days=7)
-        else:
-            start = today - timedelta(days=60)
+        latest = max((g["date"] for g in games), default=None)
+        latest_date = datetime.strptime(latest, "%Y-%m-%d").date() if latest else None
+        start = espn_scan_start(latest_date, today)
         api = ESPNLaLigaAPI(start_date=start.isoformat(), end_date=today.isoformat())
         id_prefix = "espn"
         stats["source"] = "ESPN public scoreboard (keyless fallback)"
