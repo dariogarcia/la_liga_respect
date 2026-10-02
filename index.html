@@ -606,6 +606,7 @@
                         <div>
                             <div style="font-weight: bold;">${esc(teamName)}</div>
                             <div style="font-size: 0.8rem; color: var(--fg-muted);">${esc(entry.coach)}${previousCoachLabel(teamData)}</div>
+                            ${coverageLine(entry.coach)}
                         </div>
                     </td>
                     <td class="gp-col">${Number(entry.games_played) || 0}</td>
@@ -624,6 +625,28 @@
         function onSearchInput(value) {
             STATE.filter = value;
             renderLeaderboard();
+        }
+
+        // U1: per-coach coverage transparency — how many of this row's
+        // games produced referee quotes vs resolved as respectful
+        // silence (confirmed coverage vs presumed after the window).
+        function coverageFor(coach) {
+            const cs = DATA.comments.filter(c => c.coach === coach);
+            const quotes = cs.filter(c => !c.no_ref_comment).length;
+            const clean = cs.filter(c => c.no_ref_comment).length;
+            const presumed = cs.filter(c => c.no_ref_comment && c.kind === 'presumed').length;
+            return { quotes, clean, presumed, confirmed: clean - presumed };
+        }
+
+        function coverageLine(coach) {
+            const cov = coverageFor(coach);
+            if (!cov.quotes && !cov.clean) return '';
+            const parts = [`${cov.quotes} quote${cov.quotes === 1 ? '' : 's'}`];
+            if (cov.clean) {
+                parts.push(`${cov.clean} no-ref (${cov.presumed} presumed)`);
+            }
+            return `<div title="Referee-related quotes found vs games resolved without a referee comment (presumed = nothing found within the 14-day window)" ` +
+                   `style="font-size: 0.72rem; color: var(--fg-muted);">${parts.join(' · ')}</div>`;
         }
 
         async function loadLeaderboard(mode) {
@@ -810,8 +833,8 @@
                 console.warn('Could not load comments.json:', e);
             }
 
-            // Pending collection requests. Terminal entries (no_coverage)
-            // are excluded: they will never be retried (D4).
+            // Pending collection requests. Exhausted entries stay listed
+            // until a full run resolves them (seek-then-presume).
             try {
                 await ensureData();
                 const active = DATA.pending.filter(

@@ -1,29 +1,5 @@
 [
   {
-    "game_id": "espn-401882876",
-    "coach": "Quique Sánchez Flores",
-    "date": "2026-09-15",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:53:28.813452",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882876",
-    "coach": "Carlos Corberán",
-    "date": "2026-09-15",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:54:01.706575",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882871",
-    "coach": "Hansi Flick",
-    "date": "2026-09-16",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:54:47.122074",
-    "reason": "no_quotes_extracted"
-  },
-  {
     "game_id": "espn-401882871",
     "coach": "José Alberto López",
     "date": "2026-09-16",
