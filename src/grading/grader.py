@@ -148,6 +148,7 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
             leaderboard[key] = {
                 "coach": coach, "team": team, "points": 0, "games_played": 0,
                 "home_points": 0, "away_points": 0,
+                "quoted_games": 0, "quoted_points": 0,
             }
         return leaderboard[key]
 
@@ -200,7 +201,13 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
         if mode == "separate":
             for c in scored:
                 _add(c["coach"], _team(game, c["coach"]), c["score"], _side(game, c["coach"]))
-                _entry(c["coach"], _team(game, c["coach"]))["games_played"] += 1
+                entry = _entry(c["coach"], _team(game, c["coach"]))
+                entry["games_played"] += 1
+                if not c.get("no_ref_comment"):
+                    # Normalization base: only games where a quote was
+                    # retrieved count towards the per-game average.
+                    entry["quoted_games"] += 1
+                    entry["quoted_points"] += c["score"]
             missing = [c["coach"] for c in quotes if "score" not in c]
             if missing:
                 incomplete_games.append(f"Game {gid} (ungraded quotes: {', '.join(missing)})")
@@ -209,12 +216,17 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
                 incomplete_games.append(f"Game {gid} (only {len(coaches_here)} coach with graded quote)")
                 for c in scored:
                     _add(c["coach"], _team(game, c["coach"]), c["score"], _side(game, c["coach"]))
-                    _entry(c["coach"], _team(game, c["coach"]))["games_played"] += 1
+                    entry = _entry(c["coach"], _team(game, c["coach"]))
+                    entry["games_played"] += 1
+                    if not c.get("no_ref_comment"):
+                        entry["quoted_games"] += 1
+                        entry["quoted_points"] += c["score"]
                 continue
 
             home_coach = game.get("home_coach")
             away_coach = game.get("away_coach")
             pairs = [(c["coach"], c["score"]) for c in scored]
+            awarded = {c["coach"]: 0 for c in scored}
             if home_coach and away_coach and {home_coach, away_coach} == coaches_here:
                 s_h = next(s for c, s in pairs if c == home_coach)
                 s_a = next(s for c, s in pairs if c == away_coach)
@@ -222,31 +234,43 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
                 _entry(away_coach, _team(game, away_coach))["games_played"] += 1
                 if s_h > s_a:
                     _add(home_coach, _team(game, home_coach), 3, "home")
+                    awarded[home_coach] = 3
                 elif s_a > s_h:
                     _add(away_coach, _team(game, away_coach), 3, "away")
+                    awarded[away_coach] = 3
                 else:
                     _add(home_coach, _team(game, home_coach), 1, "home")
                     _add(away_coach, _team(game, away_coach), 1, "away")
+                    awarded[home_coach] = 1
+                    awarded[away_coach] = 1
             else:
                 sorted_pairs = sorted(pairs, key=lambda x: x[1], reverse=True)
                 for c, _ in sorted_pairs:
                     _entry(c, _team(game, c))["games_played"] += 1
                 if sorted_pairs[0][1] > sorted_pairs[1][1]:
                     _add(sorted_pairs[0][0], _team(game, sorted_pairs[0][0]), 3, _side(game, sorted_pairs[0][0]))
+                    awarded[sorted_pairs[0][0]] = 3
                 elif sorted_pairs[1][1] > sorted_pairs[0][1]:
                     _add(sorted_pairs[1][0], _team(game, sorted_pairs[1][0]), 3, _side(game, sorted_pairs[1][0]))
+                    awarded[sorted_pairs[1][0]] = 3
                 else:
                     _add(sorted_pairs[0][0], _team(game, sorted_pairs[0][0]), 1, _side(game, sorted_pairs[0][0]))
                     _add(sorted_pairs[1][0], _team(game, sorted_pairs[1][0]), 1, _side(game, sorted_pairs[1][0]))
+                    awarded[sorted_pairs[0][0]] = 1
+                    awarded[sorted_pairs[1][0]] = 1
+            for c in scored:
+                if not c.get("no_ref_comment"):
+                    entry = _entry(c["coach"], _team(game, c["coach"]))
+                    entry["quoted_games"] += 1
+                    entry["quoted_points"] += awarded.get(c["coach"], 0)
 
     final_rankings = []
     emitted = set()
+    _zero = {"points": 0, "games_played": 0, "home_points": 0, "away_points": 0,
+             "quoted_games": 0, "quoted_points": 0}
     for t in teams_data:
         coach = t["coach"]
-        entry = leaderboard.get(
-            (coach, t["team"]),
-            {"coach": coach, "points": 0, "games_played": 0, "home_points": 0, "away_points": 0},
-        )
+        entry = leaderboard.get((coach, t["team"]), _zero)
         final_rankings.append({
             "coach": coach,
             "team": t["team"],
@@ -254,6 +278,8 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
             "games_played": entry["games_played"],
             "home_points": entry["home_points"],
             "away_points": entry["away_points"],
+            "quoted_games": entry["quoted_games"],
+            "quoted_points": entry["quoted_points"],
         })
         emitted.add((coach, t["team"]))
 
@@ -269,6 +295,8 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
                 "games_played": entry["games_played"],
                 "home_points": entry["home_points"],
                 "away_points": entry["away_points"],
+                "quoted_games": entry["quoted_games"],
+                "quoted_points": entry["quoted_points"],
             })
 
     sorted_leaderboard = sorted(final_rankings, key=lambda x: (-x["points"], x["coach"]))

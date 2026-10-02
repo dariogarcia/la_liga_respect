@@ -164,6 +164,7 @@ python3 -m unittest discover -s tests -t . -v
 - `src/utils/`: LLM client and football-data.org API handler.
 - `src/display.py`: CLI visualization tool.
 - `scripts/generate_badges.py`: Regenerates the web UI team badges.
+- `scripts/fetch_team_logos.py`: Backfills official team crest URLs (ESPN CDN) into `teams.json`.
 - `assets/teams/`: Generated SVG badges for the web UI.
 - `data/`: JSON files (`games.json`, `teams.json`, `comments.json`, `pending_requests.json`, leaderboards).
 - `tests/`: Unit tests.

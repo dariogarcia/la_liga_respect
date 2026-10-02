@@ -107,12 +107,20 @@ class ESPNLaLigaAPI:
                 name = competitor["team"]["displayName"]
                 return self.TEAM_ALIASES.get(name, name)
 
+            def logo_of(competitor):
+                # Official crest served by ESPN's CDN; used as the
+                # team logo in the UI. Absent for some feeds.
+                logo = competitor["team"].get("logo")
+                return logo if isinstance(logo, str) and logo.startswith("https://") else None
+
             return {
                 "match_id": str(event["id"]),
                 "utcDate": event["date"],
                 "status": event.get("status", {}).get("type", {}).get("name"),
                 "homeTeam": name_of(home),
                 "awayTeam": name_of(away),
+                "homeLogo": logo_of(home),
+                "awayLogo": logo_of(away),
             }
         except (KeyError, IndexError, StopIteration):
             return None

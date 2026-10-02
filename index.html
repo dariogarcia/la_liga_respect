@@ -243,6 +243,7 @@
             color: #fff;
             font-weight: 600;
         }
+        .metric-switch .mode-btn { padding: 8px 12px; font-size: 13px; }
         .mode-explainer {
             flex: 1;
             min-width: 240px;
@@ -669,6 +670,10 @@
                 <button id="btn-separate" class="mode-btn active" aria-pressed="true" onclick="loadLeaderboard('separate')">Season Total</button>
                 <button id="btn-competitive" class="mode-btn" aria-pressed="false" onclick="loadLeaderboard('competitive')">Head-to-Head</button>
             </div>
+            <div class="mode-switch metric-switch" role="group" aria-label="Points display">
+                <button id="btn-total" class="mode-btn active" aria-pressed="true" onclick="setMetric('total')">Total Points</button>
+                <button id="btn-pergame" class="mode-btn" aria-pressed="false" onclick="setMetric('pergame')" title="Average points over the games where a quote was retrieved">Per Game*</button>
+            </div>
             <p id="mode-explainer" class="mode-explainer"></p>
         </div>
 
@@ -690,7 +695,7 @@
                         <th class="coach-col" scope="col">Coach &amp; Team</th>
                         <th class="gp-col" scope="col" title="Games played">GP</th>
                         <th id="th-homeaway" class="ha-col" scope="col" title="Points earned in home games / away games">Home/Away</th>
-                        <th class="pts-col" scope="col">Points</th>
+                        <th id="th-points" class="pts-col" scope="col">Points</th>
                     </tr>
                 </thead>
                 <tbody id="leaderboard-body">
@@ -698,6 +703,13 @@
                 </tbody>
             </table>
         </div>
+
+        <p id="pergame-note" class="pending-note" hidden>
+            * Average points over the games where a quote was retrieved; an asterisk marks
+            coaches with fewer than 5 such games (small sample). Coaches with no retrieved
+            quotes yet are listed without a value. Switch to <em>Total Points</em> to see
+            season-long accumulation including respectful silences.
+        </p>
 
         <div id="coach-detail" class="detail-panel" hidden></div>
 
@@ -783,6 +795,12 @@
                 points and the other 0, and a tie gives 1 point each. It reads like a league
                 table built from respect instead of goals, and rewards showing up your
                 counterpart.</p>
+            <p><strong>Per Game view</strong> — absolute points grow with the number of
+                games coached, so the ranking can also be normalized: <em>Per Game</em>
+                shows the average score over the games where a quote was retrieved for
+                that coach. An asterisk marks coaches with fewer than 5 such games — a
+                small sample — and coaches with no retrieved quotes yet are listed
+                without a value.</p>
 
             <h3>Limitations</h3>
             <ul>
@@ -797,8 +815,9 @@
             <h3>Data &amp; licensing</h3>
             <p class="muted">
                 Quotes are reproduced verbatim from the linked publisher articles and remain
-                the property of their respective publishers. Team badges are generated
-                initials, not club crests. The collection pipeline and this site are open
+                the property of their respective publishers. Team shields are the official
+                crests served by ESPN's public CDN, with locally generated initials badges as
+                a fallback. The collection pipeline and this site are open
                 source: <a href="https://github.com/dariogarcia/la_liga_respect" target="_blank" rel="noopener noreferrer">dariogarcia/la_liga_respect</a>.
             </p>
         </div>
@@ -820,8 +839,9 @@
     // All remote data, loaded once and cached.
     const DATA = { teams: [], comments: [], games: [], pending: [], seasonStart: null };
     const MAX_ATTEMPTS = 5;
-    // Current UI state: shown mode, fetched entries, search filter.
-    const STATE = { mode: 'separate', entries: [], filter: '', movement: null };
+    // Current UI state: shown mode, metric (total vs per-game
+    // average), fetched entries, search filter.
+    const STATE = { mode: 'separate', metric: 'total', entries: [], filter: '', movement: null };
 
     // Human labels + one-line explanation per ranking mode. The data
     // files keep the historical keys ('separate' / 'competitive'); only
@@ -863,7 +883,15 @@
     }
 
     function logoFor(teamData) {
-        return safeUrl(teamData && teamData.logo) || 'assets/teams/default.svg';
+        return safeUrl(teamData && teamData.logo) || localBadgeFor(teamData);
+    }
+
+    // Fallback crest: the locally generated two-tone badge for the
+    // team slug, or the neutral placeholder when even that is missing.
+    function localBadgeFor(teamData) {
+        const id = (teamData && teamData.id) || '';
+        return (/^[a-z0-9-]+$/i.test(id) && id !== 'default')
+            ? `assets/teams/${id}.svg` : 'assets/teams/default.svg';
     }
 
     // --- E3: the previous coach is derived from coach_history, not
@@ -936,7 +964,7 @@
         body.innerHTML = '';
         const filter = norm(STATE.filter);
 
-        const shown = STATE.entries.filter(entry => {
+        let shown = STATE.entries.filter(entry => {
             if (!filter) return true;
             const teamData = DATA.teams.find(t => t.coach === entry.coach);
             const teamName = teamData ? teamData.team : '';
@@ -948,6 +976,32 @@
         const hasSplit = STATE.entries.some(e => 'home_points' in e);
         document.getElementById('th-homeaway').style.display = hasSplit ? '' : 'none';
 
+        // Per-game normalization: average points over the games where
+        // a quote was retrieved (silences are excluded from this view
+        // — they carry no quote to average). Older leaderboard files
+        // without the quote counters fall back to the total view.
+        const perGame = STATE.metric === 'pergame'
+            && STATE.entries.some(e => 'quoted_games' in e);
+        const avgOf = e => (Number(e.quoted_games) > 0)
+            ? (Number(e.quoted_points) || 0) / e.quoted_games
+            : null;
+        if (perGame) {
+            shown = shown.slice().sort((a, b) => {
+                const aa = avgOf(a), bb = avgOf(b);
+                if (aa === null && bb === null) return (b.points - a.points) || a.coach.localeCompare(b.coach);
+                if (aa === null) return 1;
+                if (bb === null) return -1;
+                return (bb - aa) || (b.points - a.points);
+            });
+        }
+
+        const thPoints = document.getElementById('th-points');
+        thPoints.textContent = perGame ? 'Avg / Game*' : 'Points';
+        thPoints.title = perGame
+            ? 'Average points over games with a retrieved quote (asterisk: fewer than 5)'
+            : 'Total respect points';
+        document.getElementById('pergame-note').hidden = !perGame;
+
         if (!shown.length) {
             const row = document.createElement('tr');
             row.className = 'no-match';
@@ -956,7 +1010,9 @@
             return;
         }
 
-        const maxPoints = Math.max(...STATE.entries.map(e => Number(e.points) || 0), 1);
+        const maxPoints = perGame
+            ? Math.max(...shown.map(avgOf).filter(v => v !== null), 1)
+            : Math.max(...STATE.entries.map(e => Number(e.points) || 0), 1);
 
         shown.forEach((entry, index) => {
             const teamData = DATA.teams.find(t => t.coach === entry.coach);
@@ -966,14 +1022,28 @@
                 ? `<td class="ha-col" title="Home / Away points">${Number(entry.home_points) || 0}<span class="ha-sep">/</span>${Number(entry.away_points) || 0}</td>`
                 : '';
             const mvKey = entry.coach + '|' + (entry.team || teamName);
-            const mv = (STATE.movement && STATE.mode === 'separate')
+            const mv = (STATE.movement && STATE.mode === 'separate' && !perGame)
                 ? STATE.movement[mvKey] : undefined;
             const mvHtml = (mv === undefined || mv === 0)
                 ? ''
                 : `<span class="movement ${mv > 0 ? 'up' : 'down'}" title="Moved ${mv > 0 ? 'up' : 'down'} ${Math.abs(mv)} place${Math.abs(mv) === 1 ? '' : 's'} since the previous run">${mv > 0 ? '▲' : '▼'}${Math.abs(mv)}</span>`;
 
             const points = Number(entry.points) || 0;
-            const barPct = Math.round((points / maxPoints) * 100);
+            const quotedGames = Number(entry.quoted_games) || 0;
+            const avg = avgOf(entry);
+            const barPct = perGame
+                ? (avg === null ? 0 : Math.round((avg / maxPoints) * 100))
+                : Math.round((points / maxPoints) * 100);
+            const ptsDisplay = perGame
+                ? (avg === null
+                    ? '—'
+                    : avg.toFixed(2) + (quotedGames < 5 ? '*' : ''))
+                : String(points);
+            const ptsTitle = perGame
+                ? (avg === null
+                    ? 'No retrieved quotes yet'
+                    : `${quotedGames} game${quotedGames === 1 ? '' : 's'} with quotes · ${points} total points`)
+                : `${points} points`;
 
             const row = document.createElement('tr');
             row.className = 'leaderboard-row';
@@ -986,7 +1056,7 @@
                     <div class="team-cell">
                         <div class="team-logo">
                             <img src="${esc(logoUrl)}" class="team-icon" alt="${esc(teamName)} logo" loading="lazy"
-                                 onerror="this.onerror=null; this.src='assets/teams/default.svg';">
+                                 onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='${esc(localBadgeFor(teamData))}';}else{this.onerror=null;this.src='assets/teams/default.svg';}">
                         </div>
                         <div class="coach-line">
                             <div class="coach-name" title="${esc(entry.coach)}">${esc(entry.coach)}</div>
@@ -998,9 +1068,9 @@
                 <td class="gp-col" title="Games played">${Number(entry.games_played) || 0}</td>
                 ${homeAway}
                 <td class="pts-col">
-                    <div class="pts-cell">
+                    <div class="pts-cell" title="${esc(ptsTitle)}">
                         <div class="pts-bar" style="width: calc(${barPct}% - 12px);"></div>
-                        <span class="pts-num">${points}</span>
+                        <span class="pts-num">${esc(ptsDisplay)}</span>
                     </div>
                 </td>
             `;
@@ -1015,6 +1085,19 @@
 
     function onSearchInput(value) {
         STATE.filter = value;
+        renderLeaderboard();
+    }
+
+    // Points display toggle: season-long totals vs the per-game
+    // average over games with retrieved quotes.
+    function setMetric(metric) {
+        if (STATE.metric === metric) return;
+        STATE.metric = metric;
+        for (const m of ['total', 'pergame']) {
+            const btn = document.getElementById('btn-' + m);
+            btn.classList.toggle('active', metric === m);
+            btn.setAttribute('aria-pressed', String(metric === m));
+        }
         renderLeaderboard();
     }
 
@@ -1217,7 +1300,7 @@
 
         panel.innerHTML = `
             <div class="detail-header">
-                <img src="${esc(logoFor(teamData))}" alt="" onerror="this.onerror=null; this.src='assets/teams/default.svg';">
+                <img src="${esc(logoFor(teamData))}" alt="" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='${esc(localBadgeFor(teamData))}';}else{this.onerror=null;this.src='assets/teams/default.svg';}">
                 <h2>${esc(coach)} — ${esc(teamName)}</h2>
                 <button class="detail-close" onclick="hideCoachDetail()" aria-label="Close detail panel">Close ✕</button>
             </div>

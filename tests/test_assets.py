@@ -28,65 +28,60 @@ class TestTeamAssets(unittest.TestCase):
         self.teams = json.loads((ROOT / "data" / "teams.json").read_text(encoding="utf-8"))
         self.assets_dir = ROOT / "assets" / "teams"
 
-    def test_every_team_has_logo_file(self):
+    def _badge(self, team):
+        # The local fallback badge that ships with the site; the UI uses
+        # it when the remote crest fails to load.
+        return self.assets_dir / f"{team['id']}.svg"
+
+    def test_every_team_has_fallback_badge(self):
         for team in self.teams:
-            logo_path = ROOT / team["logo"]
             self.assertTrue(
-                logo_path.exists(),
-                f"Missing logo file for {team['id']}: {team['logo']}",
+                self._badge(team).exists(),
+                f"Missing fallback badge for {team['id']}: assets/teams/{team['id']}.svg",
             )
 
-    def test_logo_paths_follow_convention(self):
+    def test_logo_is_espn_cdn_or_local(self):
+        # Product decision (2026-10): teams.json carries the official
+        # crest served by ESPN's public CDN; local badge paths are also
+        # accepted as a legacy/interim value. Anything else (other
+        # hosts, http, protocol-relative) is rejected.
         for team in self.teams:
-            self.assertEqual(
-                team["logo"],
-                f"assets/teams/{team['id']}.svg",
-                f"Unexpected logo path for {team['id']}",
+            logo = team.get("logo", "")
+            self.assertTrue(
+                logo.startswith("https://a.espncdn.com/")
+                or logo.startswith("assets/teams/"),
+                f"Unexpected logo for {team['id']}: {logo}",
             )
 
     def test_default_badge_exists(self):
         self.assertTrue((self.assets_dir / "default.svg").exists())
 
-    def test_logos_are_valid_svg(self):
+    def test_badges_are_valid_svg(self):
         for team in self.teams:
-            content = (ROOT / team["logo"]).read_text(encoding="utf-8")
-            self.assertIn("<svg", content, f"{team['id']} logo is not an SVG")
-            self.assertIn("</svg>", content, f"{team['id']} logo is truncated")
+            content = self._badge(team).read_text(encoding="utf-8")
+            self.assertIn("<svg", content, f"{team['id']} badge is not an SVG")
+            self.assertIn("</svg>", content, f"{team['id']} badge is truncated")
 
     def test_index_references_default_badge(self):
         html = (ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("assets/teams/default.svg", html)
 
-    def test_logos_are_local_no_external_crests(self):
-        # C7 regression: badges must stay locally generated files, never
-        # hot-linked club crests (copyright + tracking + availability).
-        for team in self.teams:
-            logo = team["logo"]
-            self.assertFalse(
-                logo.startswith(("http://", "https://", "//")),
-                f"{team['id']} points to an external logo: {logo}",
-            )
-            self.assertTrue(
-                logo.startswith("assets/teams/"),
-                f"{team['id']} logo is not under assets/teams/: {logo}",
-            )
-
     def test_badges_are_initials_style_not_club_crests(self):
-        # C7: generated badges are text/initials based SVGs; a real club
-        # crest smuggled in would typically be a heavy embedded raster.
+        # The locally generated fallbacks are text/initials based SVGs;
+        # a real club crest smuggled in would typically be a heavy
+        # embedded raster.
         for team in self.teams:
-            content = (ROOT / team["logo"]).read_text(encoding="utf-8")
+            content = self._badge(team).read_text(encoding="utf-8")
             self.assertNotIn(
                 "data:image",
                 content,
-                f"{team['id']} logo embeds raster data (club crest?)",
+                f"{team['id']} badge embeds raster data (club crest?)",
             )
             self.assertLess(
                 len(content),
                 20000,
-                f"{team['id']} logo is suspiciously large for an initials badge",
+                f"{team['id']} badge is suspiciously large for an initials badge",
             )
-
 
     def test_badge_text_contrasts_with_both_halves(self):
         # Regression: initials must be legible on the primary circle AND
@@ -94,7 +89,7 @@ class TestTeamAssets(unittest.TestCase):
         # white-on-orange (Valencia) letters are invisible; the fill or
         # its halo stroke must clear a 3:1 WCAG ratio on each half.
         for team in self.teams:
-            content = (ROOT / team["logo"]).read_text(encoding="utf-8")
+            content = self._badge(team).read_text(encoding="utf-8")
             primary = re.search(
                 r'<circle[^>]*fill="(#[0-9A-Fa-f]{6})"', content).group(1)
             secondary = re.search(

@@ -2,7 +2,7 @@ import unicodedata
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional
 
-from src.data.manager import get_games, save_games, get_teams
+from src.data.manager import get_games, save_games, get_teams, save_teams
 from src.utils.api import ESPNLaLigaAPI, LaLigaAPI
 
 MATCH_TOKENS = {"de", "la", "el", "los", "las", "a", "y", "club", "cf", "fc", "cd",
@@ -103,7 +103,8 @@ def sync_finished_games(api_key: Optional[str] = None) -> Dict:
     already known (by game_id or home/away/date) are added. Coaches are
     resolved from teams.json.
     """
-    stats = {"added": 0, "already_known": 0, "unmapped": [], "error": None, "source": None}
+    stats = {"added": 0, "already_known": 0, "unmapped": [], "error": None, "source": None,
+             "logos_updated": 0}
 
     games = get_games()
     teams = get_teams()
@@ -145,6 +146,14 @@ def sync_finished_games(api_key: Optional[str] = None) -> Dict:
             stats["unmapped"].append(match["awayTeam"])
             continue
 
+        # Refresh crest URLs from the API payload even for games that
+        # are already known, so teams.json logos stay current.
+        for team_entry, logo in ((home, match.get("homeLogo")),
+                                 (away, match.get("awayLogo"))):
+            if logo and team_entry.get("logo") != logo:
+                team_entry["logo"] = logo
+                stats["logos_updated"] += 1
+
         pair = (home["team"], away["team"], date)
         if gid in known_ids or pair in known_pairs:
             stats["already_known"] += 1
@@ -165,6 +174,8 @@ def sync_finished_games(api_key: Optional[str] = None) -> Dict:
     if stats["added"]:
         games.sort(key=lambda g: (g["date"], g["game_id"]))
         save_games(games)
+    if stats["logos_updated"]:
+        save_teams(teams)
 
     print(
         f"--- Calendar Sync Report ---\n"
@@ -172,6 +183,7 @@ def sync_finished_games(api_key: Optional[str] = None) -> Dict:
         f"Finished matches: {len(finished)}\n"
         f"New games added: {stats['added']}\n"
         f"Already known: {stats['already_known']}\n"
+        f"Team logos refreshed: {stats['logos_updated']}\n"
         f"Unmapped teams: {sorted(set(stats['unmapped'])) or 'none'}\n"
         f"----------------------------"
     )

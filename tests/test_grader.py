@@ -272,3 +272,78 @@ class TestCleanEntriesInRankings(unittest.TestCase):
         points = {r["coach"]: r["points"] for r in rankings}
         self.assertEqual(points["A"], 1)
         self.assertEqual(points["B"], 1)
+
+
+class TestQuotedGameStats(unittest.TestCase):
+    """Per-game normalization base: quoted_games / quoted_points track
+    only the games where a quote was retrieved (silences are excluded,
+    since they carry no quote to average)."""
+
+    TEAMS = [
+        {"team": "Alavés", "coach": "A"},
+        {"team": "Getafe", "coach": "B"},
+    ]
+    GAMES = [
+        {"game_id": "1", "date": "2026-08-15", "home_team": "Alavés", "away_team": "Getafe",
+         "home_coach": "A", "away_coach": "B"},
+        {"game_id": "2", "date": "2026-08-22", "home_team": "Getafe", "away_team": "Alavés",
+         "home_coach": "B", "away_coach": "A"},
+    ]
+
+    def _rankings(self, comments, mode):
+        with mock.patch("src.grading.grader.get_teams", return_value=self.TEAMS), \
+             mock.patch("src.grading.grader.get_games", return_value=self.GAMES):
+            return calculate_rankings(comments, mode=mode)
+
+    def _clean(self, coach, game_id):
+        return {
+            "game_id": game_id, "coach": coach, "quote": "",
+            "no_ref_comment": True, "kind": "confirmed", "score": 3,
+            "graded_by": "coverage", "justification": "no referee comment",
+        }
+
+    def test_separate_excludes_silences(self):
+        comments = [
+            {"game_id": "1", "coach": "A", "quote": "q", "score": 5},
+            self._clean("B", "1"),
+            self._clean("A", "2"),
+            {"game_id": "2", "coach": "B", "quote": "q", "score": 1},
+        ]
+        rankings, _ = self._rankings(comments, "separate")
+        stats = {r["coach"]: (r["quoted_games"], r["quoted_points"]) for r in rankings}
+        self.assertEqual(stats["A"], (1, 5))   # one quoted game, silence ignored
+        self.assertEqual(stats["B"], (1, 1))
+        # Totals still include the silences.
+        points = {r["coach"]: r["points"] for r in rankings}
+        self.assertEqual(points["A"], 8)
+        self.assertEqual(points["B"], 4)
+
+    def test_separate_accumulates_across_quoted_games(self):
+        comments = [
+            {"game_id": "1", "coach": "A", "quote": "q", "score": 5},
+            {"game_id": "2", "coach": "A", "quote": "q", "score": 1},
+        ]
+        rankings, _ = self._rankings(comments, "separate")
+        entry = next(r for r in rankings if r["coach"] == "A")
+        self.assertEqual((entry["quoted_games"], entry["quoted_points"]), (2, 6))
+
+    def test_competitive_uses_duel_points(self):
+        # Game 1: A quoted (5) beats B quoted (0) -> duel 3/0.
+        # Game 2: B silent vs A quoted (1) -> B wins the duel 3, A gets 0.
+        comments = [
+            {"game_id": "1", "coach": "A", "quote": "q", "score": 5},
+            {"game_id": "1", "coach": "B", "quote": "q", "score": 0},
+            self._clean("B", "2"),
+            {"game_id": "2", "coach": "A", "quote": "q", "score": 1},
+        ]
+        rankings, _ = self._rankings(comments, "competitive")
+        stats = {r["coach"]: (r["quoted_games"], r["quoted_points"]) for r in rankings}
+        self.assertEqual(stats["A"], (2, 3))   # duel win + duel loss
+        self.assertEqual(stats["B"], (1, 0))   # game 1 quote (lost duel); game 2 silence ignored
+
+    def test_all_silent_coach_has_no_quote_base(self):
+        comments = [self._clean("A", "1"), self._clean("B", "1")]
+        rankings, _ = self._rankings(comments, "competitive")
+        for r in rankings:
+            self.assertEqual(r["quoted_games"], 0)
+            self.assertEqual(r["quoted_points"], 0)

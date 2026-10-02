@@ -64,6 +64,10 @@ def get_teams():
     return load_json(TEAMS_FILE)
 
 
+def save_teams(teams):
+    save_json(TEAMS_FILE, teams)
+
+
 def get_leaderboard(mode="separate"):
     filepath = LEADERBOARD_FILE if mode == "separate" else LEADERBOARD_COMPETITIVE_FILE
     return load_json(filepath)

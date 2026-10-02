@@ -5,7 +5,9 @@
     "points": 12,
     "games_played": 7,
     "home_points": 7,
-    "away_points": 5
+    "away_points": 5,
+    "quoted_games": 2,
+    "quoted_points": 3
   },
   {
     "coach": "Claudio Giráldez",
@@ -13,7 +15,9 @@
     "points": 10,
     "games_played": 7,
     "home_points": 5,
-    "away_points": 5
+    "away_points": 5,
+    "quoted_games": 2,
+    "quoted_points": 3
   },
   {
     "coach": "Iñigo Pérez",
@@ -21,7 +25,9 @@
     "points": 10,
     "games_played": 6,
     "home_points": 2,
-    "away_points": 8
+    "away_points": 8,
+    "quoted_games": 1,
+    "quoted_points": 3
   },
   {
     "coach": "Antonio Hidalgo",
@@ -29,7 +35,9 @@
     "points": 9,
     "games_played": 7,
     "home_points": 4,
-    "away_points": 5
+    "away_points": 5,
+    "quoted_games": 1,
+    "quoted_points": 1
   },
   {
     "coach": "Luis Miguel Ramis",
@@ -37,7 +45,9 @@
     "points": 9,
     "games_played": 6,
     "home_points": 5,
-    "away_points": 4
+    "away_points": 4,
+    "quoted_games": 2,
+    "quoted_points": 1
   },
   {
     "coach": "Luis García",
@@ -45,7 +55,9 @@
     "points": 8,
     "games_played": 7,
     "home_points": 5,
-    "away_points": 3
+    "away_points": 3,
+    "quoted_games": 2,
+    "quoted_points": 1
   },
   {
     "coach": "Manolo González",
@@ -53,7 +65,9 @@
     "points": 8,
     "games_played": 7,
     "home_points": 5,
-    "away_points": 3
+    "away_points": 3,
+    "quoted_games": 5,
+    "quoted_points": 4
   },
   {
     "coach": "Martín Anselmi",
@@ -61,7 +75,9 @@
     "points": 8,
     "games_played": 6,
     "home_points": 5,
-    "away_points": 3
+    "away_points": 3,
+    "quoted_games": 0,
+    "quoted_points": 0
   },
   {
     "coach": "Quique Sánchez Flores",
@@ -69,7 +85,9 @@
     "points": 8,
     "games_played": 6,
     "home_points": 6,
-    "away_points": 2
+    "away_points": 2,
+    "quoted_games": 1,
+    "quoted_points": 3
   },
   {
     "coach": "Beñat San José",
@@ -77,7 +95,9 @@
     "points": 7,
     "games_played": 6,
     "home_points": 5,
-    "away_points": 2
+    "away_points": 2,
+    "quoted_games": 1,
+    "quoted_points": 0
   },
   {
     "coach": "Hansi Flick",
@@ -85,7 +105,9 @@
     "points": 7,
     "games_played": 7,
     "home_points": 3,
-    "away_points": 4
+    "away_points": 4,
+    "quoted_games": 0,
+    "quoted_points": 0
   },
   {
     "coach": "Juan Francisco Funes",
@@ -93,7 +115,9 @@
     "points": 7,
     "games_played": 6,
     "home_points": 2,
-    "away_points": 5
+    "away_points": 5,
+    "quoted_games": 2,
+    "quoted_points": 1
   },
   {
     "coach": "Carlos Corberán",
@@ -101,7 +125,9 @@
     "points": 6,
     "games_played": 6,
     "home_points": 3,
-    "away_points": 3
+    "away_points": 3,
+    "quoted_games": 0,
+    "quoted_points": 0
   },
   {
     "coach": "José Alberto López",
@@ -109,7 +135,9 @@
     "points": 6,
     "games_played": 6,
     "home_points": 2,
-    "away_points": 4
+    "away_points": 4,
+    "quoted_games": 2,
+    "quoted_points": 0
   },
   {
     "coach": "Luís Castro",
@@ -117,7 +145,9 @@
     "points": 6,
     "games_played": 5,
     "home_points": 2,
-    "away_points": 4
+    "away_points": 4,
+    "quoted_games": 3,
+    "quoted_points": 4
   },
   {
     "coach": "Manuel Pellegrini",
@@ -125,7 +155,9 @@
     "points": 6,
     "games_played": 6,
     "home_points": 3,
-    "away_points": 3
+    "away_points": 3,
+    "quoted_games": 0,
+    "quoted_points": 0
   },
   {
     "coach": "Pellegrino Matarazzo",
@@ -133,7 +165,9 @@
     "points": 6,
     "games_played": 6,
     "home_points": 2,
-    "away_points": 4
+    "away_points": 4,
+    "quoted_games": 3,
+    "quoted_points": 1
   },
   {
     "coach": "Edin Terzić",
@@ -141,7 +175,9 @@
     "points": 5,
     "games_played": 5,
     "home_points": 3,
-    "away_points": 2
+    "away_points": 2,
+    "quoted_games": 1,
+    "quoted_points": 1
   },
   {
     "coach": "José Bordalás",
@@ -149,7 +185,9 @@
     "points": 4,
     "games_played": 6,
     "home_points": 2,
-    "away_points": 2
+    "away_points": 2,
+    "quoted_games": 2,
+    "quoted_points": 0
   },
   {
     "coach": "José Mourinho",
@@ -157,6 +195,8 @@
     "points": 4,
     "games_played": 7,
     "home_points": 1,
-    "away_points": 3
+    "away_points": 3,
+    "quoted_games": 5,
+    "quoted_points": 2
   }
 ]

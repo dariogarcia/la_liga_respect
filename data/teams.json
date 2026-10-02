@@ -1,202 +1,202 @@
 [
-    {
-        "id": "alaves",
-        "team": "Alavés",
-        "coach": "Quique Sánchez Flores",
-        "previous_coach": "Luis García Plaza",
-        "logo": "assets/teams/alaves.svg",
-        "coach_history": [
-            {
-                "coach": "Luis García Plaza",
-                "until": "2026-06-30"
-            }
-        ]
-    },
-    {
-        "id": "athletic-bilbao",
-        "team": "Athletic Bilbao",
-        "coach": "Edin Terzić",
-        "previous_coach": "Ernesto Valverde",
-        "logo": "assets/teams/athletic-bilbao.svg",
-        "coach_history": [
-            {
-                "coach": "Ernesto Valverde",
-                "until": "2026-06-30"
-            }
-        ]
-    },
-    {
-        "id": "atletico-madrid",
-        "team": "Atlético Madrid",
-        "coach": "Diego Simeone",
-        "previous_coach": "Diego Simeone",
-        "logo": "assets/teams/atletico-madrid.svg"
-    },
-    {
-        "id": "barcelona",
-        "team": "Barcelona",
-        "coach": "Hansi Flick",
-        "previous_coach": "Xavi Hernández",
-        "logo": "assets/teams/barcelona.svg",
-        "coach_history": [
-            {
-                "coach": "Xavi Hernández",
-                "until": "2026-06-30"
-            }
-        ]
-    },
-    {
-        "id": "celta-vigo",
-        "team": "Celta Vigo",
-        "coach": "Claudio Giráldez",
-        "previous_coach": "TBD",
-        "logo": "assets/teams/celta-vigo.svg"
-    },
-    {
-        "id": "deportivo-a-coruna",
-        "team": "Deportivo A Coruña",
-        "coach": "Antonio Hidalgo",
-        "previous_coach": "TBD",
-        "logo": "assets/teams/deportivo-a-coruna.svg"
-    },
-    {
-        "id": "elche",
-        "team": "Elche",
-        "coach": "Martín Anselmi",
-        "previous_coach": "TBD",
-        "logo": "assets/teams/elche.svg"
-    },
-    {
-        "id": "espanyol",
-        "team": "Espanyol",
-        "coach": "Manolo González",
-        "previous_coach": "Manolo González",
-        "logo": "assets/teams/espanyol.svg"
-    },
-    {
-        "id": "getafe",
-        "team": "Getafe",
-        "coach": "José Bordalás",
-        "previous_coach": "José Bordalás",
-        "logo": "assets/teams/getafe.svg"
-    },
-    {
-        "id": "levante",
-        "team": "Levante",
-        "coach": "Luís Castro",
-        "previous_coach": "Luís Castro",
-        "logo": "assets/teams/levante.svg"
-    },
-    {
-        "id": "malaga",
-        "team": "Málaga",
-        "coach": "Juan Francisco Funes",
-        "previous_coach": "Juan Francisco Funes",
-        "logo": "assets/teams/malaga.svg"
-    },
-    {
-        "id": "osasuna",
-        "team": "Osasuna",
-        "coach": "Luis Miguel Ramis",
-        "previous_coach": "Jagoba Arrasate",
-        "logo": "assets/teams/osasuna.svg",
-        "coach_history": [
-            {
-                "coach": "Jagoba Arrasate",
-                "until": "2026-06-30"
-            }
-        ]
-    },
-    {
-        "id": "racing-santander",
-        "team": "Racing Santander",
-        "coach": "José Alberto López",
-        "previous_coach": "José Alberto López",
-        "logo": "assets/teams/racing-santander.svg"
-    },
-    {
-        "id": "rayo-vallecano",
-        "team": "Rayo Vallecano",
-        "coach": "Beñat San José",
-        "previous_coach": "Íñigo Pérez",
-        "logo": "assets/teams/rayo-vallecano.svg",
-        "coach_history": [
-            {
-                "coach": "Íñigo Pérez",
-                "until": "2026-06-30"
-            }
-        ]
-    },
-    {
-        "id": "real-betis",
-        "team": "Real Betis",
-        "coach": "Manuel Pellegrini",
-        "previous_coach": "Manuel Pellegrini",
-        "logo": "assets/teams/real-betis.svg"
-    },
-    {
-        "id": "real-sociedad",
-        "team": "Real Sociedad",
-        "coach": "Pellegrino Matarazzo",
-        "previous_coach": "Imanol Alguacil",
-        "logo": "assets/teams/real-sociedad.svg",
-        "coach_history": [
-            {
-                "coach": "Imanol Alguacil",
-                "until": "2026-06-30"
-            }
-        ]
-    },
-    {
-        "id": "real-madrid",
-        "team": "Real Madrid",
-        "coach": "José Mourinho",
-        "previous_coach": "Carlo Ancelotti",
-        "logo": "assets/teams/real-madrid.svg",
-        "coach_history": [
-            {
-                "coach": "Carlo Ancelotti",
-                "until": "2026-06-30"
-            }
-        ]
-    },
-    {
-        "id": "sevilla",
-        "team": "Sevilla",
-        "coach": "Luis García",
-        "previous_coach": "Pablo Longoria",
-        "logo": "assets/teams/sevilla.svg",
-        "coach_history": [
-            {
-                "coach": "Pablo Longoria",
-                "until": "2026-06-30"
-            }
-        ]
-    },
-    {
-        "id": "valencia",
-        "team": "Valencia",
-        "coach": "Carlos Corberán",
-        "previous_coach": "Rubén Baraja",
-        "logo": "assets/teams/valencia.svg",
-        "coach_history": [
-            {
-                "coach": "Rubén Baraja",
-                "until": "2026-06-30"
-            }
-        ]
-    },
-    {
-        "id": "villarreal",
-        "team": "Villarreal",
-        "coach": "Iñigo Pérez",
-        "previous_coach": "Marcelino",
-        "logo": "assets/teams/villarreal.svg",
-        "coach_history": [
-            {
-                "coach": "Marcelino",
-                "until": "2026-06-30"
-            }
-        ]
-    }
+  {
+    "id": "alaves",
+    "team": "Alavés",
+    "coach": "Quique Sánchez Flores",
+    "previous_coach": "Luis García Plaza",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/96.png",
+    "coach_history": [
+      {
+        "coach": "Luis García Plaza",
+        "until": "2026-06-30"
+      }
+    ]
+  },
+  {
+    "id": "athletic-bilbao",
+    "team": "Athletic Bilbao",
+    "coach": "Edin Terzić",
+    "previous_coach": "Ernesto Valverde",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/93.png",
+    "coach_history": [
+      {
+        "coach": "Ernesto Valverde",
+        "until": "2026-06-30"
+      }
+    ]
+  },
+  {
+    "id": "atletico-madrid",
+    "team": "Atlético Madrid",
+    "coach": "Diego Simeone",
+    "previous_coach": "Diego Simeone",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/1068.png"
+  },
+  {
+    "id": "barcelona",
+    "team": "Barcelona",
+    "coach": "Hansi Flick",
+    "previous_coach": "Xavi Hernández",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/83.png",
+    "coach_history": [
+      {
+        "coach": "Xavi Hernández",
+        "until": "2026-06-30"
+      }
+    ]
+  },
+  {
+    "id": "celta-vigo",
+    "team": "Celta Vigo",
+    "coach": "Claudio Giráldez",
+    "previous_coach": "TBD",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/85.png"
+  },
+  {
+    "id": "deportivo-a-coruna",
+    "team": "Deportivo A Coruña",
+    "coach": "Antonio Hidalgo",
+    "previous_coach": "TBD",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/90.png"
+  },
+  {
+    "id": "elche",
+    "team": "Elche",
+    "coach": "Martín Anselmi",
+    "previous_coach": "TBD",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/3751.png"
+  },
+  {
+    "id": "espanyol",
+    "team": "Espanyol",
+    "coach": "Manolo González",
+    "previous_coach": "Manolo González",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/88.png"
+  },
+  {
+    "id": "getafe",
+    "team": "Getafe",
+    "coach": "José Bordalás",
+    "previous_coach": "José Bordalás",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/2922.png"
+  },
+  {
+    "id": "levante",
+    "team": "Levante",
+    "coach": "Luís Castro",
+    "previous_coach": "Luís Castro",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/1538.png"
+  },
+  {
+    "id": "malaga",
+    "team": "Málaga",
+    "coach": "Juan Francisco Funes",
+    "previous_coach": "Juan Francisco Funes",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/99.png"
+  },
+  {
+    "id": "osasuna",
+    "team": "Osasuna",
+    "coach": "Luis Miguel Ramis",
+    "previous_coach": "Jagoba Arrasate",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/97.png",
+    "coach_history": [
+      {
+        "coach": "Jagoba Arrasate",
+        "until": "2026-06-30"
+      }
+    ]
+  },
+  {
+    "id": "racing-santander",
+    "team": "Racing Santander",
+    "coach": "José Alberto López",
+    "previous_coach": "José Alberto López",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/87.png"
+  },
+  {
+    "id": "rayo-vallecano",
+    "team": "Rayo Vallecano",
+    "coach": "Beñat San José",
+    "previous_coach": "Íñigo Pérez",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/101.png",
+    "coach_history": [
+      {
+        "coach": "Íñigo Pérez",
+        "until": "2026-06-30"
+      }
+    ]
+  },
+  {
+    "id": "real-betis",
+    "team": "Real Betis",
+    "coach": "Manuel Pellegrini",
+    "previous_coach": "Manuel Pellegrini",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/244.png"
+  },
+  {
+    "id": "real-sociedad",
+    "team": "Real Sociedad",
+    "coach": "Pellegrino Matarazzo",
+    "previous_coach": "Imanol Alguacil",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/89.png",
+    "coach_history": [
+      {
+        "coach": "Imanol Alguacil",
+        "until": "2026-06-30"
+      }
+    ]
+  },
+  {
+    "id": "real-madrid",
+    "team": "Real Madrid",
+    "coach": "José Mourinho",
+    "previous_coach": "Carlo Ancelotti",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/86.png",
+    "coach_history": [
+      {
+        "coach": "Carlo Ancelotti",
+        "until": "2026-06-30"
+      }
+    ]
+  },
+  {
+    "id": "sevilla",
+    "team": "Sevilla",
+    "coach": "Luis García",
+    "previous_coach": "Pablo Longoria",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/243.png",
+    "coach_history": [
+      {
+        "coach": "Pablo Longoria",
+        "until": "2026-06-30"
+      }
+    ]
+  },
+  {
+    "id": "valencia",
+    "team": "Valencia",
+    "coach": "Carlos Corberán",
+    "previous_coach": "Rubén Baraja",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/94.png",
+    "coach_history": [
+      {
+        "coach": "Rubén Baraja",
+        "until": "2026-06-30"
+      }
+    ]
+  },
+  {
+    "id": "villarreal",
+    "team": "Villarreal",
+    "coach": "Iñigo Pérez",
+    "previous_coach": "Marcelino",
+    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/102.png",
+    "coach_history": [
+      {
+        "coach": "Marcelino",
+        "until": "2026-06-30"
+      }
+    ]
+  }
 ]

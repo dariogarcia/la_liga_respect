@@ -210,3 +210,68 @@ class TestSyncFinishedGames(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+    def test_sync_refreshes_team_logos(self):
+        teams = [
+            {"team": "Alavés", "coach": "Coach A", "logo": "assets/teams/alaves.svg"},
+            {"team": "Getafe", "coach": "Coach B", "logo": "assets/teams/getafe.svg"},
+        ]
+
+        class LogoAPI:
+            def __init__(self, api_key):
+                pass
+
+            def get_finished_matches(self):
+                return [
+                    {"match_id": "100", "utcDate": "2026-08-15T19:00:00Z", "status": "FINISHED",
+                     "homeTeam": "Deportivo Alavés", "awayTeam": "Getafe",
+                     "homeLogo": "https://a.espncdn.com/i/teamlogos/soccer/500/95.png",
+                     "awayLogo": None},
+                ]
+
+        saved = {}
+        with mock.patch("src.collection.calendar.LaLigaAPI", LogoAPI), \
+             mock.patch("src.collection.calendar.get_games", return_value=[]), \
+             mock.patch("src.collection.calendar.get_teams", return_value=teams), \
+             mock.patch("src.collection.calendar.save_games"), \
+             mock.patch("src.collection.calendar.save_teams", side_effect=lambda t: saved.update({"teams": t})):
+            stats = sync_finished_games(api_key="key")
+
+        self.assertEqual(stats["logos_updated"], 1)
+        # https crest replaces the local badge path
+        self.assertEqual(saved["teams"][0]["logo"], "https://a.espncdn.com/i/teamlogos/soccer/500/95.png")
+        # a missing (None) logo leaves the existing value untouched
+        self.assertEqual(saved["teams"][1]["logo"], "assets/teams/getafe.svg")
+
+    def test_sync_refreshes_logos_for_already_known_games(self):
+        teams = [{"team": "Alavés", "coach": "Coach A", "logo": "assets/teams/alaves.svg"},
+                 {"team": "Getafe", "coach": "Coach B", "logo": None}]
+        existing = [{
+            "game_id": "fd-100", "date": "2026-08-15",
+            "home_team": "Alavés", "away_team": "Getafe",
+            "home_coach": "Coach A", "away_coach": "Coach B",
+        }]
+
+        class LogoAPI:
+            def __init__(self, api_key):
+                pass
+
+            def get_finished_matches(self):
+                return [
+                    {"match_id": "100", "utcDate": "2026-08-15T19:00:00Z", "status": "FINISHED",
+                     "homeTeam": "Deportivo Alavés", "awayTeam": "Getafe",
+                     "homeLogo": "https://a.espncdn.com/i/teamlogos/soccer/500/95.png",
+                     "awayLogo": "https://a.espncdn.com/i/teamlogos/soccer/500/93.png"},
+                ]
+
+        saved = {}
+        with mock.patch("src.collection.calendar.LaLigaAPI", LogoAPI), \
+             mock.patch("src.collection.calendar.get_games", return_value=existing), \
+             mock.patch("src.collection.calendar.get_teams", return_value=teams), \
+             mock.patch("src.collection.calendar.save_games"), \
+             mock.patch("src.collection.calendar.save_teams", side_effect=lambda t: saved.update({"teams": t})):
+            stats = sync_finished_games(api_key="key")
+
+        self.assertEqual(stats["added"], 0)
+        self.assertEqual(stats["logos_updated"], 2)
+        self.assertTrue(all(t["logo"].startswith("https://") for t in saved["teams"]))
