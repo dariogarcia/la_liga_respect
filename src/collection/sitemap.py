@@ -10,9 +10,9 @@ import unicodedata
 import xml.etree.ElementTree as ET
 from typing import List, Optional
 
-import requests
-
+from . import cache
 from .models import SearchResult
+from ..utils import http
 from ..utils.ratelimit import SITEMAP_RATE_LIMITER
 from ..utils.useragent import BOT_USER_AGENT
 
@@ -86,8 +86,18 @@ def fetch_sitemap_entries(force_refresh: bool = False) -> List[SearchResult]:
     seen = set()
     for domain, sitemap_url in NEWS_SITEMAPS.items():
         try:
-            SITEMAP_RATE_LIMITER.wait()
-            response = requests.get(sitemap_url, headers={"User-Agent": USER_AGENT}, timeout=20)
+            # On-disk cache (A4): sitemaps are refreshed at most once per
+            # 24h even across interrupted or repeated runs.
+            response = cache.cache_get(sitemap_url)
+            if response is None:
+                SITEMAP_RATE_LIMITER.wait()
+                response = http.http_get(
+                    sitemap_url, headers={"User-Agent": USER_AGENT}, timeout=20
+                )
+                if response.status_code == 200:
+                    cache.cache_put(
+                        sitemap_url, 200, response.content, ttl=cache.TTL_SITEMAP_SECONDS
+                    )
             if response.status_code != 200:
                 print(f"Sitemap for {domain} returned HTTP {response.status_code}, skipping.")
                 continue

@@ -1,6 +1,8 @@
+# Test-suite-wide environment: keep the suite hermetic.
+# - Disable the on-disk HTTP cache so mocked responses never write to
+#   the developer's .cache/ directory.
+# - Remove the per-run HTTP request budget (tests count mocked calls).
 import os
-import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if ROOT not in sys.path:
-    sys.path.insert(0, ROOT)
+os.environ.setdefault("HTTP_CACHE_DISABLE", "1")
+os.environ.setdefault("MAX_REQUESTS_PER_RUN", "0")

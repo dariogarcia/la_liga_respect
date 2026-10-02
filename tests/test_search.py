@@ -125,27 +125,27 @@ class TestDuckDuckGoCircuitBreaker(unittest.TestCase):
 
     def test_opens_after_consecutive_failures(self):
         provider, response = self._failing_provider()
-        with mock.patch("src.collection.search.requests") as requests_mock, self._patched():
-            requests_mock.post.return_value = response
+        with mock.patch("src.utils.http.http_post") as post_mock, self._patched():
+            post_mock.return_value = response
             for _ in range(provider.FAILURE_THRESHOLD):
                 provider.search("query")
-            self.assertEqual(requests_mock.post.call_count, provider.FAILURE_THRESHOLD)
+            self.assertEqual(post_mock.call_count, provider.FAILURE_THRESHOLD)
             # Circuit breaker open: further calls return instantly
             # without touching the network.
             provider.search("query")
-            self.assertEqual(requests_mock.post.call_count, provider.FAILURE_THRESHOLD)
+            self.assertEqual(post_mock.call_count, provider.FAILURE_THRESHOLD)
 
     def test_closes_again_after_cooldown(self):
         provider, response = self._failing_provider()
-        with mock.patch("src.collection.search.requests") as requests_mock, self._patched():
-            requests_mock.post.return_value = response
+        with mock.patch("src.utils.http.http_post") as post_mock, self._patched():
+            post_mock.return_value = response
             for _ in range(provider.FAILURE_THRESHOLD):
                 provider.search("query")
-            self.assertEqual(requests_mock.post.call_count, provider.FAILURE_THRESHOLD)
+            self.assertEqual(post_mock.call_count, provider.FAILURE_THRESHOLD)
             # Simulate cooldown expiry: the provider is probed again.
             provider._disabled_until = 0.0
             provider.search("query")
-            self.assertEqual(requests_mock.post.call_count, provider.FAILURE_THRESHOLD + 1)
+            self.assertEqual(post_mock.call_count, provider.FAILURE_THRESHOLD + 1)
 
 
 class TestGoogleNewsRSSProvider(unittest.TestCase):

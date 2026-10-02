@@ -61,5 +61,311 @@
     "score": 1,
     "graded_by": "llm",
     "justification": "The coach expresses disagreement with the referee's decision by citing the head of referees' own guidance that plays like the one involving 'Cuti' were not red-card offenses. However, he does so without aggression, without accusing the referee of bias, and explicitly avoids commenting on other calls ('No opiné en las otras jugadas'). He also emphasizes his team won the match regardless, avoiding blaming the referee for the result. This is a neutral expression of disagreement rather than open criticism or disrespect."
+  },
+  {
+    "game_id": "espn-401882918",
+    "coach": "Beñat San José",
+    "quote": "No sé si lo es. Si lo hubiera revisado yo creo que lo hubiera echado para atrás porque para mí no le toca, pero no voy a juzgar lo que ellos han pitado. Nos han anulado un gol fantástico y cuando te  anulan es una diferencia muy grande",
+    "source_url": "https://www.marca.com/futbol/rayo/2026/08/16/benat-san-jose-hubiera-revisado-tercer-penalti-creo-hubiera-echado-atras.html",
+    "sources": [
+      "https://www.marca.com/futbol/rayo/2026/08/16/benat-san-jose-hubiera-revisado-tercer-penalti-creo-hubiera-echado-atras.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-08-15T22:45:13",
+    "retrieved_at": "2026-10-02T07:47:42.585086"
+  },
+  {
+    "game_id": "espn-401882925",
+    "coach": "Juan Francisco Funes",
+    "quote": "El árbitro ha hecho un buen partido a pesar de todo",
+    "source_url": "https://www.mundodeportivo.com/futbol/atletico-madrid/20260820/1004217831/hemos-sido-capaces-tutear-atletico-momentos.html",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/atletico-madrid/20260820/1004217831/hemos-sido-capaces-tutear-atletico-momentos.html",
+      "https://www.cope.es/emisoras/andalucia/malaga-provincia/malaga/deportes-cope-malaga/noticias/funes-doce-debutantes-primera-malaga-fiel-estilo-juego-elite-20260820_3422646.html"
+    ],
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-08-19T22:11:18",
+    "retrieved_at": "2026-10-02T07:49:43.239360"
+  },
+  {
+    "game_id": "espn-401882912",
+    "coach": "Manolo González",
+    "quote": "Hemos querido hacer los cambios (Riedel, Calatrava y Edu Expósito) por las tarjetas, porque viendo un poco cómo iba el arbitraje, no me he fiado mucho de estar con un jugador con la amarilla contra el Real Madrid puedo entender que se equivoquen, y lógicamente no perdemos por el arbitraje para nada. No hay más, ha sido una lástima. Hay que seguir y sacar muchas cosas positivas que tiene el partido el arbitraje no condiciona el resultado, pero lo que me molesta es el criterio. No somos un equipo que pierde tiempo, pero cada saque de banda nos lo contaban, cada falta la pitaban al mínimo contacto... Al Madrid no le contaban. El criterio no ha sido el mismo",
+    "source_url": "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260823/1004218759/manolo-he-tenido-quitar-tenian-amarilla-no-me-fiaba-arbitraje.html",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260823/1004218759/manolo-he-tenido-quitar-tenian-amarilla-no-me-fiaba-arbitraje.html",
+      "https://www.marca.com/futbol/real-madrid/2026/08/23/mourinho-introduce-debate-caso-vinicius-dimension.html",
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260822/1004218684/espanyol-real-madrid.html",
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260823/1004218804/cala-explica-patada-vinicius-suelo.html",
+      "https://www.marca.com/futbol/espanyol/2026/08/23/manolo-responde-mou-bullying-vini-cono-le-tocar.html",
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260823/1004218927/carlos-espi-vino-real-madrid-esto-manolo-gonzalez-sabia-esto-dijo-rueda-prensa-previa.html"
+    ],
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-08-22T21:30:39",
+    "retrieved_at": "2026-10-02T07:59:10.802394"
+  },
+  {
+    "game_id": "espn-401882912",
+    "coach": "José Mourinho",
+    "quote": "Es premeditado por parte de los rivales. Le pegan desde la primera jugada. Y cuando uno es amonestado, va otro. Es duro Le doy yo, ahora le das tú. Si yo tengo amarilla, le das tú. Sale uno con amarilla, entra uno sin amarilla, y le da. Es una frustración para él",
+    "source_url": "https://www.marca.com/futbol/real-madrid/2026/08/23/mourinho-introduce-debate-caso-vinicius-dimension.html",
+    "sources": [
+      "https://www.marca.com/futbol/real-madrid/2026/08/23/mourinho-introduce-debate-caso-vinicius-dimension.html",
+      "https://www.marca.com/futbol/real-madrid/2026/08/23/mourinho-hay-bulling-vinicius.html",
+      "https://www.marca.com/hemeroteca/2026/08/23/index_t.html",
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260822/1004218684/espanyol-real-madrid.html",
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260822/1004218390/mou-vuelta.html",
+      "https://www.mundodeportivo.com/futbol/real-madrid/20260823/1004218841/vinicius-dia-foco.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-08-22T05:00:00",
+    "retrieved_at": "2026-10-02T08:00:30.671134"
+  },
+  {
+    "game_id": "espn-401882916",
+    "coach": "Edin Terzić",
+    "quote": "No voy a hablar de las decisiones del árbitro, sólo lo haré de nuestra actuación. Canales y Gere han hecho un trabajo fantástico bajo circunstancias complicadas, ganando muchos balones y cubriendo mucho espacio cuando hemos jugado con la expulsión de Yuri. He visto una buena reacción después de dos golpes duros como la roja y el primer gol.",
+    "source_url": "https://www.marca.com/futbol/athletic/2026/08/22/terzic-hicimos-errores-nunca-hemos-rendido.html",
+    "sources": [
+      "https://www.marca.com/futbol/athletic/2026/08/22/terzic-hicimos-errores-nunca-hemos-rendido.html",
+      "https://www.mundodeportivo.com/futbol/athletic-bilbao/20260822/1004218388/arranca-terzic-athletic.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260822/1004218364/nuevo-athletic-terzic-estrena-sevilla-mas-rodado.html",
+      "https://www.mundodeportivo.com/futbol/athletic-bilbao/20260822/1004218508/division-opiniones-san-mames-homenaje-campeones-mundo.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-08-22T05:00:00",
+    "retrieved_at": "2026-10-02T08:01:13.013812"
+  },
+  {
+    "game_id": "espn-401882911",
+    "coach": "José Bordalás",
+    "quote": "¿El penalti? No voy a opinar, luego estoy está en todas las polémicas No voy a opinar porque luego Bordalás siempre está en las polémicas Martín lo mismo, chico muy generoso, tiene unas virtudes muy buenas, hoy no se ha sido justo con él, le hicieron muchas faltas que no le señalaron. No voy a opinar porque luego Bordalás está en todas las polémicas que los árbitros no trataban a su equipo “de la misma manera” crearon cuatro o cinco amigos",
+    "source_url": "https://www.marca.com/futbol/getafe/2026/08/23/bordalas-penalti-opinar-luego-todas-polemicas.html",
+    "sources": [
+      "https://www.marca.com/futbol/getafe/2026/08/23/bordalas-penalti-opinar-luego-todas-polemicas.html",
+      "https://www.mundodeportivo.com/futbol/getafe/20260823/1004219013/bordalas-no-opino-luego-bordalas-todas-polemicas.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260823/1004218929/getafe-redondea-semana-fantastica.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-08-23T19:35:27",
+    "retrieved_at": "2026-10-02T08:02:40.294177"
+  },
+  {
+    "game_id": "espn-401882915",
+    "coach": "Diego Simeone",
+    "quote": "No me voy a detener en los penaltis, más allá de si fueron o no, ya los pitaron.",
+    "source_url": "https://www.marca.com/futbol/atletico/2026/08/23/simeone-necesitamos-delanteros-delanteros-buenos-cuidar.html",
+    "sources": [
+      "https://www.marca.com/futbol/atletico/2026/08/23/simeone-necesitamos-delanteros-delanteros-buenos-cuidar.html",
+      "https://www.mundodeportivo.com/futbol/atletico-madrid/20260823/1004218953/decision-club-hay-detras-julian-fuese-saludar.html",
+      "https://www.marca.com/futbol/atletico/2026/08/23/todas-respuestas-simeone-rueda-prensa-sobre-julian-alvarez-video.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-08-23T17:28:53",
+    "retrieved_at": "2026-10-02T08:04:55.839050"
+  },
+  {
+    "game_id": "espn-401882909",
+    "coach": "Luís Castro",
+    "quote": "No ha jugado por una expulsión, pero no lo comprendo. Él ha tenido una expulsión y después de haber estado suspendido, pero ha jugado en Bélgica. Después de la suspensión, ha jugado, y ahora no puedo. Si juegas en competición y ahora está sancionado, yo no comprendo esto.",
+    "source_url": "https://www.mundodeportivo.com/futbol/20260824/1004219389/luis-castro-claras-han-sido.html",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/20260824/1004219389/luis-castro-claras-han-sido.html",
+      "https://www.marca.com/futbol/levante/2026/08/24/desconocida-sancion-musuayi-belgica-provoco-insolita-triple-convocatoria-levante.html",
+      "https://www.marca.com/futbol/levante/2026/08/24/luis-castro-resultado-justo-hubiera-ganado-equipo-hubieramos-sido-nosotros.html",
+      "https://www.mundodeportivo.com/futbol/20260825/1004219507/revolucion-revision-inteligencia-artificial-elegira-jugadas.html"
+    ],
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-08-24T20:24:20",
+    "retrieved_at": "2026-10-02T08:07:03.665359"
+  },
+  {
+    "game_id": "espn-401882910",
+    "coach": "Juan Francisco Funes",
+    "quote": "No es penalti porque no se ha pitado, pero a Le Normand le hubiese gustado que le hubiese pitado este árbitro",
+    "source_url": "https://www.mundodeportivo.com/futbol/atletico-madrid/20260825/1004219715/24-horas-tardaron-darle-razon-atletico-queja-penalti-le-normand-le-habria-gustado-nuestro-arbitro.html",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/atletico-madrid/20260825/1004219715/24-horas-tardaron-darle-razon-atletico-queja-penalti-le-normand-le-habria-gustado-nuestro-arbitro.html"
+    ],
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-08-25T16:41:16",
+    "retrieved_at": "2026-10-02T08:07:34.271518"
+  },
+  {
+    "game_id": "espn-401882919",
+    "coach": "José Mourinho",
+    "quote": "Y el cambio de Carreras fue por la amarilla.",
+    "source_url": "https://www.marca.com/futbol/real-madrid/2026/08/26/mourinho-mbappe-hecho-partido-increible-equipo-siempre-sido-equipo.html",
+    "sources": [
+      "https://www.marca.com/futbol/real-madrid/2026/08/26/mourinho-mbappe-hecho-partido-increible-equipo-siempre-sido-equipo.html",
+      "https://www.marca.com/futbol/real-madrid/opinion/2026/08/26/mourinho-dos-teorias-sobre-vinicius.html",
+      "https://www.mundodeportivo.com/futbol/real-sociedad/20260826/1004219723/dar-sorpresa-mourinho-bernabeu.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-08-26"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-08-26T00:00:00",
+    "retrieved_at": "2026-10-02T08:10:16.125343"
+  },
+  {
+    "game_id": "espn-401882924",
+    "coach": "Claudio Giráldez",
+    "quote": "Ha entendido el VAR que tenía que avisar al árbitro, él  ha decidido, después de muchas repeticiones y mucha visualización, que era roja. Hay que aceptarlo, respetarlo. Es una decisión fundamental en el partido y que lo cambia, más allá de la situación del penalti de Galán que también es determinante y nos acaba de matar. Entiendo que no es muy clara si se tarda tanto tiempo en decidir y yo en ese caso optaría por no expulsar pero bueno entiendo que lo pueda hacer. Se ha dado así, es el fútbol y tenemos que aceptarlo Una expulsión ha cambiado todo y no nos hemos asentado bien después  y es lo que más me ha disgustado del partido. El árbitro ha decidido después de muchas visualizaciones y muchas repeticiones cuando el árbitro tarda tanto tiempo en decidir optaría por no expulsarlo, pero entiendo que lo pueda hacer Creo que el partido había que madurarlo desde su desgaste físico, pero la expulsión lo cambió todo",
+    "source_url": "https://www.marca.com/futbol/celta/2026/08/27/giraldez-expulsion-decision-fundamental-partido.html",
+    "sources": [
+      "https://www.marca.com/futbol/celta/2026/08/27/giraldez-expulsion-decision-fundamental-partido.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260827/1004220500/swedberg-vestuario-triste-sido-partido-duro.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260827/1004220498/giraldez-arbitro-decidido-muchas-visualizaciones-muchas-repeticiones.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260827/1004220462/budimir-eclipsa-aspas.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-08-27T20:32:04",
+    "retrieved_at": "2026-10-02T08:12:56.820684"
+  },
+  {
+    "game_id": "espn-401882897",
+    "coach": "Luis García",
+    "quote": "Espero que saquen en el vídeo de LaLiga la acción del penalti No, posible no, es penalti, por favor. No sé cómo han montado la que han montado con la roja del otro día, hoy es penalti, que salga en el vídeo de los árbitros una valoración",
+    "source_url": "https://www.marca.com/futbol/sevilla/2026/08/30/luis-garcia-plaza-espero-saquen-video-laliga-accion-penalti.html",
+    "sources": [
+      "https://www.marca.com/futbol/sevilla/2026/08/30/luis-garcia-plaza-espero-saquen-video-laliga-accion-penalti.html",
+      "https://www.mundodeportivo.com/futbol/fc-barcelona/20260829/1004220889/barca-debutara-champions-calendario-detalle.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260830/1004221115/sevilla-atletico-imagenes.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-08-29/page-3",
+      "https://www.mundodeportivo.com/futbol/laliga/20260829/1004220719/levante-recibe-betis-calor-protagonista.html",
+      "https://www.mundodeportivo.com/futbol/20260830/1004221410/mallorca-agudiza-caida-libre-ceuta.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-08-29T00:00:00",
+    "retrieved_at": "2026-10-02T08:16:21.741217"
+  },
+  {
+    "game_id": "espn-401882898",
+    "coach": "Pellegrino Matarazzo",
+    "quote": "Estaba asombrado en el momento por la roja porque no entendía el porqué. Es una nueva situación, no ha contado hasta 5 el árbitro a Remiro en el suelo cuando ha pedido asistencia, ha habido confusión y también emociones, claro. He podido hablar ahora con él, y me dice que la roja ha sido por haber demasiada gente protestando en el área técnica. Hubiera estado bien que me lo dijera allí y pudiéramos solucionarlo, quizá una amarilla y advertencia. Creo que la roja es dura, porque tampoco había habido aviso o comunicación previa. Toprak igual, estaba centrado en el balón parado y no sabe por qué le han expulsado En el momento estaba sorprendido, porque no entendía porque que me había sacado la tarjeta roja. Es una situación nueva, cuando el portero estaba siendo atendido y hay que sacar un futbolista fuera. Estábamos decidiendo y él ha sacado a Zubeldia fuera, era un momento complicado y emocionante. Matarazzo: \"La roja es dura, estaba asombrado porque no entendía por qué era\"",
+    "source_url": "https://www.mundodeportivo.com/futbol/real-sociedad/20260829/1004221103/matarazzo-roja-dura-asombrado-no-entendia.html",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/real-sociedad/20260829/1004221103/matarazzo-roja-dura-asombrado-no-entendia.html",
+      "https://www.marca.com/futbol/real-sociedad/2026/08/29/matarazzo-importante-ganar-primer-partido-nuestra-aficion.html",
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260829/1004221097/manolo-gonzalez-hemos-tenido-perdidas-no-permitir-primera.html",
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260829/1004220736/anoeta-primera-salida-espanyol.html",
+      "https://www.mundodeportivo.com/futbol/real-sociedad/20260830/1004221201/enfado-malas-formas-zakharyan-descarte-matarazzo-recta-final.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-08-29/page-3"
+    ],
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-08-29T00:00:00",
+    "retrieved_at": "2026-10-02T08:17:52.838905"
+  },
+  {
+    "game_id": "espn-401882898",
+    "coach": "Manolo González",
+    "quote": "Es lo que decimos de la regla, que al final todo el mundo intentará jugar con esto. Al final lo que ha pasado es que hemos estado parados. Cuando haces una cosa de estas, ya sabes que la trampa vendrá detrás. Al final han pasado dos minutos desde la jugada de córner hasta que se ha lanzado y en este aspecto sí que es mejorable”.",
+    "source_url": "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260829/1004220736/anoeta-primera-salida-espanyol.html",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260829/1004220736/anoeta-primera-salida-espanyol.html",
+      "https://www.marca.com/futbol/espanyol/2026/08/29/manolo-gonzalez-dos-goles-lleguen-contraataque-me-asquea.html",
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260829/1004221097/manolo-gonzalez-hemos-tenido-perdidas-no-permitir-primera.html",
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260830/1004221361/sociedad-abre-paso-espanyol.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-08-29/page-3"
+    ],
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-08-29T00:00:00",
+    "retrieved_at": "2026-10-02T08:18:37.465326"
+  },
+  {
+    "game_id": "espn-401882899",
+    "coach": "José Mourinho",
+    "quote": "No merece ningún comentario",
+    "source_url": "https://www.marca.com/futbol/primera-division/2026/08/30/funes-gana-primera-respuesta-puro-mou-merece-comentar-video.html",
+    "sources": [
+      "https://www.marca.com/futbol/primera-division/2026/08/30/funes-gana-primera-respuesta-puro-mou-merece-comentar-video.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260831/1004221285/david-soria-budimir-record-frente-gol.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260831/1004221796/osasuna-getafe-mejores-fotos-partido-jornada-3-laliga.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260831/1004221814/budimir-i-pamplona-le-da-triunfo-osasuna-getafe.html",
+      "https://www.mundodeportivo.com/futbol/20260830/1004221410/mallorca-agudiza-caida-libre-ceuta.html",
+      "https://www.mundodeportivo.com/videos/futbol/20260830/1004221442/resumen-datos-cadiz-real-valladolid.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-08-30T17:59:46",
+    "retrieved_at": "2026-10-02T08:20:09.174585"
+  },
+  {
+    "game_id": "espn-401882867",
+    "coach": "Pellegrino Matarazzo",
+    "quote": "Es una sensación terrible no estar en el banquillo, no estoy contento. Creo que no debe volver a pasar. Estaré en el estadio, en una sala arriba donde los analistas. Me veréis y os saludaré",
+    "source_url": "https://www.mundodeportivo.com/futbol/real-sociedad/20260904/1004223119/giraldez.html",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/real-sociedad/20260904/1004223119/giraldez.html",
+      "https://www.mundodeportivo.com/futbol/real-sociedad/20260903/1004223120/dejando-porteria-cero-gente-dejara-hablar-quiero-mis-jugadores-sean-libres.html",
+      "https://www.mundodeportivo.com/futbol/real-sociedad/20260903/1004223123/movimiento-roles-real-tres-tecnicos-lugares-distintos.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-09-03"
+    ],
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-09-03T00:00:00",
+    "retrieved_at": "2026-10-02T08:25:47.944739"
+  },
+  {
+    "game_id": "espn-401882867",
+    "coach": "Claudio Giráldez",
+    "quote": "No la he visto repetida, pero puede ser medio falta primero y luego penalti. El árbitro ha sido coherente y se agradece como espectador. Deja que el partido fluya.",
+    "source_url": "https://www.mundodeportivo.com/futbol/real-sociedad/20260904/1004223119/giraldez.html",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/real-sociedad/20260904/1004223119/giraldez.html",
+      "https://www.mundodeportivo.com/futbol/fichajes/20260903/1004223026/nuevo-fichaje-celta-vigo.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260904/1004223100/fotos-espectaculares-real-sociedad-celta.html"
+    ],
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-09-03T16:18:07",
+    "retrieved_at": "2026-10-02T08:26:23.689592"
+  },
+  {
+    "game_id": "espn-401882894",
+    "coach": "José Mourinho",
+    "quote": "No he visto en detalle. No lo he visto en el vestuario. No te puedo comentar En la primera jugada del partido hay una tarjeta amarilla clara a un jugador que ha golpeado a Valverde, luego otra, pero nos levantamos rápidamente. No sé cómo Arda termina el primer tiempo con una tarjeta amarilla... No sé por qué vi amarilla. Me he levantado porque un jugador del Betis parecía que había muerto delante del banquillo. He visto mucha gente frustrada con las jugadas, pero yo no lo he visto y no puedo comentar. Ha dejado jugar, y eso es algo que me gusta. Después de perder, decir ahora que es por una amarilla... no lo hago. El penalti... cuando va uno a patear, vamos todos juntos.",
+    "source_url": "https://www.marca.com/futbol/real-madrid/2026/09/04/mourinho-hemos-perdido-hemos-jugado-bien.html",
+    "sources": [
+      "https://www.marca.com/futbol/real-madrid/2026/09/04/mourinho-hemos-perdido-hemos-jugado-bien.html",
+      "https://www.mundodeportivo.com/futbol/real-madrid/20260904/1004223155/no-me-creo-mourinho-viene-hoja-ruta-saltar-aires-vengan-mal-dadas.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260905/1004223754/villarreal-deportivo-mejores-fotos-duelo-ceramica.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260905/1004223737/revive-rayo-racing-imagenes-momentos-emocionantes-partido.html",
+      "https://www.mundodeportivo.com/futbol/20260905/1004223503/asi-redactada-primera-tarjeta-amarilla-mourinho-laliga.html",
+      "https://www.mundodeportivo.com/videos/laliga/20260904/1004223455/palabras-mourinho-derrota-madrid-villamarin.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-09-04T05:56:10",
+    "retrieved_at": "2026-10-02T08:27:59.857619"
+  },
+  {
+    "game_id": "espn-401882892",
+    "coach": "Manolo González",
+    "quote": "Son criterios que no acabamos de entender. No sabemos por qué se anula el 1-0, y si se hubiera anulado el otro hubiera sido increíble. Ni nosotros lo entendemos. Los criterios deben ser unificados nadie entiende muy bien por qué han anulado no sabemos muy bien qué es o no fuera de juego porque estaba en la trayectoria y ya está pinta de un modo diferente de una semana a otra Sí, porque es una jugada de mucho mérito de Javi Hernández, que saca un centro muy bien, y Omar llega muy bien. El partido se te pone de cara con el 1-0 y ellos ya se tienen que abrir Por mucho que toque el balón, toca al jugador, porque sino Roberto Fernández se queda delante del portero",
+    "source_url": "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260907/1004224135/manolo.html",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260907/1004224135/manolo.html",
+      "https://www.marca.com/futbol/primera-division/cronica/2026/09/06/marcos-fernandez-rescata-punto-sevilla-oficio.html",
+      "https://www.marca.com/futbol/espanyol/2026/09/07/manolo-gonzalez-sobre-tanto-anulado-hilai-nadie-entiende-bien.html",
+      "https://www.cope.es/programas/tiempo-de-juego/noticias/manolo-lama-da-razon-mbappe-analiza-rueda-prensa-mourinho-lobo-gente-estara-feliz-20260907_3431919.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260906/1004224126/marcos-fernandez-lucas-stassin-reivindican-figuras.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260906/1004223712/espanyol.html"
+    ],
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-09-06T05:00:00",
+    "retrieved_at": "2026-10-02T08:34:56.065098"
+  },
+  {
+    "game_id": "espn-401882892",
+    "coach": "Luis García",
+    "quote": "No me ha explicado las jugadas de los goles. Sí que ha venido porque cuando me ha enseñado tarjeta amarilla, me ha explicado la expulsión. Pero los goles no lo sé, no los he visto Le da a la pelota, es que no es roja",
+    "source_url": "https://www.marca.com/futbol/sevilla/2026/09/07/luis-garcia-plaza-defender-area-asi-ultima-jugada.html",
+    "sources": [
+      "https://www.marca.com/futbol/sevilla/2026/09/07/luis-garcia-plaza-defender-area-asi-ultima-jugada.html",
+      "https://www.mundodeportivo.com/futbol/sevilla/20260907/1004224132/luis-garcia-plaza-le-da-pelota-no-roja.html",
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260907/1004224135/manolo.html",
+      "https://www.marca.com/futbol/primera-division/cronica/2026/09/06/marcos-fernandez-rescata-punto-sevilla-oficio.html",
+      "https://www.marca.com/radio/2026/09/07/dura-historia-detras-regalo-aspersor-mourinho-viviendo-dolor-peor-papa-vivir.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260906/1004223712/espanyol.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-09-06T05:00:00",
+    "retrieved_at": "2026-10-02T08:35:57.876662"
   }
 ]

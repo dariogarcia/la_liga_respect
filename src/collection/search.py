@@ -1,5 +1,6 @@
 import base64
 import json
+import os
 import re
 import time
 from datetime import date as date_type, timezone
@@ -11,7 +12,9 @@ from xml.etree import ElementTree
 import requests
 from bs4 import BeautifulSoup
 
+from . import cache
 from .models import SearchResult
+from ..utils import http
 from ..utils.ratelimit import SEARCH_RATE_LIMITER
 from ..utils.useragent import BROWSER_USER_AGENT
 
@@ -47,7 +50,7 @@ class WebSearchProvider:
             "num": max_results,
         }
         try:
-            response = requests.get(self.base_url, params=params, timeout=15)
+            response = http.http_get(self.base_url, params=params, timeout=15)
             response.raise_for_status()
             data = response.json()
 
@@ -108,7 +111,7 @@ class DuckDuckGoSearchProvider:
             return []
         SEARCH_RATE_LIMITER.wait()
         try:
-            response = requests.post(
+            response = http.http_post(
                 self.url,
                 data={"q": query},
                 headers={"User-Agent": USER_AGENT},
@@ -169,7 +172,7 @@ class BingSearchProvider:
     def search(self, query: str, max_results: int = 10, date_range=None) -> List[SearchResult]:
         SEARCH_RATE_LIMITER.wait()
         try:
-            response = requests.get(
+            response = http.http_get(
                 self.url,
                 params={"q": query, "count": max_results},
                 headers={"User-Agent": USER_AGENT},
@@ -279,17 +282,23 @@ class GoogleNewsRSSSearchProvider:
         if date_range:
             start, end = date_range
             q = f"{query} after:{start.isoformat()} before:{end.isoformat()}"
+        params = {"q": q, "hl": "es", "gl": "ES", "ceid": "ES:es"}
+        # On-disk cache (A4): a date-bounded query is stable, so its
+        # feed is fetched at most once per 24h even across runs.
+        cached = cache.cache_get(GOOGLE_NEWS_RSS_URL, params=params)
+        if cached is not None and cached.status_code == 200:
+            return self._parse_feed(cached.content, max_results)
         SEARCH_RATE_LIMITER.wait()
         try:
-            response = self.session.get(
-                GOOGLE_NEWS_RSS_URL,
-                params={"q": q, "hl": "es", "gl": "ES", "ceid": "ES:es"},
-                timeout=15,
-            )
+            http.request_budget().acquire()
+            response = self.session.get(GOOGLE_NEWS_RSS_URL, params=params, timeout=15)
             if response.status_code != 200:
                 print(f"Google News RSS returned HTTP {response.status_code}.")
                 self._register_failure()
                 return []
+            cache.cache_put(
+                GOOGLE_NEWS_RSS_URL, 200, response.content, ttl=cache.TTL_SITEMAP_SECONDS
+            )
         except Exception as e:
             print(f"Search error for query '{query}': {e}")
             self._register_failure()
@@ -343,10 +352,20 @@ class GoogleNewsRSSSearchProvider:
     def _decode_links(self, links: List[str]) -> Dict[str, str]:
         """Map Google News redirect links to publisher URLs.
 
+        The decoding protocol (Google's undocumented batchexecute
+        endpoint) can be disabled with GOOGLE_NEWS_DECODE=0 (C3): the
+        provider then yields no results instead of relying on the
+        gray-area endpoint.
+
         Signature pages are fetched one per uncached article id, then a
         single batchexecute POST decodes all of them. Failures are
         cached as None so they are not retried within the same run.
         """
+        if os.environ.get("GOOGLE_NEWS_DECODE", "1") in ("0", "false", "no"):
+            if not getattr(self, "_decode_disabled_logged", False):
+                print("Google News decode disabled via GOOGLE_NEWS_DECODE, skipping RSS results.")
+                self._decode_disabled_logged = True
+            return {}
         mapping: Dict[str, str] = {}
         uncached = []
         for link in links:
@@ -378,6 +397,7 @@ class GoogleNewsRSSSearchProvider:
     def _fetch_decoding_params(self, art_id: str) -> Optional[Tuple[int, str]]:
         url = f"https://news.google.com/rss/articles/{art_id}?hl=es&gl=ES&ceid=ES:es"
         try:
+            http.request_budget().acquire()
             response = self.session.get(url, timeout=15, allow_redirects=False)
             if response.status_code != 200:
                 return None
@@ -399,6 +419,7 @@ class GoogleNewsRSSSearchProvider:
             envelopes.append(["Fbv4je", inner, None, str(i)])
         body = "f.req=" + quote(json.dumps([envelopes], separators=(",", ":")))
         try:
+            http.request_budget().acquire()
             response = self.session.post(
                 GOOGLE_NEWS_BATCH_URL,
                 data=body,

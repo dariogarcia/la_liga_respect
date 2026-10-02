@@ -18,6 +18,7 @@ from urllib.robotparser import RobotFileParser
 
 import requests
 
+from ..utils import http
 from ..utils.ratelimit import FETCH_RATE_LIMITER
 from ..utils.useragent import BOT_UA_TOKEN, BOT_USER_AGENT
 
@@ -26,7 +27,7 @@ class RobotsPolicy:
     """Per-origin robots.txt cache with an injectable HTTP session."""
 
     def __init__(self, session: Optional[requests.Session] = None):
-        self.session = session or requests.Session()
+        self.session = session or http.shared_session()
         self._parsers: Dict[str, RobotFileParser] = {}
 
     def allowed(self, url: str) -> bool:

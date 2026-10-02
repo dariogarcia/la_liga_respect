@@ -97,13 +97,14 @@ class TestFetchPoliteness(unittest.TestCase):
     def setUp(self):
         self.sleep = mock.patch("src.collection.fetcher.time.sleep").start()
         mock.patch("src.collection.fetcher.FETCH_RATE_LIMITER").start()
+        mock.patch("src.collection.fetcher.FETCH_DOMAIN_RATE_LIMITER").start()
         self.addCleanup(mock.patch.stopall)
 
     def _fetcher(self):
         return ArticleFetcher(robots=AllowAllRobots())
 
     def _patch_get(self, *responses):
-        return mock.patch("src.collection.fetcher.requests.get", side_effect=list(responses))
+        return mock.patch("src.utils.http.http_get", side_effect=list(responses))
 
     def test_fetch_sends_bot_user_agent(self):
         ok = FakeResponse(200, HTML)
@@ -216,7 +217,7 @@ class TestDomainCircuitBreaker(unittest.TestCase):
         get.assert_not_called()
 
     def _patch_get(self, *responses):
-        return mock.patch("src.collection.fetcher.requests.get", side_effect=list(responses))
+        return mock.patch("src.utils.http.http_get", side_effect=list(responses))
 
 
 if __name__ == "__main__":

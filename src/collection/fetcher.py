@@ -9,7 +9,9 @@ from bs4 import BeautifulSoup
 from .filtering import get_domain
 from .models import SourceDocument
 from .robots import RobotsPolicy, shared_robots_policy
-from ..utils.ratelimit import FETCH_RATE_LIMITER
+from . import cache
+from ..utils import http
+from ..utils.ratelimit import FETCH_RATE_LIMITER, FETCH_DOMAIN_RATE_LIMITER
 from ..utils.useragent import BOT_USER_AGENT
 
 USER_AGENT = BOT_USER_AGENT
@@ -152,16 +154,29 @@ class ArticleFetcher:
 
     def _get_with_retries(self, url: str, headers: dict) -> requests.Response:
         domain = get_domain(url)
+        # On-disk cache (A4): a hit avoids the network entirely. Cached
+        # errors raise immediately (retrying a stored failure is
+        # pointless) but still feed the circuit breaker.
+        cached = cache.cache_get(url)
+        if cached is not None:
+            if cached.status_code < 400:
+                self.circuit_breaker.register_success(domain)
+            else:
+                self.circuit_breaker.register_failure(domain)
+                cached.raise_for_status()
+            return cached
         for attempt in range(1, MAX_ATTEMPTS + 1):
             self.circuit_breaker.check(domain)
             FETCH_RATE_LIMITER.wait()
-            response = requests.get(url, timeout=15, headers=headers)
+            FETCH_DOMAIN_RATE_LIMITER.wait(domain)
+            response = http.http_get(url, timeout=15, headers=headers)
             if response.status_code == 429:
                 self.circuit_breaker.register_failure(domain)
             if response.status_code in RETRYABLE_STATUSES or (
                 response.status_code in SERVER_ERROR_STATUSES
             ):
                 if attempt >= MAX_ATTEMPTS:
+                    self._cache_response(url, response)
                     response.raise_for_status()
                 time.sleep(self._retry_delay(response, attempt))
                 continue
@@ -169,9 +184,17 @@ class ArticleFetcher:
                 self.circuit_breaker.register_failure(domain)
             if response.status_code < 400:
                 self.circuit_breaker.register_success(domain)
+            self._cache_response(url, response)
             response.raise_for_status()
             return response
         raise requests.HTTPError(f"exhausted retries for {url}")
+
+    @staticmethod
+    def _cache_response(url: str, response) -> None:
+        content = getattr(response, "content", None)
+        if content is None:
+            content = (response.text or "").encode("utf-8", "replace")
+        cache.cache_put(url, response.status_code, content)
 
     @staticmethod
     def _retry_delay(response: requests.Response, attempt: int) -> float:
