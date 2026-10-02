@@ -1,3 +1,4 @@
+import os
 import re
 import unicodedata
 from typing import Any, Dict, List
@@ -16,6 +17,8 @@ QUOTE_RE = re.compile(r'[«“"]([^»”"]{25,800})[»”"]')
 
 MIN_QUOTE_LEN = 25
 MAX_DOC_CHARS = 12000
+# B3: per-document truncation inside a batched extraction call.
+BATCH_DOC_CHARS = 6000
 
 
 def _normalize(text: str) -> str:
@@ -200,7 +203,21 @@ class LLMQuoteExtractor:
     """
     Extracts verbatim referee-related quotes for a specific coach using an LLM.
     Requires LLM_API_KEY (or PROVIDER_API_KEY).
+
+    Cost controls:
+    - B4: uses the cheaper model named in LLM_EXTRACT_MODEL when set
+      (grading keeps the strong LLM_MODEL).
+    - B3: `extract_batch` extracts from several documents in one call;
+      `batch_enabled()` gates it (LLM_BATCH_EXTRACTION=0 disables).
+    - B2: when the run's LLM call budget is exhausted, falls back to
+      the heuristic extractor instead of failing the run.
     """
+
+    def __init__(self):
+        self._fallback = HeuristicQuoteExtractor()
+
+    def _model(self):
+        return os.getenv("LLM_EXTRACT_MODEL") or None
 
     def extract(self, coach: str, game_id: str, document: SourceDocument) -> List[Dict[str, Any]]:
         system = (
@@ -217,13 +234,82 @@ class LLMQuoteExtractor:
             f"Respond as JSON: {{\"quotes\": [{{\"text\": \"...\", \"referee_related\": true}}]}}\n\n"
             f"ARTICLE:\n{document.text[:MAX_DOC_CHARS]}"
         )
-        data = llm.llm_chat(system, user, json_mode=True, temperature=0.0)
+        try:
+            data = llm.llm_chat(
+                system, user, json_mode=True, temperature=0.0,
+                purpose="extraction", model=self._model(),
+            )
+        except llm.LLMBudgetExceeded:
+            print("LLM budget exhausted: falling back to heuristic extraction for this document.")
+            return self._fallback.extract(coach, game_id, document)
+        return self._parse_quotes(data)
+
+    def extract_batch(
+        self, coach: str, game_id: str, documents: List[SourceDocument]
+    ) -> List[List[Dict[str, Any]]]:
+        """B3: extracts from all documents in a single LLM call.
+
+        Returns one quotes-list per document, in input order. Raises on
+        any protocol/parse error so the caller can fall back to
+        per-document extraction.
+        """
+        if not documents:
+            return []
+        if len(documents) == 1:
+            return [self.extract(coach, game_id, documents[0])]
+
+        system = (
+            "You are a precise information extraction engine. You extract verbatim quotes "
+            "from sports press articles. You never invent or paraphrase text. "
+            "Respond only with JSON."
+        )
+        parts = [
+            f"Extract the verbatim sentences (exact substring copies, in the original "
+            f"language) spoken by or attributed to the coach '{coach}' that refer to the "
+            f"referee, officiating, VAR, or a specific refereeing decision. "
+            f"Do NOT include sentences spoken by other people. "
+            f"There are {len(documents)} numbered documents below; report quotes per "
+            f"document. If a document contains no such quotes from this coach, return "
+            f"an empty list for it.\n\n"
+            f"Respond as JSON: {{\"documents\": [{{\"doc\": 1, \"quotes\": "
+            f"[{{\"text\": \"...\", \"referee_related\": true}}]}}]}}\n"
+        ]
+        for i, doc in enumerate(documents, 1):
+            parts.append(f"DOCUMENT {i}:\n{doc.text[:BATCH_DOC_CHARS]}\n")
+        user = "\n".join(parts)
+
+        data = llm.llm_chat(
+            system, user, json_mode=True, temperature=0.0,
+            purpose="extraction_batch", model=self._model(),
+        )
+        per_doc: List[List[Dict[str, Any]]] = [[] for _ in documents]
+        entries = data.get("documents") if isinstance(data, dict) else None
+        if not isinstance(entries, list):
+            raise ValueError("batch extraction response has no 'documents' list")
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            try:
+                index = int(entry.get("doc")) - 1
+            except (TypeError, ValueError):
+                continue
+            if 0 <= index < len(per_doc):
+                per_doc[index] = self._parse_quotes(entry)
+        return per_doc
+
+    @staticmethod
+    def _parse_quotes(data) -> List[Dict[str, Any]]:
         quotes = []
-        for q in data.get("quotes", []):
+        for q in (data or {}).get("quotes", []):
             text = (q.get("text") or "").strip()
             if text and q.get("referee_related", True):
                 quotes.append({"text": text, "referee_related": True, "confidence": "llm"})
         return quotes
+
+
+def batch_enabled() -> bool:
+    """B3 is on by default; LLM_BATCH_EXTRACTION=0 opts out."""
+    return os.environ.get("LLM_BATCH_EXTRACTION", "1") not in ("0", "false", "no")
 
 
 def get_extractor():

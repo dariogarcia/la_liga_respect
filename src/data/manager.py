@@ -9,6 +9,7 @@ TEAMS_FILE = os.path.join(DATA_DIR, "teams.json")
 LEADERBOARD_FILE = os.path.join(DATA_DIR, "leaderboard.json")
 LEADERBOARD_COMPETITIVE_FILE = os.path.join(DATA_DIR, "leaderboard_competitive.json")
 PENDING_REQUESTS_FILE = os.path.join(DATA_DIR, "pending_requests.json")
+RUN_REPORT_FILE = os.path.join(DATA_DIR, "run_report.json")
 
 LIST_FILES = ("leaderboard", "comments", "games", "teams", "pending_requests")
 
@@ -77,3 +78,12 @@ def get_pending_requests():
 
 def save_pending_requests(requests):
     save_json(PENDING_REQUESTS_FILE, requests)
+
+
+def get_run_report():
+    """Last run's report (A5/E5); {} when no run has happened yet."""
+    return load_json(RUN_REPORT_FILE)
+
+
+def save_run_report(report):
+    save_json(RUN_REPORT_FILE, report)

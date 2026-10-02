@@ -14,19 +14,24 @@ from .search import get_search_provider
 from .sitemap import fetch_sitemap_entries, find_coach_articles
 from .filtering import is_allowed_source
 from .fetcher import ArticleFetcher
-from .extractor import get_extractor, is_candidate_document
+from .extractor import get_extractor, is_candidate_document, batch_enabled
 from .validation import validate_extractions
 from .deduplication import deduplicate_quotes
 
 MAX_DOCS_PER_COACH = 6
 MAX_ATTEMPTS = 5
 PUBLICATION_WINDOW = timedelta(days=2)
+# After this many days a game with no collected quotes is declared
+# terminally uncovered: the 48h publication window is long gone, so
+# further searches can only find nothing (D4).
+COVERAGE_CUTOFF = timedelta(days=14)
 
 REASON_NO_RESULTS = "no_search_results"
 REASON_NO_TRUSTED = "no_trusted_sources"
 REASON_FETCH_FAILED = "fetch_failed"
 REASON_WINDOW_FILTERED = "publication_window_filtered"
 REASON_NO_QUOTES = "no_quotes_extracted"
+REASON_NO_COVERAGE = "no_coverage"
 
 
 def _dedupe_results(search_results):
@@ -85,14 +90,18 @@ def collect_comments_for_coach(
     # Fallback discovery: search engines. The query is date-bounded to
     # this game's publication window (after:/before: on Google News), so
     # games older than the window stay searchable within their own 48h.
-    date_range = (
-        match_date.date(),
-        (match_date + PUBLICATION_WINDOW + timedelta(days=1)).date(),
-    )
-    queries = build_queries(coach, opponent_team, match_date.date())
+    # Skipped when trusted sitemap candidates already saturate the
+    # document budget (C3: prefer sitemaps over scraped engines).
+    trusted_candidates = [r for r in candidates if is_allowed_source(r.url)]
     search_results = []
-    for q in queries:
-        search_results.extend(search_provider.search(q, date_range=date_range))
+    if len(trusted_candidates) < MAX_DOCS_PER_COACH:
+        date_range = (
+            match_date.date(),
+            (match_date + PUBLICATION_WINDOW + timedelta(days=1)).date(),
+        )
+        queries = build_queries(coach, opponent_team, match_date.date())
+        for q in queries:
+            search_results.extend(search_provider.search(q, date_range=date_range))
     candidates.extend(search_results)
 
     unique_results = _dedupe_results(candidates)
@@ -127,17 +136,36 @@ def collect_comments_for_coach(
             return None, REASON_WINDOW_FILTERED
         return None, REASON_FETCH_FAILED
 
+    # Cheap local check before (potentially LLM-backed) extraction:
+    # skip documents that cannot yield referee quotes from this coach.
+    candidate_docs = [doc for doc in documents if is_candidate_document(coach, doc)]
+    skipped_prefilter = len(documents) - len(candidate_docs)
+
     quotes = []
-    skipped_prefilter = 0
-    for doc in documents:
-        # Cheap local check before (potentially LLM-backed) extraction:
-        # skip documents that cannot yield referee quotes from this coach.
-        if not is_candidate_document(coach, doc):
-            skipped_prefilter += 1
-            continue
-        extracted = extractor.extract(coach, game["game_id"], doc)
-        validated = validate_extractions(extracted, doc)
-        quotes.extend(validated)
+    batches = None
+    if (
+        len(candidate_docs) > 1
+        and batch_enabled()
+        and getattr(extractor, "extract_batch", None) is not None
+    ):
+        # B3: one LLM call for all of the coach's documents. Any
+        # failure falls back to per-document extraction.
+        try:
+            batches = extractor.extract_batch(coach, game["game_id"], candidate_docs)
+            if len(batches) != len(candidate_docs):
+                batches = None
+        except Exception as e:
+            print(f"Batch extraction failed for {coach}, falling back per-document: {e}")
+            batches = None
+
+    if batches is not None:
+        for doc, extracted in zip(candidate_docs, batches):
+            quotes.extend(validate_extractions(extracted, doc))
+    else:
+        for doc in candidate_docs:
+            extracted = extractor.extract(coach, game["game_id"], doc)
+            validated = validate_extractions(extracted, doc)
+            quotes.extend(validated)
 
     if skipped_prefilter:
         print(
@@ -187,13 +215,58 @@ def _drop_pending(pending: List[Dict], game_id: str, coach: str) -> None:
     pending[:] = [p for p in pending if _pending_key(p["game_id"], p["coach"]) != _pending_key(game_id, coach)]
 
 
-def collect_matchday_comments(api_key: str = None, search_provider: Any = None, retry_pending: bool = False):
+def _mark_no_coverage(pending: List[Dict], game: Dict, coach: str) -> bool:
+    """Marks a coach/game pair terminally uncovered (D4).
+
+    The entry gets reason `no_coverage` and a `terminal` flag: it is
+    never retried again and excluded from the active pending count.
+    Returns True when the entry changed.
+    """
+    key = _pending_key(game["game_id"], coach)
+    entry = next((p for p in pending if _pending_key(p["game_id"], p["coach"]) == key), None)
+    if entry is not None:
+        if entry.get("terminal") and entry.get("reason") == REASON_NO_COVERAGE:
+            return False
+        entry["reason"] = REASON_NO_COVERAGE
+        entry["terminal"] = True
+        entry["last_attempt"] = datetime.utcnow().isoformat()
+        return True
+    pending.append({
+        "game_id": game["game_id"],
+        "coach": coach,
+        "date": game["date"],
+        "attempts": 0,
+        "last_attempt": datetime.utcnow().isoformat(),
+        "reason": REASON_NO_COVERAGE,
+        "terminal": True,
+    })
+    return True
+
+
+def collect_matchday_comments(
+    api_key: str = None,
+    search_provider: Any = None,
+    retry_pending: bool = False,
+    since: Optional[date] = None,
+) -> Dict[str, Any]:
+    """Collects coach comments for unfinished targets.
+
+    - Games older than COVERAGE_CUTOFF with no comment are terminally
+      marked `no_coverage` and never sought again (D4).
+    - With `since` set (A3), games dated before it are not sought: a
+      weekly run only processes the latest matchday plus recent
+      pending, not the whole season.
+    Returns a stats dict for the run report (A5).
+    """
     games = get_games()
     comments = get_comments()
     pending = get_pending_requests()
 
     if retry_pending:
-        exhausted = [p for p in pending if p.get("attempts", 0) >= MAX_ATTEMPTS]
+        exhausted = [
+            p for p in pending
+            if p.get("attempts", 0) >= MAX_ATTEMPTS and not p.get("terminal")
+        ]
         for p in exhausted:
             p["attempts"] = 0
         print(f"Retry requested: reset {len(exhausted)} exhausted pending request(s).")
@@ -210,6 +283,8 @@ def collect_matchday_comments(api_key: str = None, search_provider: Any = None, 
     sought_count = 0
     found_count = 0
     skipped_future = 0
+    skipped_since = 0
+    skipped_no_coverage = 0
     skipped_max_attempts = 0
     already_in_db = 0
 
@@ -219,6 +294,8 @@ def collect_matchday_comments(api_key: str = None, search_provider: Any = None, 
             skipped_future += 1
             continue
 
+        stale = match_date < today - COVERAGE_CUTOFF
+
         for coach_key in ["home_coach", "away_coach"]:
             coach = game[coach_key]
             game_id = game["game_id"]
@@ -227,12 +304,27 @@ def collect_matchday_comments(api_key: str = None, search_provider: Any = None, 
                 already_in_db += 1
                 continue
 
+            # D4: the publication window for an old game is long gone;
+            # searching again can only fail. Record it terminally.
+            if stale:
+                _mark_no_coverage(pending, game, coach)
+                skipped_no_coverage += 1
+                continue
+
+            # A3: outside the requested window (and not stale), so leave
+            # the entry retryable but do not seek it in this run.
+            if since is not None and match_date < since:
+                skipped_since += 1
+                continue
+
             pending_entry = next(
                 (p for p in pending if _pending_key(p["game_id"], p["coach"]) == _pending_key(game_id, coach)),
                 None,
             )
             if pending_entry and pending_entry.get("attempts", 0) >= MAX_ATTEMPTS:
                 skipped_max_attempts += 1
+                continue
+            if pending_entry and pending_entry.get("terminal"):
                 continue
 
             sought_count += 1
@@ -269,14 +361,31 @@ def collect_matchday_comments(api_key: str = None, search_provider: Any = None, 
     save_comments(comments)
     save_pending_requests(pending)
 
-    pending_active = [p for p in pending if p.get("attempts", 0) < MAX_ATTEMPTS]
+    pending_active = [
+        p for p in pending
+        if p.get("attempts", 0) < MAX_ATTEMPTS and not p.get("terminal")
+    ]
     print(f"--- Collection Report ---")
     print(f"Matches in calendar: {len(games)} (future, skipped: {skipped_future})")
+    if since is not None:
+        print(f"Window: games since {since.isoformat()} (older, non-terminal, skipped: {skipped_since})")
     print(f"Coach comments sought: {sought_count}")
     print(f"Comments already in DB: {already_in_db}")
     print(f"Comments found: {found_count}")
+    print(f"Marked no_coverage (terminal, {COVERAGE_CUTOFF.days}d+ old): {skipped_no_coverage}")
     print(f"Pending (will retry): {len(pending_active)}")
     print(f"Gave up after {MAX_ATTEMPTS} attempts: {skipped_max_attempts}")
     for p in pending_active:
         print(f"  - {p['game_id']} | {p['coach']} | {p['reason']} (attempt {p['attempts']})")
     print(f"----------------------------")
+    return {
+        "games_in_calendar": len(games),
+        "skipped_future": skipped_future,
+        "skipped_since": skipped_since,
+        "no_coverage": skipped_no_coverage,
+        "sought": sought_count,
+        "found": found_count,
+        "already_in_db": already_in_db,
+        "pending_active": len(pending_active),
+        "pending_terminal": len(pending) - len(pending_active),
+    }

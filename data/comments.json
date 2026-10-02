@@ -367,5 +367,32 @@
     "source_name": "marca.com",
     "published_at": "2026-09-06T05:00:00",
     "retrieved_at": "2026-10-02T08:35:57.876662"
+  },
+  {
+    "game_id": "espn-401882882",
+    "coach": "Luis Miguel Ramis",
+    "quote": "El partido lo marca la decisión del penalti (a Raúl no pitado) La decisión del VAR es absolutamente inexplicable",
+    "source_url": "https://www.marca.com/futbol/osasuna/2026/09/12/ramis-mejorar-defensa-area.html",
+    "sources": [
+      "https://www.marca.com/futbol/osasuna/2026/09/12/ramis-mejorar-defensa-area.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-09-12/page-3"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-09-12T00:00:00",
+    "retrieved_at": "2026-10-02T08:43:27.071212"
+  },
+  {
+    "game_id": "espn-401882882",
+    "coach": "Manolo González",
+    "quote": "Lo que te decía antes, hemos cometido dos errores muy graves, el gol anulado y la situación del saque de banda, que es un pase atrás que han rematado dentro del área a las manos de Marco.",
+    "source_url": "https://www.marca.com/futbol/espanyol/2026/09/12/manolo-gonzalez-hemos-equipo-ambicioso-posible.html",
+    "sources": [
+      "https://www.marca.com/futbol/espanyol/2026/09/12/manolo-gonzalez-hemos-equipo-ambicioso-posible.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-09-12/page-3",
+      "https://www.mundodeportivo.com/videos/futbol/20260912/1004226482/resumen-datos-girona-castellon.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-09-12T00:00:00",
+    "retrieved_at": "2026-10-02T08:44:20.142899"
   }
 ]

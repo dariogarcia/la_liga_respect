@@ -6,6 +6,7 @@ from src.collection.collector import (
     collect_comments_for_coach,
     collect_matchday_comments,
     MAX_ATTEMPTS,
+    REASON_NO_COVERAGE,
     REASON_NO_QUOTES,
     REASON_NO_RESULTS,
     REASON_NO_TRUSTED,
@@ -21,6 +22,10 @@ GAME = {
     "home_coach": "Coach A",
     "away_coach": "Coach B",
 }
+
+
+def recent_game(days_ago=1):
+    return dict(GAME, date=(date.today() - timedelta(days=days_ago)).isoformat())
 
 
 class FakeSearchProvider:
@@ -192,7 +197,7 @@ class TestQuerySelection(unittest.TestCase):
 
 
 class TestPendingRetrySemantics(unittest.TestCase):
-    def _run(self, game):
+    def _run(self, game, since=None):
         saved = {}
         with mock.patch("src.collection.collector.get_games", return_value=[game]), \
              mock.patch("src.collection.collector.get_comments", return_value=[]), \
@@ -202,25 +207,40 @@ class TestPendingRetrySemantics(unittest.TestCase):
              mock.patch("src.collection.collector.fetch_sitemap_entries", return_value=[]), \
              mock.patch("src.collection.collector.ArticleFetcher"), \
              mock.patch("src.collection.collector.get_extractor"):
-            collect_matchday_comments(search_provider=FakeSearchProvider([]))
+            stats = collect_matchday_comments(
+                search_provider=FakeSearchProvider([]), since=since
+            )
+        saved["stats"] = stats
         return saved
 
-    def test_old_game_failure_stays_retryable(self):
-        # 2026-08-15 is older than the publication window, but the
-        # failure is recorded like any other: attempts=1, retried later.
+    def test_old_game_is_terminally_no_coverage(self):
+        # D4: 2026-08-15 is older than the coverage cutoff; both coaches
+        # are marked terminal `no_coverage` and never sought again.
         saved = self._run(GAME)
         self.assertEqual(saved["comments"], [])
         self.assertEqual(len(saved["pending"]), 2)
         for entry in saved["pending"]:
-            self.assertEqual(entry["reason"], REASON_NO_RESULTS)
-            self.assertEqual(entry["attempts"], 1)
+            self.assertEqual(entry["reason"], REASON_NO_COVERAGE)
+            self.assertTrue(entry["terminal"])
+        self.assertEqual(saved["stats"]["no_coverage"], 2)
+        self.assertEqual(saved["stats"]["sought"], 0)
 
     def test_recent_failure_stays_retryable(self):
-        recent_game = dict(GAME, date=(date.today() - timedelta(days=1)).isoformat())
-        saved = self._run(recent_game)
+        saved = self._run(recent_game())
         entry = saved["pending"][0]
         self.assertEqual(entry["reason"], REASON_NO_RESULTS)
         self.assertEqual(entry["attempts"], 1)
+        self.assertFalse(entry.get("terminal"))
+        self.assertEqual(saved["stats"]["pending_active"], 2)
+
+    def test_since_skips_older_games(self):
+        # A3: a game inside the coverage cutoff but before the requested
+        # window is not sought, and stays retryable.
+        saved = self._run(recent_game(days_ago=5), since=date.today())
+        self.assertEqual(saved["comments"], [])
+        self.assertEqual(saved["pending"], [])
+        self.assertEqual(saved["stats"]["skipped_since"], 2)
+        self.assertEqual(saved["stats"]["sought"], 0)
 
 
 class TestIncrementalPersistence(unittest.TestCase):
@@ -245,7 +265,7 @@ class TestIncrementalPersistence(unittest.TestCase):
         # Two coach targets in one game -> one save per target during the
         # loop plus the final save, so an interruption mid-run keeps the
         # results already collected.
-        calls = self._run([GAME])
+        calls = self._run([recent_game()])
         self.assertGreaterEqual(calls["comments"], 3)
         self.assertGreaterEqual(calls["pending"], 3)
 
@@ -254,6 +274,13 @@ class TestIncrementalPersistence(unittest.TestCase):
         future_game = dict(GAME, date=(date.today() + timedelta(days=1)).isoformat())
         calls = self._run([future_game])
         self.assertEqual(calls["comments"], 1)  # final save only
+        self.assertEqual(calls["pending"], 1)
+
+    def test_stale_game_only_saves_once(self):
+        # D4: games past the coverage cutoff are terminalized before the
+        # per-target loop, so only the final save happens.
+        calls = self._run([GAME])
+        self.assertEqual(calls["comments"], 1)
         self.assertEqual(calls["pending"], 1)
 
 
@@ -296,6 +323,17 @@ class TestRetryPending(unittest.TestCase):
         saved = self._run(retry_pending=False, pending=[dict(self.PENDING[0])])
         entry = saved["pending"][0]
         self.assertEqual(entry["attempts"], MAX_ATTEMPTS)
+        self.assertEqual(saved["comments"], [])
+
+    def test_retry_pending_ignores_terminal_entries(self):
+        # D4: `no_coverage` entries are terminal; --retry-pending must
+        # not reset them and the game loop must not re-seek them.
+        terminal = dict(self.PENDING[0], reason=REASON_NO_COVERAGE, terminal=True)
+        saved = self._run(retry_pending=True, pending=[terminal])
+        entry = saved["pending"][0]
+        self.assertTrue(entry["terminal"])
+        self.assertEqual(entry["attempts"], MAX_ATTEMPTS)  # untouched
+        self.assertEqual(entry["reason"], REASON_NO_COVERAGE)
         self.assertEqual(saved["comments"], [])
 
 

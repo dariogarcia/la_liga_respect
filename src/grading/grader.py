@@ -69,10 +69,14 @@ def grade_quote(text: str) -> Tuple[int, str, str]:
             f"QUOTE (in Spanish):\n{text}"
         )
         try:
-            data = llm.llm_chat(system, user, json_mode=True, temperature=0.0)
+            data = llm.llm_chat(
+                system, user, json_mode=True, temperature=0.0, purpose="grading"
+            )
             score = int(data.get("score"))
             if score in (0, 1, 3):
                 return score, "llm", str(data.get("justification", "")).strip()
+        except llm.LLMBudgetExceeded:
+            print("LLM budget exhausted: remaining quotes graded by keyword heuristic.")
         except Exception as e:
             print(f"LLM grading failed, falling back to heuristic: {e}")
     return heuristic_grade(text), "heuristic", "keyword heuristic"
@@ -135,8 +139,27 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
 
     def _entry(coach: str) -> Dict:
         if coach not in leaderboard:
-            leaderboard[coach] = {"coach": coach, "points": 0, "games_played": 0}
+            leaderboard[coach] = {
+                "coach": coach, "points": 0, "games_played": 0,
+                "home_points": 0, "away_points": 0,
+            }
         return leaderboard[coach]
+
+    def _side(game: Dict, coach: str) -> str:
+        """E2: 'home' or 'away' for the coach in this game, else ''."""
+        if game.get("home_coach") == coach:
+            return "home"
+        if game.get("away_coach") == coach:
+            return "away"
+        return ""
+
+    def _add(coach: str, points: int, side: str) -> None:
+        entry = _entry(coach)
+        entry["points"] += points
+        if side == "home":
+            entry["home_points"] += points
+        elif side == "away":
+            entry["away_points"] += points
 
     by_game: Dict[str, List[Dict]] = {}
     for c in comments:
@@ -149,7 +172,7 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
 
         if mode == "separate":
             for c in scored:
-                _entry(c["coach"])["points"] += c["score"]
+                _add(c["coach"], c["score"], _side(game, c["coach"]))
                 _entry(c["coach"])["games_played"] += 1
             missing = [c["coach"] for c in quotes if "score" not in c]
             if missing:
@@ -158,7 +181,7 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
             if len(coaches_here) < 2:
                 incomplete_games.append(f"Game {gid} (only {len(coaches_here)} coach with graded quote)")
                 for c in scored:
-                    _entry(c["coach"])["points"] += c["score"]
+                    _add(c["coach"], c["score"], _side(game, c["coach"]))
                     _entry(c["coach"])["games_played"] += 1
                 continue
 
@@ -171,23 +194,23 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
                 _entry(home_coach)["games_played"] += 1
                 _entry(away_coach)["games_played"] += 1
                 if s_h > s_a:
-                    _entry(home_coach)["points"] += 3
+                    _add(home_coach, 3, "home")
                 elif s_a > s_h:
-                    _entry(away_coach)["points"] += 3
+                    _add(away_coach, 3, "away")
                 else:
-                    _entry(home_coach)["points"] += 1
-                    _entry(away_coach)["points"] += 1
+                    _add(home_coach, 1, "home")
+                    _add(away_coach, 1, "away")
             else:
                 sorted_pairs = sorted(pairs, key=lambda x: x[1], reverse=True)
                 for c, _ in sorted_pairs:
                     _entry(c)["games_played"] += 1
                 if sorted_pairs[0][1] > sorted_pairs[1][1]:
-                    _entry(sorted_pairs[0][0])["points"] += 3
+                    _add(sorted_pairs[0][0], 3, _side(game, sorted_pairs[0][0]))
                 elif sorted_pairs[1][1] > sorted_pairs[0][1]:
-                    _entry(sorted_pairs[1][0])["points"] += 3
+                    _add(sorted_pairs[1][0], 3, _side(game, sorted_pairs[1][0]))
                 else:
-                    _entry(sorted_pairs[0][0])["points"] += 1
-                    _entry(sorted_pairs[1][0])["points"] += 1
+                    _add(sorted_pairs[0][0], 1, _side(game, sorted_pairs[0][0]))
+                    _add(sorted_pairs[1][0], 1, _side(game, sorted_pairs[1][0]))
 
     # Map every known coach (current and historical) to his team so that
     # coaches replaced mid-season keep their affiliation and points.
@@ -201,12 +224,17 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
     emitted = set()
     for t in teams_data:
         coach = t["coach"]
-        entry = leaderboard.get(coach, {"coach": coach, "points": 0, "games_played": 0})
+        entry = leaderboard.get(
+            coach,
+            {"coach": coach, "points": 0, "games_played": 0, "home_points": 0, "away_points": 0},
+        )
         final_rankings.append({
             "coach": coach,
             "team": t["team"],
             "points": entry["points"],
             "games_played": entry["games_played"],
+            "home_points": entry["home_points"],
+            "away_points": entry["away_points"],
         })
         emitted.add(coach)
 
@@ -220,6 +248,8 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
                 "team": team_by_coach.get(coach, "?"),
                 "points": entry["points"],
                 "games_played": entry["games_played"],
+                "home_points": entry["home_points"],
+                "away_points": entry["away_points"],
             })
 
     sorted_leaderboard = sorted(final_rankings, key=lambda x: (-x["points"], x["coach"]))
@@ -250,11 +280,15 @@ def update_leaderboard():
     save_leaderboard(competitive_rankings, mode="competitive")
 
     heuristic_count = sum(1 for c in comments if c.get("graded_by") == "heuristic")
+    usage = llm.llm_usage()
     print(f"--- Grading Report ---")
     print(f"Quotes processed: {len(comments)}")
     print(f"Newly graded: {graded_count}")
     if heuristic_count:
         print(f"WARNING: {heuristic_count} quotes graded by keyword heuristic (no LLM key).")
+    print(f"LLM usage so far: {usage['calls']} call(s), "
+          f"~{usage['prompt_tokens'] + usage['completion_tokens']} tokens "
+          f"({', '.join(f'{k}={v}' for k, v in usage['by_purpose'].items()) or 'none'}).")
     print(f"Separate leaderboard updated.")
     print(f"Competitive leaderboard updated.")
     if incomplete:
@@ -262,3 +296,9 @@ def update_leaderboard():
         for msg in incomplete:
             print(f"  - {msg}")
     print(f"----------------------")
+    return {
+        "quotes": len(comments),
+        "newly_graded": graded_count,
+        "heuristic": heuristic_count,
+        "llm_calls": usage["calls"],
+    }
