@@ -4,6 +4,7 @@ from src.collection.extractor import (
     HeuristicQuoteExtractor,
     REFEREE_RE,
     is_candidate_document,
+    was_quoted,
 )
 from src.collection.models import SourceDocument
 
@@ -151,3 +152,38 @@ class TestIsCandidateDocument(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestWasQuoted(unittest.TestCase):
+    def test_quoted_about_anything_counts_as_coverage(self):
+        # The coach is quoted about tactics (no referee mention): the
+        # article still proves coverage.
+        text = (
+            "Diego Simeone compareció en sala de prensa. "
+            "«Jugamos un gran partido y el equipo estuvo muy serio»"
+        )
+        self.assertTrue(was_quoted("Diego Simeone", make_doc(text)))
+
+    def test_mention_without_quotes_is_not_coverage(self):
+        text = "Diego Simeone vio el partido desde la grada con su cuerpo técnico."
+        self.assertFalse(was_quoted("Diego Simeone", make_doc(text)))
+
+    def test_other_speaker_quote_is_not_coverage(self):
+        text = "El técnico del rival declaró: «El árbitro estuvo muy bien»."
+        self.assertFalse(was_quoted("Diego Simeone", make_doc(text)))
+
+    def test_no_name_tokens_is_not_coverage(self):
+        self.assertFalse(was_quoted("X", make_doc("cualquier cosa")))
+
+
+class TestHeuristicAssessCoverage(unittest.TestCase):
+    def test_any_document_with_quotes_proves_coverage(self):
+        docs = [
+            make_doc("El rival entrenó en la mañana."),
+            make_doc("Diego Simeone habló en la rueda de prensa: «El equipo estuvo muy bien en todo el partido»."),
+        ]
+        self.assertTrue(HeuristicQuoteExtractor().assess_coverage("Diego Simeone", docs))
+
+    def test_no_quotes_anywhere_is_not_coverage(self):
+        docs = [make_doc("El rival entrenó en la mañana.")]
+        self.assertFalse(HeuristicQuoteExtractor().assess_coverage("Diego Simeone", docs))

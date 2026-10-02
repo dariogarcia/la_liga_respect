@@ -1,4 +1,5 @@
 from datetime import datetime, date, timedelta
+import os
 from typing import Any, Dict, List, Optional
 
 from src.data.manager import (
@@ -14,24 +15,29 @@ from .search import get_search_provider
 from .sitemap import fetch_sitemap_entries, find_coach_articles
 from .filtering import is_allowed_source
 from .fetcher import ArticleFetcher
-from .extractor import get_extractor, is_candidate_document, batch_enabled
+from .extractor import get_extractor, is_candidate_document, batch_enabled, mentions_coach
 from .validation import validate_extractions
 from .deduplication import deduplicate_quotes
 
 MAX_DOCS_PER_COACH = 6
 MAX_ATTEMPTS = 5
 PUBLICATION_WINDOW = timedelta(days=2)
-# After this many days a game with no collected quotes is declared
-# terminally uncovered: the 48h publication window is long gone, so
-# further searches can only find nothing (D4).
-COVERAGE_CUTOFF = timedelta(days=14)
+# User semantics: every game must resolve. A coach who made no
+# referee-related comment within this many days after his game is
+# presumed respectful for it (score 3). Gathering itself has no
+# deadline: full runs keep seeking old games (Wayback can still
+# recover quotes); only the *presumption* is time-based.
+PRESUMPTION_WINDOW = timedelta(days=int(os.getenv("PRESUME_AFTER_DAYS", "14")))
 
 REASON_NO_RESULTS = "no_search_results"
 REASON_NO_TRUSTED = "no_trusted_sources"
 REASON_FETCH_FAILED = "fetch_failed"
 REASON_WINDOW_FILTERED = "publication_window_filtered"
 REASON_NO_QUOTES = "no_quotes_extracted"
-REASON_NO_COVERAGE = "no_coverage"
+
+# Terminal outcomes stored as comments (not pending failures).
+KIND_CONFIRMED_CLEAN = "confirmed"
+KIND_PRESUMED_CLEAN = "presumed"
 
 
 def _dedupe_results(search_results):
@@ -175,6 +181,21 @@ def collect_comments_for_coach(
 
     quotes = deduplicate_quotes(quotes)
     if not quotes:
+        # No referee-related quotes. Was the coach quoted at all? If the
+        # coverage exists but never mentions the referee, the game
+        # resolves as respectful silence instead of a retryable failure.
+        coach_docs = [doc for doc in documents if mentions_coach(coach, doc)]
+        assess = getattr(extractor, "assess_coverage", None)
+        if coach_docs and assess and assess(coach, coach_docs):
+            return {
+                "clean": KIND_CONFIRMED_CLEAN,
+                "sources": [doc.url for doc in documents],
+                "source": documents[0].source_name,
+                "published_at": min(
+                    (doc.published_at for doc in documents if doc.published_at),
+                    default=None,
+                ),
+            }, None
         return None, REASON_NO_QUOTES
 
     merged = {
@@ -215,32 +236,36 @@ def _drop_pending(pending: List[Dict], game_id: str, coach: str) -> None:
     pending[:] = [p for p in pending if _pending_key(p["game_id"], p["coach"]) != _pending_key(game_id, coach)]
 
 
-def _mark_no_coverage(pending: List[Dict], game: Dict, coach: str) -> bool:
-    """Marks a coach/game pair terminally uncovered (D4).
-
-    The entry gets reason `no_coverage` and a `terminal` flag: it is
-    never retried again and excluded from the active pending count.
-    Returns True when the entry changed.
+def _clean_comment(game: Dict, coach: str, kind: str, result: Optional[Dict] = None) -> Dict:
     """
-    key = _pending_key(game["game_id"], coach)
-    entry = next((p for p in pending if _pending_key(p["game_id"], p["coach"]) == key), None)
-    if entry is not None:
-        if entry.get("terminal") and entry.get("reason") == REASON_NO_COVERAGE:
-            return False
-        entry["reason"] = REASON_NO_COVERAGE
-        entry["terminal"] = True
-        entry["last_attempt"] = datetime.utcnow().isoformat()
-        return True
-    pending.append({
+    Builds the terminal comment entry for a coach-game pair that
+    resolves without a referee quote: score 3, because not commenting
+    on the referee is the respectful baseline (user semantics).
+    """
+    sources = (result or {}).get("sources") or []
+    published = (result or {}).get("published_at")
+    if kind == KIND_CONFIRMED_CLEAN:
+        justification = "The coach was quoted in the match coverage but made no comment about the referee."
+    else:
+        justification = (
+            f"No referee-related comment found within {PRESUMPTION_WINDOW.days} days "
+            f"of the game; presumed respectful."
+        )
+    return {
         "game_id": game["game_id"],
         "coach": coach,
-        "date": game["date"],
-        "attempts": 0,
-        "last_attempt": datetime.utcnow().isoformat(),
-        "reason": REASON_NO_COVERAGE,
-        "terminal": True,
-    })
-    return True
+        "quote": "",
+        "no_ref_comment": True,
+        "kind": kind,
+        "score": 3,
+        "graded_by": "coverage",
+        "justification": justification,
+        "sources": sources,
+        "source_url": sources[0] if sources else None,
+        "source_name": (result or {}).get("source"),
+        "published_at": published.isoformat() if published else None,
+        "retrieved_at": datetime.utcnow().isoformat(),
+    }
 
 
 def collect_matchday_comments(
@@ -251,11 +276,16 @@ def collect_matchday_comments(
 ) -> Dict[str, Any]:
     """Collects coach comments for unfinished targets.
 
-    - Games older than COVERAGE_CUTOFF with no comment are terminally
-      marked `no_coverage` and never sought again (D4).
-    - With `since` set (A3), games dated before it are not sought: a
-      weekly run only processes the latest matchday plus recent
-      pending, not the whole season.
+    Every coach-game pair resolves (user semantics):
+    - referee quotes found -> graded comment;
+    - coach quoted but no referee mention -> confirmed clean (3);
+    - game older than PRESUMPTION_WINDOW with nothing found -> presumed
+      clean (3);
+    - fresh game unresolved -> pending, retried next run.
+    Gathering has no deadline: full runs (since=None) keep seeking old
+    games so archive fallback can still recover quotes; weekly runs
+    (since set) settle already-sought old games as presumed clean
+    without re-seeking.
     Returns a stats dict for the run report (A5).
     """
     games = get_games()
@@ -282,9 +312,10 @@ def collect_matchday_comments(
     today = date.today()
     sought_count = 0
     found_count = 0
+    confirmed_clean = 0
+    presumed_clean = 0
     skipped_future = 0
     skipped_since = 0
-    skipped_no_coverage = 0
     skipped_max_attempts = 0
     already_in_db = 0
 
@@ -294,7 +325,7 @@ def collect_matchday_comments(
             skipped_future += 1
             continue
 
-        stale = match_date < today - COVERAGE_CUTOFF
+        stale = match_date < today - PRESUMPTION_WINDOW
 
         for coach_key in ["home_coach", "away_coach"]:
             coach = game[coach_key]
@@ -304,28 +335,36 @@ def collect_matchday_comments(
                 already_in_db += 1
                 continue
 
-            # D4: the publication window for an old game is long gone;
-            # searching again can only fail. Record it terminally.
-            if stale:
-                _mark_no_coverage(pending, game, coach)
-                skipped_no_coverage += 1
-                continue
-
-            # A3: outside the requested window (and not stale), so leave
-            # the entry retryable but do not seek it in this run.
-            if since is not None and match_date < since:
-                skipped_since += 1
-                continue
-
             pending_entry = next(
                 (p for p in pending if _pending_key(p["game_id"], p["coach"]) == _pending_key(game_id, coach)),
                 None,
             )
-            if pending_entry and pending_entry.get("attempts", 0) >= MAX_ATTEMPTS:
-                skipped_max_attempts += 1
+
+            if stale and since is not None and match_date < since:
+                # Weekly window over an old game: settle it as presumed
+                # clean (it was already sought while fresh) instead of
+                # re-seeking. Games never sought before are left for a
+                # full run.
+                if pending_entry is not None and pending_entry.get("attempts", 0) >= 1:
+                    comments.append(_clean_comment(game, coach, KIND_PRESUMED_CLEAN))
+                    _drop_pending(pending, game_id, coach)
+                    presumed_clean += 1
+                    save_comments(comments)
+                    save_pending_requests(pending)
+                else:
+                    skipped_since += 1
                 continue
-            if pending_entry and pending_entry.get("terminal"):
-                continue
+
+            if not stale:
+                # A3: outside the requested window: retryable, not sought.
+                if since is not None and match_date < since:
+                    skipped_since += 1
+                    continue
+                if pending_entry and pending_entry.get("attempts", 0) >= MAX_ATTEMPTS:
+                    skipped_max_attempts += 1
+                    continue
+                if pending_entry and pending_entry.get("terminal"):
+                    continue
 
             sought_count += 1
             print(f"Collecting comments from {coach} for game {game_id} ({game['date']})...")
@@ -337,7 +376,11 @@ def collect_matchday_comments(
                 print(f"Failed to collect for {coach} in game {game_id}: {e}")
                 result, reason = None, REASON_FETCH_FAILED
 
-            if result is not None:
+            if result is not None and result.get("clean") == KIND_CONFIRMED_CLEAN:
+                comments.append(_clean_comment(game, coach, KIND_CONFIRMED_CLEAN, result))
+                _drop_pending(pending, game_id, coach)
+                confirmed_clean += 1
+            elif result is not None:
                 found_count += 1
                 comments.append({
                     "game_id": game_id,
@@ -350,6 +393,12 @@ def collect_matchday_comments(
                     "retrieved_at": datetime.utcnow().isoformat(),
                 })
                 _drop_pending(pending, game_id, coach)
+            elif stale:
+                # Sought and still nothing: the presumption window has
+                # passed, resolve as respectful silence.
+                comments.append(_clean_comment(game, coach, KIND_PRESUMED_CLEAN))
+                _drop_pending(pending, game_id, coach)
+                presumed_clean += 1
             else:
                 _update_pending(pending, game, coach, reason)
 
@@ -361,18 +410,16 @@ def collect_matchday_comments(
     save_comments(comments)
     save_pending_requests(pending)
 
-    pending_active = [
-        p for p in pending
-        if p.get("attempts", 0) < MAX_ATTEMPTS and not p.get("terminal")
-    ]
+    pending_active = [p for p in pending if p.get("attempts", 0) < MAX_ATTEMPTS]
     print(f"--- Collection Report ---")
     print(f"Matches in calendar: {len(games)} (future, skipped: {skipped_future})")
     if since is not None:
-        print(f"Window: games since {since.isoformat()} (older, non-terminal, skipped: {skipped_since})")
+        print(f"Window: games since {since.isoformat()} (older, unresolved, skipped: {skipped_since})")
     print(f"Coach comments sought: {sought_count}")
     print(f"Comments already in DB: {already_in_db}")
     print(f"Comments found: {found_count}")
-    print(f"Marked no_coverage (terminal, {COVERAGE_CUTOFF.days}d+ old): {skipped_no_coverage}")
+    print(f"Resolved clean — coach quoted, no referee comment: {confirmed_clean}")
+    print(f"Resolved clean — presumed respectful ({PRESUMPTION_WINDOW.days}d+ old): {presumed_clean}")
     print(f"Pending (will retry): {len(pending_active)}")
     print(f"Gave up after {MAX_ATTEMPTS} attempts: {skipped_max_attempts}")
     for p in pending_active:
@@ -382,10 +429,10 @@ def collect_matchday_comments(
         "games_in_calendar": len(games),
         "skipped_future": skipped_future,
         "skipped_since": skipped_since,
-        "no_coverage": skipped_no_coverage,
         "sought": sought_count,
         "found": found_count,
+        "confirmed_clean": confirmed_clean,
+        "presumed_clean": presumed_clean,
         "already_in_db": already_in_db,
         "pending_active": len(pending_active),
-        "pending_terminal": len(pending) - len(pending_active),
     }

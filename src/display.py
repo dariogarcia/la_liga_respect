@@ -23,6 +23,14 @@ def show_leaderboard(mode="separate"):
         print(f"NOTE: {len(heuristic_scores)} quotes graded by keyword heuristic (run the grader with an LLM key for better accuracy).")
         print("-" * 58)
 
+    no_ref = [c for c in comments if c.get("no_ref_comment")]
+    if no_ref:
+        confirmed = sum(1 for c in no_ref if c.get("kind") == "confirmed")
+        print(f"NOTE: {len(no_ref)} game(s) resolved without a referee comment "
+              f"({confirmed} confirmed coach coverage, {len(no_ref) - confirmed} presumed). "
+              f"These count as respectful (3 points).")
+        print("-" * 58)
+
     coach_to_team = {t["coach"]: t["team"] for t in teams_data}
     team_stats = {t["team"]: {"games": 0, "home": 0, "away": 0, "total": 0} for t in teams_data}
 

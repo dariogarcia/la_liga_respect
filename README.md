@@ -79,6 +79,7 @@ No `PYTHONPATH` configuration is needed.
 | `HTTP_CACHE_DISABLE` | No | Set `1` to bypass the on-disk HTTP cache |
 | `BLOCKED_DOMAINS` | No | Publishers that persistently hard-block this bot (default `as.com,sport.es`); never contacted directly, read via the Internet Archive instead. Empty string disables |
 | `WAYBACK_FALLBACK` | No | Set `0` to disable the Wayback Machine fallback for blocked publishers (fails hard instead) |
+| `PRESUME_AFTER_DAYS` | No | Days after a game before a coach with no referee comment is presumed respectful (default 14) |
 | `GOOGLE_NEWS_DECODE` | No | Set `0` to skip the Google News base64 URL decoder (the batchexecute endpoint it queries is undocumented) |
 
 Everything degrades gracefully: without keys the system still runs using news-sitemap discovery, keyless search, and heuristic extraction/grading (lower quality, clearly flagged).
@@ -101,9 +102,11 @@ python3 src/main.py --since 2026-09-25 # only process games from this date on
 python3 src/main.py --full-history     # ignore the incremental window
 ```
 
-**Incremental weekly runs**: by default each run only seeks comments for games since the last run (minus a 3-day overlap), so a weekly run costs minutes, not hours. Games more than 14 days old with no collected quotes are marked terminally `no_coverage` in `pending_requests.json` — the 48h publication window is long gone, so they are never retried again (not even by `--retry-pending`).
+**Incremental weekly runs**: by default each run only seeks comments for games since the last run (minus a 3-day overlap), so a weekly run costs minutes, not hours.
 
-Pending requests that fail 5 times are normally given up on; `--retry-pending` resets their attempt counters so the next collection run tries them again (terminal `no_coverage` entries excepted).
+**Every game resolves.** A coach-game pair ends in one of three outcomes: referee quotes found (graded 0/1/3), the coach was quoted in the match coverage but never mentioned the referee (**confirmed clean**, 3 points — not dragging the referee is the respectful baseline), or nothing was found within `PRESUME_AFTER_DAYS` (default 14) days of the game (**presumed clean**, 3 points). Gathering itself has no deadline: full runs (`--full-history` or no `--since`) keep seeking old games — the Internet Archive fallback can still recover quotes for them — and weekly runs settle already-sought old games as presumed clean without re-seeking. Games never sought before are always left for a full run rather than presumed blindly.
+
+Pending requests that fail 5 times are normally given up on; `--retry-pending` resets their attempt counters so the next collection run tries them again.
 
 Every run writes `data/run_report.json` (run timestamp, window used, collection and grading stats, LLM usage); the web UI shows it as a "data last updated" banner.
 

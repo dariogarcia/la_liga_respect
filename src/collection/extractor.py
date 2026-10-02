@@ -61,11 +61,14 @@ NAME_ENUM_RE = re.compile(
     r"(?:\s+[oy]\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?"
 )
 
-# Common sentence-initial words that would otherwise look like names.
+# Common sentence-initial or colon-preceding words that would otherwise
+# look like speaker names ("en la rueda de prensa: «...»").
 CAP_WORD_STOPWORDS = {
     "despues", "ahora", "tambien", "ademas", "antes", "luego",
     "entonces", "finalmente", "solamente", "unicamente",
     "posteriormente", "solto",
+    "prensa", "rueda", "sala", "comparecencia", "conferencia",
+    "declaraciones", "declaracion", "medios", "camara", "camaras",
 }
 
 # First-person markers: evidence that unquoted text is direct speech
@@ -105,6 +108,61 @@ def is_candidate_document(coach: str, document: SourceDocument) -> bool:
 
 def _mentions(text_normalized: str, tokens: List[str]) -> bool:
     return any(t in text_normalized for t in tokens)
+
+
+def mentions_coach(coach: str, document: SourceDocument) -> bool:
+    """True when the article text mentions the coach by name."""
+    tokens = _name_tokens(coach)
+    if not tokens:
+        return True
+    return _mentions(_normalize(document.text), tokens)
+
+
+def was_quoted(coach: str, document: SourceDocument) -> bool:
+    """
+    Heuristic coverage check: was the coach quoted speaking (about
+    anything) in this article?
+
+    Reuses the heuristic extractor's attribution logic without the
+    referee-keyword filter: a document with quoted or reported speech
+    attributed to the coach proves the coach was covered, even when he
+    never mentioned the referee.
+    """
+    tokens = _name_tokens(coach)
+    if not tokens:
+        return False
+    sentences = _split_sentences(document.text)
+    norm = [_normalize(s) for s in sentences]
+    last_mention = None
+    for i, sentence in enumerate(sentences):
+        attr = _attribution_target(sentence, norm[i], tokens)
+        mentions = _mentions(norm[i], tokens)
+        if attr == "self":
+            last_mention = i
+        elif attr == "other":
+            last_mention = None
+        elif mentions and not _in_enumeration(sentence, tokens):
+            last_mention = i
+        prev_ok = i > 0 and _mentions(norm[i - 1], tokens) and (
+            _attribution_target(sentences[i - 1], norm[i - 1], tokens) != "other"
+            and not _in_enumeration(sentences[i - 1], tokens)
+        )
+        in_context = (mentions and attr != "other") or prev_ok
+        inherited = (
+            last_mention is not None
+            and (i - last_mention) <= MENTION_WINDOW
+            and attr != "other"
+        )
+        matches = QUOTE_RE.findall(sentence)
+        if matches:
+            for m in matches:
+                if in_context or _mentions(_normalize(m), tokens) or inherited:
+                    return True
+        elif (in_context and any(v in norm[i] for v in REPORTING_VERBS)) or (
+            inherited and FIRST_PERSON_RE.search(norm[i])
+        ):
+            return True
+    return False
 
 
 def _attribution_target(raw: str, normalized: str, tokens: List[str]):
@@ -197,6 +255,10 @@ class HeuristicQuoteExtractor:
             ):
                 quotes.append({"text": sentence, "referee_related": True, "confidence": "low"})
         return quotes
+
+    def assess_coverage(self, coach: str, documents: List[SourceDocument]) -> bool:
+        """Was the coach quoted speaking (about anything) in any document?"""
+        return any(was_quoted(coach, doc) for doc in documents)
 
 
 class LLMQuoteExtractor:
@@ -305,6 +367,40 @@ class LLMQuoteExtractor:
             if text and q.get("referee_related", True):
                 quotes.append({"text": text, "referee_related": True, "confidence": "llm"})
         return quotes
+
+    def assess_coverage(self, coach: str, documents: List[SourceDocument]) -> bool:
+        """
+        One LLM call over all of the coach's documents: was he quoted
+        speaking (about anything)? Distinguishes "coach was covered but
+        never mentioned the referee" (respectful silence) from "no
+        coverage found". Falls back to the heuristic check on budget
+        exhaustion or protocol errors.
+        """
+        system = (
+            "You are a precise information extraction engine. You answer strictly "
+            "from the given articles. Respond only with JSON."
+        )
+        parts = [
+            f"In the {len(documents)} numbered articles below, is the coach '{coach}' "
+            f"quoted or reported speaking about any topic (direct quotes, reported "
+            f"speech, press-conference coverage)? Answer only about this coach, not "
+            f"other people.\n\n"
+            f"Respond as JSON: {{\"coach_quoted\": true}}\n"
+        ]
+        for i, doc in enumerate(documents, 1):
+            parts.append(f"ARTICLE {i}:\n{doc.text[:BATCH_DOC_CHARS]}\n")
+        try:
+            data = llm.llm_chat(
+                system, "\n".join(parts), json_mode=True, temperature=0.0,
+                purpose="coverage", model=self._model(),
+            )
+            return bool(data.get("coach_quoted"))
+        except llm.LLMBudgetExceeded:
+            print("LLM budget exhausted: coverage assessed by heuristic.")
+            return self._fallback.assess_coverage(coach, documents)
+        except Exception as e:
+            print(f"Coverage assessment failed, using heuristic: {e}")
+            return self._fallback.assess_coverage(coach, documents)
 
 
 def batch_enabled() -> bool:

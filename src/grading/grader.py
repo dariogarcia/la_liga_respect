@@ -280,10 +280,13 @@ def update_leaderboard():
     save_leaderboard(competitive_rankings, mode="competitive")
 
     heuristic_count = sum(1 for c in comments if c.get("graded_by") == "heuristic")
+    coverage_count = sum(1 for c in comments if c.get("graded_by") == "coverage")
     usage = llm.llm_usage()
     print(f"--- Grading Report ---")
     print(f"Quotes processed: {len(comments)}")
     print(f"Newly graded: {graded_count}")
+    if coverage_count:
+        print(f"Games resolved without a referee comment (score 3): {coverage_count}")
     if heuristic_count:
         print(f"WARNING: {heuristic_count} quotes graded by keyword heuristic (no LLM key).")
     print(f"LLM usage so far: {usage['calls']} call(s), "
@@ -300,5 +303,6 @@ def update_leaderboard():
         "quotes": len(comments),
         "newly_graded": graded_count,
         "heuristic": heuristic_count,
+        "no_ref_comment": coverage_count,
         "llm_calls": usage["calls"],
     }

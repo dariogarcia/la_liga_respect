@@ -169,3 +169,51 @@ class TestCalculateRankings(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestCleanEntriesInRankings(unittest.TestCase):
+    """no_ref_comment entries (score 3, graded_by=coverage) flow through
+    both ranking modes like any scored quote."""
+
+    TEAMS = [
+        {"team": "Alavés", "coach": "A"},
+        {"team": "Getafe", "coach": "B"},
+    ]
+    GAMES = [
+        {"game_id": "1", "date": "2026-08-15", "home_team": "Alavés", "away_team": "Getafe",
+         "home_coach": "A", "away_coach": "B"},
+    ]
+
+    def _rankings(self, comments, mode):
+        with mock.patch("src.grading.grader.get_teams", return_value=self.TEAMS), \
+             mock.patch("src.grading.grader.get_games", return_value=self.GAMES):
+            return calculate_rankings(comments, mode=mode)
+
+    def _clean(self, coach, kind="presumed"):
+        return {
+            "game_id": "1", "coach": coach, "quote": "",
+            "no_ref_comment": True, "kind": kind, "score": 3,
+            "graded_by": "coverage", "justification": "no referee comment",
+        }
+
+    def test_separate_mode_counts_clean_as_three(self):
+        comments = [self._clean("A"), {"game_id": "1", "coach": "B", "quote": "q", "score": 0}]
+        rankings, _ = self._rankings(comments, "separate")
+        points = {r["coach"]: r["points"] for r in rankings}
+        self.assertEqual(points["A"], 3)
+        self.assertEqual(points["B"], 0)
+
+    def test_competitive_mode_silent_coach_beats_complainer(self):
+        comments = [self._clean("A"), {"game_id": "1", "coach": "B", "quote": "q", "score": 0}]
+        rankings, incomplete = self._rankings(comments, "competitive")
+        self.assertEqual(incomplete, [])
+        points = {r["coach"]: r["points"] for r in rankings}
+        self.assertEqual(points["A"], 3)  # silence wins the duel
+        self.assertEqual(points["B"], 0)
+
+    def test_both_clean_is_a_draw(self):
+        comments = [self._clean("A"), self._clean("B", kind="confirmed")]
+        rankings, _ = self._rankings(comments, "competitive")
+        points = {r["coach"]: r["points"] for r in rankings}
+        self.assertEqual(points["A"], 1)
+        self.assertEqual(points["B"], 1)

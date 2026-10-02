@@ -99,3 +99,38 @@ class TestLLMQuoteExtractor(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestLLMAssessCoverage(unittest.TestCase):
+    def test_coach_quoted_true(self):
+        doc = make_doc("Simeone habló en la rueda de prensa: «El equipo estuvo muy bien».")
+        with patch("src.utils.llm.llm_chat", return_value={"coach_quoted": True}) as mock_chat:
+            result = LLMQuoteExtractor().assess_coverage("Diego Simeone", [doc])
+        self.assertTrue(result)
+        self.assertIn("Diego Simeone", mock_chat.call_args[0][1])
+        self.assertEqual(mock_chat.call_args.kwargs.get("purpose"), "coverage")
+
+    def test_coach_quoted_false(self):
+        doc = make_doc("El rival entrenó en la mañana.")
+        with patch("src.utils.llm.llm_chat", return_value={"coach_quoted": False}):
+            result = LLMQuoteExtractor().assess_coverage("Diego Simeone", [doc])
+        self.assertFalse(result)
+
+    def test_protocol_error_falls_back_to_heuristic(self):
+        doc = make_doc("Diego Simeone habló: «El equipo estuvo muy bien».")
+        with patch("src.utils.llm.llm_chat", side_effect=ValueError("bad json")):
+            result = LLMQuoteExtractor().assess_coverage("Diego Simeone", [doc])
+        self.assertTrue(result)  # heuristic detects the quote
+
+    def test_budget_exhaustion_falls_back_to_heuristic(self):
+        from src.utils import llm as llm_mod
+        doc = make_doc("El rival entrenó en la mañana.")
+        with patch("src.utils.llm.llm_chat", side_effect=llm_mod.LLMBudgetExceeded("over")):
+            result = LLMQuoteExtractor().assess_coverage("Diego Simeone", [doc])
+        self.assertFalse(result)
+
+    def test_truncates_documents(self):
+        doc = make_doc("Simeone dijo: «Bien». " + "x" * 20000)
+        with patch("src.utils.llm.llm_chat", return_value={"coach_quoted": False}) as mock_chat:
+            LLMQuoteExtractor().assess_coverage("Diego Simeone", [doc])
+        self.assertLess(len(mock_chat.call_args[0][1]), 20000)
