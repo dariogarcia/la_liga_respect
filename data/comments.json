@@ -1690,5 +1690,50 @@
     "source_name": null,
     "published_at": null,
     "retrieved_at": "2026-10-02T10:25:21.490448"
+  },
+  {
+    "game_id": "espn-401882868",
+    "coach": "Manolo González",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "presumed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "No referee-related comment found within 14 days of the game; presumed respectful.",
+    "sources": [],
+    "source_url": null,
+    "source_name": null,
+    "published_at": null,
+    "retrieved_at": "2026-10-02T10:25:39.491584"
+  },
+  {
+    "game_id": "espn-401882872",
+    "coach": "Martín Anselmi",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "presumed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "No referee-related comment found within 14 days of the game; presumed respectful.",
+    "sources": [],
+    "source_url": null,
+    "source_name": null,
+    "published_at": null,
+    "retrieved_at": "2026-10-02T10:25:57.492498"
+  },
+  {
+    "game_id": "espn-401882872",
+    "coach": "José Mourinho",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "presumed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "No referee-related comment found within 14 days of the game; presumed respectful.",
+    "sources": [],
+    "source_url": null,
+    "source_name": null,
+    "published_at": null,
+    "retrieved_at": "2026-10-02T10:26:15.493544"
   }
 ]

@@ -1,29 +1,5 @@
 [
   {
-    "game_id": "espn-401882868",
-    "coach": "Manolo González",
-    "date": "2026-09-15",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:51:58.701692",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882872",
-    "coach": "Martín Anselmi",
-    "date": "2026-09-15",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:52:25.179536",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882872",
-    "coach": "José Mourinho",
-    "date": "2026-09-15",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:53:02.474036",
-    "reason": "no_quotes_extracted"
-  },
-  {
     "game_id": "espn-401882876",
     "coach": "Quique Sánchez Flores",
     "date": "2026-09-15",

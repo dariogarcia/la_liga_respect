@@ -1,14 +1,13 @@
-import json
 import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.data.manager import get_games, get_comments, get_teams, load_json, DATA_DIR
+from src.data.manager import get_comments, get_teams
+from src.grading.grader import calculate_rankings
 
 
 def show_leaderboard(mode="separate"):
-    games = get_games()
     comments = get_comments()
     teams_data = get_teams()
 
@@ -31,54 +30,28 @@ def show_leaderboard(mode="separate"):
               f"These count as respectful (3 points).")
         print("-" * 58)
 
-    coach_to_team = {t["coach"]: t["team"] for t in teams_data}
-    team_stats = {t["team"]: {"games": 0, "home": 0, "away": 0, "total": 0} for t in teams_data}
+    # U4: one source of truth. The team table is aggregated from
+    # calculate_rankings (coach rows with home/away points), so the
+    # terminal view can never drift from the published leaderboard.
+    rankings, incomplete = calculate_rankings(comments, mode=mode)
+    if incomplete:
+        print(f"NOTE: {len(incomplete)} game(s) have incomplete grading:")
+        for note in incomplete[:5]:
+            print(f"  - {note}")
+        if len(incomplete) > 5:
+            print(f"  ... and {len(incomplete) - 5} more")
+        print("-" * 58)
 
-    for game in games:
-        gid = game["game_id"]
-        h_coach = game["home_coach"]
-        a_coach = game["away_coach"]
-        h_team = game["home_team"]
-        a_team = game["away_team"]
-
-        game_comments = [c for c in comments if c["game_id"] == gid]
-
-        def _score_for(coach):
-            return sum(c["score"] for c in game_comments if c["coach"] == coach and "score" in c)
-
-        h_has = any(c["coach"] == h_coach for c in game_comments)
-        a_has = any(c["coach"] == a_coach for c in game_comments)
-
-        if h_has:
-            team_stats[h_team]["games"] += 1
-        if a_has:
-            team_stats[a_team]["games"] += 1
-
-        if mode == "separate":
-            if h_has:
-                score = _score_for(h_coach)
-                team_stats[h_team]["home"] += score
-                team_stats[h_team]["total"] += score
-            if a_has:
-                score = _score_for(a_coach)
-                team_stats[a_team]["away"] += score
-                team_stats[a_team]["total"] += score
-        else:
-            if h_has and a_has:
-                s_h = _score_for(h_coach)
-                s_a = _score_for(a_coach)
-
-                if s_h > s_a:
-                    team_stats[h_team]["home"] += 3
-                    team_stats[h_team]["total"] += 3
-                elif s_a > s_h:
-                    team_stats[a_team]["away"] += 3
-                    team_stats[a_team]["total"] += 3
-                else:
-                    team_stats[h_team]["home"] += 1
-                    team_stats[h_team]["total"] += 1
-                    team_stats[a_team]["away"] += 1
-                    team_stats[a_team]["total"] += 1
+    team_stats = {t["team"]: {"games": 0, "home": 0, "away": 0, "total": 0}
+                  for t in teams_data}
+    for row in rankings:
+        stats = team_stats.setdefault(
+            row["team"], {"games": 0, "home": 0, "away": 0, "total": 0}
+        )
+        stats["games"] += row["games_played"]
+        stats["home"] += row["home_points"]
+        stats["away"] += row["away_points"]
+        stats["total"] += row["points"]
 
     sorted_teams = sorted(team_stats.items(), key=lambda x: x[1]["total"], reverse=True)
 
