@@ -1,37 +1,5 @@
 [
   {
-    "game_id": "espn-401882886",
-    "coach": "Edin Terzić",
-    "date": "2026-09-12",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:44:50.870458",
-    "reason": "publication_window_filtered"
-  },
-  {
-    "game_id": "espn-401882886",
-    "coach": "Martín Anselmi",
-    "date": "2026-09-12",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:45:21.502002",
-    "reason": "publication_window_filtered"
-  },
-  {
-    "game_id": "espn-401882879",
-    "coach": "Pellegrino Matarazzo",
-    "date": "2026-09-13",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:45:52.224681",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882879",
-    "coach": "Diego Simeone",
-    "date": "2026-09-13",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:46:24.476165",
-    "reason": "no_quotes_extracted"
-  },
-  {
     "game_id": "espn-401882883",
     "coach": "Luís Castro",
     "date": "2026-09-13",
