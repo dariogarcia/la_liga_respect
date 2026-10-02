@@ -21,42 +21,64 @@
     <style>
         :root {
             color-scheme: light;
-            --bg: #f4f7f6;
-            --fg: #333;
-            --fg-muted: #666;
-            --fg-faint: #888;
-            --heading: #1a3a5a;
-            --highlight: #e67e22;
-            --btn-bg: #1a3a5a;
-            --btn-bg-hover: #2a4a6a;
+            --bg: #eef2f4;
+            --bg-grad-a: #eef2f4;
+            --bg-grad-b: #e3ebee;
+            --fg: #2b3440;
+            --fg-muted: #5c6b7a;
+            --fg-faint: #8494a3;
+            --heading: #16405e;
+            --accent: #e67e22;
+            --accent-hover: #d35400;
+            --accent-soft: rgba(230, 126, 34, 0.14);
+            --header-grad-a: #16324a;
+            --header-grad-b: #1e5a6b;
+            --header-fg: #ffffff;
+            --header-fg-muted: rgba(255, 255, 255, 0.75);
             --btn-fg: white;
             --surface: #ffffff;
-            --surface-alt: #fbfdfc;
-            --surface-hover: #fdfdfd;
-            --border: #ddd;
-            --border-soft: #e4e9e8;
-            --rule: #eee;
+            --surface-alt: #f6f9fa;
+            --surface-hover: #eef4f6;
+            --border: #d7dfe4;
+            --border-soft: #e4eaee;
+            --rule: #edf1f4;
             --rule-soft: #d5dee0;
             --link: #2a70a5;
+            --th-bg: #1d3f5c;
+            --th-fg: #ffffff;
+            --pos-bg: #eef2f5;
+            --pos-fg: #5c6b7a;
+            --gold-bg: #fbe8b0;      --gold-fg: #7a5b00;   --gold-border: #eccf72;
+            --silver-bg: #e8edf1;    --silver-fg: #55636f; --silver-border: #c9d3db;
+            --bronze-bg: #f0dccb;    --bronze-fg: #6e4a26; --bronze-border: #dcb99a;
+            --pts-bar-a: #2a92d5;
+            --pts-bar-b: #16405e;
             --notice-info-bg: #eaf2f8;
             --notice-info-border: #2a70a5;
             --notice-info-fg: #1a4a6a;
             --notice-warn-bg: #fdf3e3;
             --notice-warn-border: #e67e22;
             --notice-warn-fg: #9c5a12;
-            --shadow: 0 10px 30px rgba(0,0,0,0.1);
-            --btn-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            --shadow: 0 10px 30px rgba(20, 45, 65, 0.1);
+            --shadow-soft: 0 2px 10px rgba(20, 45, 65, 0.07);
+            --btn-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         :root[data-theme="dark"] {
             color-scheme: dark;
             --bg: #10161d;
+            --bg-grad-a: #10161d;
+            --bg-grad-b: #131c26;
             --fg: #e4e9ed;
             --fg-muted: #9fb0bd;
             --fg-faint: #77879a;
             --heading: #8fc1e9;
-            --highlight: #f0954a;
-            --btn-bg: #2e4d6e;
-            --btn-bg-hover: #3a5d82;
+            --accent: #f0954a;
+            --accent-hover: #f4a968;
+            --accent-soft: rgba(240, 149, 74, 0.16);
+            --header-grad-a: #0d1b29;
+            --header-grad-b: #143a4a;
+            --header-fg: #eef4f8;
+            --header-fg-muted: rgba(238, 244, 248, 0.65);
             --btn-fg: white;
             --surface: #1a232d;
             --surface-alt: #212d39;
@@ -66,109 +88,217 @@
             --rule: #26333f;
             --rule-soft: #31414f;
             --link: #6db3e8;
+            --th-bg: #22384c;
+            --th-fg: #dce8f0;
+            --pos-bg: #22303c;
+            --pos-fg: #9fb0bd;
+            --gold-bg: rgba(230, 180, 60, 0.18);  --gold-fg: #ffd76b;   --gold-border: rgba(230, 180, 60, 0.45);
+            --silver-bg: rgba(160, 175, 190, 0.18); --silver-fg: #cfd8de; --silver-border: rgba(160, 175, 190, 0.4);
+            --bronze-bg: rgba(190, 130, 80, 0.2);  --bronze-fg: #e0b48c; --bronze-border: rgba(190, 130, 80, 0.45);
+            --pts-bar-a: #2a92d5;
+            --pts-bar-b: #8fc1e9;
             --notice-info-bg: #17222c;
             --notice-info-border: #3d6d94;
             --notice-info-fg: #a8cbe4;
             --notice-warn-bg: #2a2113;
             --notice-warn-border: #b06a24;
             --notice-warn-fg: #e6b57c;
-            --shadow: 0 10px 30px rgba(0,0,0,0.45);
-            --btn-shadow: 0 2px 5px rgba(0,0,0,0.4);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+            --shadow-soft: 0 2px 10px rgba(0, 0, 0, 0.35);
+            --btn-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
         }
+        * { box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(160deg, var(--bg-grad-a), var(--bg-grad-b)) fixed;
             color: var(--fg);
             margin: 0;
-            padding: 20px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+        /* --- Header with brand + section tabs --- */
+        .site-header {
+            background: linear-gradient(135deg, var(--header-grad-a), var(--header-grad-b));
+            color: var(--header-fg);
+            padding: 26px 20px 0;
+        }
+        .header-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
             align-items: center;
+            gap: 16px;
         }
-        h1 {
+        .brand { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+        .brand-trophy {
+            font-size: 1.9rem;
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            flex: 0 0 54px;
+        }
+        .brand h1 { margin: 0; font-size: 1.7rem; letter-spacing: 0.2px; }
+        .brand-sub {
+            margin: 2px 0 0;
+            font-size: 0.85rem;
+            color: var(--header-fg-muted);
+        }
+        button#btn-theme {
+            background: rgba(255, 255, 255, 0.12);
+            color: var(--header-fg);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            padding: 9px 16px;
+            font-size: 14px;
+            box-shadow: none;
+            flex: 0 0 auto;
+        }
+        button#btn-theme:hover { background: rgba(255, 255, 255, 0.2); transform: none; }
+        .tabs {
+            max-width: 960px;
+            margin: 18px auto 0;
+            display: flex;
+            gap: 6px;
+        }
+        .tab {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--header-fg-muted);
+            border: none;
+            border-radius: 12px 12px 0 0;
+            padding: 11px 20px 13px;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: none;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .tab:hover { background: rgba(255, 255, 255, 0.18); transform: none; color: var(--header-fg); }
+        .tab.active {
+            background: var(--bg);
             color: var(--heading);
-            margin-bottom: 10px;
-            font-size: 2.5rem;
+            font-weight: 600;
         }
-        .description {
+        .tab-badge {
+            display: inline-block;
+            min-width: 20px;
+            margin-left: 7px;
+            padding: 1px 6px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
             text-align: center;
-            max-width: 600px;
-            margin-bottom: 30px;
-            color: var(--fg-muted);
-            font-size: 1.1rem;
         }
-        .controls {
-            margin-bottom: 20px;
+        /* --- Main content --- */
+        .main {
+            width: 100%;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 24px 20px 48px;
+            flex: 1;
+        }
+        .section-intro { color: var(--fg-muted); font-size: 0.95rem; margin: 0 0 18px; }
+        h2.section-title { color: var(--heading); margin: 0 0 8px; font-size: 1.35rem; }
+        /* --- Mode switch + explainer --- */
+        .mode-box {
+            background: var(--surface);
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            box-shadow: var(--shadow-soft);
+            padding: 14px 18px;
+            margin-bottom: 16px;
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
+            align-items: center;
+            gap: 12px 20px;
         }
-        button {
-            padding: 12px 24px;
-            font-size: 16px;
-            cursor: pointer;
+        .mode-switch {
+            display: inline-flex;
+            background: var(--surface-alt);
+            border: 1px solid var(--border-soft);
+            border-radius: 999px;
+            padding: 4px;
+            gap: 4px;
+            flex: 0 0 auto;
+        }
+        .mode-btn {
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-size: 14px;
+            background: transparent;
+            color: var(--fg-muted);
+            box-shadow: none;
             border: none;
-            border-radius: 5px;
-            background-color: var(--btn-bg);
-            color: var(--btn-fg);
-            transition: all 0.3s ease;
-            box-shadow: var(--btn-shadow);
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
         }
-        button:hover {
-            background-color: var(--btn-bg-hover);
-            transform: translateY(-2px);
+        .mode-btn:hover { background: var(--surface-hover); transform: none; color: var(--fg); }
+        .mode-btn.active {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
         }
-        button.active {
-            background-color: var(--highlight);
-            box-shadow: 0 0 10px rgba(230, 126, 34, 0.5);
-            font-weight: bold;
+        .mode-explainer {
+            flex: 1;
+            min-width: 240px;
+            margin: 0;
+            font-size: 0.86rem;
+            line-height: 1.45;
+            color: var(--fg-muted);
         }
-        button#btn-theme { background-color: var(--surface-alt); color: var(--fg); border: 1px solid var(--border-soft); }
-        button#btn-theme:hover { background-color: var(--surface-hover); }
-        /* F7: visible keyboard focus for every interactive element. */
-        button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible,
-        .leaderboard-row:focus-visible, summary:focus-visible {
-            outline: 3px solid var(--highlight);
-            outline-offset: 2px;
+        .mode-explainer strong { color: var(--fg); }
+        /* --- Search + banner --- */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 14px;
         }
         .search-bar {
-            max-width: 900px;
-            width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 14px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .search-bar label { font-size: 0.9rem; color: var(--fg-muted); flex: 0 0 auto; }
-        .search-bar input {
             flex: 1;
-            padding: 10px 14px;
+            min-width: 220px;
+            position: relative;
+        }
+        .search-bar .search-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--fg-faint);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 11px 14px 11px 36px;
             font-size: 15px;
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 10px;
             background: var(--surface);
             color: var(--fg);
+            box-shadow: var(--shadow-soft);
         }
         .updated-banner {
-            max-width: 900px;
-            width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 16px;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            flex: 0 0 auto;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.85rem;
             background: var(--notice-info-bg);
             border: 1px solid var(--notice-info-border);
             color: var(--notice-info-fg);
             display: none;
         }
+        /* --- Leaderboard table --- */
         .table-container {
             width: 100%;
-            max-width: 900px;
             background: var(--surface);
-            border-radius: 12px;
+            border-radius: 14px;
             box-shadow: var(--shadow);
             overflow: hidden;
             border: 1px solid var(--border);
@@ -176,61 +306,131 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
+            font-variant-numeric: tabular-nums;
         }
         th {
-            background-color: var(--btn-bg);
-            color: var(--btn-fg);
-            padding: 15px;
+            background-color: var(--th-bg);
+            color: var(--th-fg);
+            padding: 13px 14px;
             text-transform: uppercase;
-            font-size: 13px;
-            letter-spacing: 1px;
-            text-align: left;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+            text-align: right;
+            white-space: nowrap;
         }
+        th.coach-col { text-align: left; }
+        th.pos-col { text-align: center; }
         td {
-            padding: 12px 15px;
+            padding: 10px 14px;
             border-bottom: 1px solid var(--rule);
             font-size: 15px;
+            text-align: right;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
-        tr:last-child td {
-            border-bottom: none;
-        }
-        tr.leaderboard-row:hover {
-            background-color: var(--surface-hover);
-        }
-        .pos-col { width: 60px; text-align: center; font-weight: bold; color: var(--fg-faint); }
-        .team-logo {
-            width: 44px;
-            height: 44px;
-            display: flex;
+        tr:last-child td { border-bottom: none; }
+        tbody tr:nth-child(even) { background: var(--surface-alt); }
+        tr.leaderboard-row:hover { background: var(--surface-hover); }
+        .pos-col { width: 66px; text-align: center; }
+        .coach-col { width: auto; text-align: left; }
+        .gp-col { width: 64px; color: var(--fg-muted); }
+        .ha-col { width: 104px; color: var(--fg-muted); font-size: 0.92rem; }
+        .pts-col { width: 96px; }
+        .ha-col .ha-sep { color: var(--fg-faint); padding: 0 2px; }
+        .pos-badge {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            flex: 0 0 44px;
+            min-width: 30px;
+            height: 30px;
+            padding: 0 6px;
+            border-radius: 9px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            background: var(--pos-bg);
+            color: var(--pos-fg);
+            border: 1px solid var(--border-soft);
         }
-        .team-icon {
-            width: 40px;
-            height: 40px;
+        tbody tr:nth-child(1) .pos-badge { background: var(--gold-bg);   color: var(--gold-fg);   border-color: var(--gold-border); }
+        tbody tr:nth-child(2) .pos-badge { background: var(--silver-bg); color: var(--silver-fg); border-color: var(--silver-border); }
+        tbody tr:nth-child(3) .pos-badge { background: var(--bronze-bg); color: var(--bronze-fg); border-color: var(--bronze-border); }
+        .movement {
             display: block;
-            object-fit: contain;
+            margin-top: 2px;
+            font-size: 0.66rem;
+            font-weight: bold;
+            line-height: 1;
         }
+        .movement.up { color: #1d7a43; }
+        .movement.down { color: #c0392b; }
         .team-cell {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 13px;
             min-width: 0;
         }
-        .pts-col { width: 100px; text-align: center; font-weight: bold; color: var(--heading); font-size: 1.1rem; }
-        .ha-col { width: 110px; text-align: center; color: var(--fg-muted); font-size: 0.95rem; }
-        .gp-col { width: 70px; text-align: center; color: var(--fg-muted); }
+        .team-logo {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 42px;
+        }
+        .team-icon {
+            width: 38px;
+            height: 38px;
+            display: block;
+            object-fit: contain;
+        }
+        .coach-line { min-width: 0; }
+        .coach-name {
+            font-weight: 700;
+            font-size: 0.98rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .coach-team {
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .coach-team .prev-coach { font-style: italic; opacity: 0.85; }
+        .pts-cell {
+            position: relative;
+            height: 100%;
+        }
+        .pts-bar {
+            position: absolute;
+            top: 7px;
+            bottom: 7px;
+            left: 8px;
+            width: 0;
+            border-radius: 6px;
+            background: linear-gradient(90deg, var(--pts-bar-a), var(--pts-bar-b));
+            opacity: 0.16;
+        }
+        .pts-num {
+            position: relative;
+            font-weight: 700;
+            color: var(--heading);
+            font-size: 1.05rem;
+        }
         .leaderboard-row { cursor: pointer; }
-        .leaderboard-row:focus { outline: 2px solid var(--highlight); outline-offset: -2px; }
+        .leaderboard-row:focus { outline: 2px solid var(--accent); outline-offset: -2px; }
         .no-match td { text-align: center; color: var(--fg-muted); padding: 24px; cursor: default; }
+        /* --- Notices --- */
         .notice {
-            max-width: 900px;
             width: 100%;
-            box-sizing: border-box;
             margin-top: 15px;
             padding: 12px 18px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 14px;
             display: none;
         }
@@ -244,46 +444,79 @@
             border: 1px solid var(--notice-info-border);
             color: var(--notice-info-fg);
         }
+        /* --- Coverage tab --- */
+        .stat-chips {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .stat-chip {
+            background: var(--surface);
+            border: 1px solid var(--border-soft);
+            border-radius: 12px;
+            box-shadow: var(--shadow-soft);
+            padding: 14px 16px;
+        }
+        .stat-chip .num { font-size: 1.55rem; font-weight: 700; color: var(--heading); line-height: 1.1; }
+        .stat-chip label { display: block; font-size: 0.78rem; color: var(--fg-muted); margin-top: 3px; }
+        .stat-chip.accent .num { color: var(--accent-hover); }
         .pending-table td, .pending-table th {
             font-size: 13px;
             padding: 8px 12px;
+            text-align: left;
+            white-space: normal;
         }
-        .pending-section {
-            max-width: 900px;
-            width: 100%;
-            margin-top: 30px;
+        .pending-table td:first-child { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 12px; }
+        .pending-note { color: var(--fg-muted); font-size: 0.84rem; margin-top: 10px; }
+        /* --- About tab --- */
+        .about-card {
+            background: var(--surface);
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            box-shadow: var(--shadow-soft);
+            padding: 26px 30px;
+            line-height: 1.6;
         }
-        .pending-section h2 {
-            color: var(--heading);
-            font-size: 1.2rem;
+        .about-card h3 { color: var(--heading); margin: 22px 0 8px; font-size: 1.05rem; }
+        .about-card h3:first-child { margin-top: 0; }
+        .about-card p, .about-card li { font-size: 0.92rem; color: var(--fg); }
+        .about-card ul { margin: 8px 0; padding-left: 22px; }
+        .about-card .muted { color: var(--fg-muted); }
+        .scale-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+        .score-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
         }
+        .score-3 { background-color: #27ae60; }
+        .score-1 { background-color: #e67e22; }
+        .score-0 { background-color: #c0392b; }
+        /* --- Coach detail panel --- */
         .detail-panel {
             width: 100%;
-            max-width: 900px;
-            box-sizing: border-box;
-            margin-top: 25px;
+            margin-top: 16px;
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             box-shadow: var(--shadow);
             padding: 20px;
         }
-        .detail-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 5px;
-        }
+        .detail-header { display: flex; align-items: center; gap: 14px; margin-bottom: 5px; }
         .detail-header img { width: 44px; height: 44px; object-fit: contain; }
-        .detail-header h2 { color: var(--heading); margin: 0; font-size: 1.4rem; flex: 1; }
+        .detail-header h2 { color: var(--heading); margin: 0; font-size: 1.3rem; flex: 1; }
         .detail-close {
             background: var(--surface-alt);
             color: var(--fg);
             border: 1px solid var(--border-soft);
             padding: 6px 14px;
             font-size: 14px;
+            box-shadow: none;
         }
-        .detail-close:hover { background: var(--surface-hover); }
+        .detail-close:hover { background: var(--surface-hover); transform: none; }
         .detail-sub { color: var(--fg-muted); font-size: 0.9rem; margin-bottom: 18px; }
         .week-filter {
             display: flex;
@@ -303,7 +536,7 @@
         }
         .quote-card {
             border: 1px solid var(--border-soft);
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 14px 16px;
             margin-bottom: 14px;
             background: var(--surface-alt);
@@ -318,17 +551,6 @@
             margin-bottom: 8px;
         }
         .quote-meta .matchup { font-weight: bold; color: var(--heading); }
-        .score-badge {
-            display: inline-block;
-            padding: 2px 10px;
-            border-radius: 12px;
-            color: white;
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-        .score-3 { background-color: #27ae60; }
-        .score-1 { background-color: #e67e22; }
-        .score-0 { background-color: #c0392b; }
         .grader-badge {
             display: inline-block;
             padding: 2px 8px;
@@ -340,10 +562,8 @@
         }
         .grader-llm { background: var(--notice-info-bg); color: var(--notice-info-fg); border: 1px solid var(--notice-info-border); }
         .grader-heuristic { background: var(--notice-warn-bg); color: var(--notice-warn-fg); border: 1px solid var(--notice-warn-border); }
-        .grader-coverage { background: var(--notice-ok-bg, #e8f6ee); color: var(--notice-ok-fg, #1d7a43); border: 1px solid var(--notice-ok-border, #bfe5cf); }
-        .movement { display: inline-block; margin-left: 0.3em; font-size: 0.7rem; font-weight: bold; }
-        .movement.up { color: #1d7a43; }
-        .movement.down { color: #c0392b; }
+        .grader-coverage { background: #e8f6ee; color: #1d7a43; border: 1px solid #bfe5cf; }
+        :root[data-theme="dark"] .grader-coverage { background: #14251c; color: #7fd3a0; border-color: #27503a; }
         .quote-text {
             margin: 6px 0 10px 0;
             padding-left: 12px;
@@ -355,27 +575,39 @@
         .quote-justification summary { cursor: pointer; color: var(--link); }
         .quote-sources { font-size: 0.8rem; margin-top: 8px; color: var(--fg-muted); }
         .quote-sources a { color: var(--link); margin-right: 12px; }
+        /* --- Footer --- */
         .attribution {
-            max-width: 900px;
+            max-width: 960px;
             width: 100%;
-            box-sizing: border-box;
-            margin-top: 40px;
-            padding: 12px 18px;
+            margin: 0 auto;
+            padding: 14px 20px 26px;
             border-top: 1px solid var(--rule-soft);
             color: var(--fg-faint);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             text-align: center;
-            line-height: 1.5;
+            line-height: 1.55;
+        }
+        .attribution a { color: var(--link); }
+        /* F7: visible keyboard focus for every interactive element. */
+        button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible,
+        .leaderboard-row:focus-visible, summary:focus-visible, .tab:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
         }
         /* --- F3: responsive layout. Under 700px the leaderboard becomes
-           a card list (one coach per cards) and the pending table scrolls
+           a card list (one coach per card) and the pending table scrolls
            horizontally instead of breaking the page. */
         @media (max-width: 700px) {
-            body { padding: 12px; }
-            h1 { font-size: 1.7rem; }
-            .description { font-size: 1rem; }
-            .controls { flex-direction: column; width: 100%; max-width: 900px; box-sizing: border-box; }
-            .search-bar { flex-wrap: wrap; }
+            .site-header { padding: 18px 14px 0; }
+            .header-inner { flex-wrap: wrap; }
+            .brand h1 { font-size: 1.3rem; }
+            .brand-trophy { width: 44px; height: 44px; flex-basis: 44px; font-size: 1.4rem; }
+            .tabs { overflow-x: auto; }
+            .tab { padding: 9px 14px 11px; font-size: 14px; white-space: nowrap; }
+            .main { padding: 16px 14px 36px; }
+            .mode-box { flex-direction: column; align-items: stretch; }
+            .mode-switch { align-self: stretch; }
+            .mode-btn { flex: 1; }
             #leaderboard-table thead { display: none; }
             #leaderboard-table, #leaderboard-table tbody { display: block; }
             tr.leaderboard-row {
@@ -392,15 +624,17 @@
                 display: block;
                 border: none;
                 padding: 0;
+                overflow: visible;
             }
-            td.pos-col { width: auto; min-width: 24px; font-size: 0.9rem; }
-            td.team-cell { flex: 1; min-width: 0; gap: 10px; }
-            .team-logo { flex: 0 0 36px; width: 36px; height: 36px; }
-            .team-icon { width: 32px; height: 32px; }
-            td.gp-col { width: auto; font-size: 0.8rem; }
-            td.pts-col { width: auto; font-size: 1rem; }
-            td.ha-col { width: auto; font-size: 0.8rem; }
-            .pending-section .table-container { overflow-x: auto; }
+            td.pos-col { width: auto; min-width: 38px; flex: 0 0 auto; }
+            td.coach-col { flex: 1; min-width: 0; }
+            .team-logo { flex: 0 0 34px; width: 34px; height: 34px; }
+            .team-icon { width: 30px; height: 30px; }
+            td.gp-col { width: auto; font-size: 0.8rem; flex: 0 0 auto; }
+            td.pts-col { width: auto; flex: 0 0 auto; }
+            td.ha-col { display: none; }
+            .pts-bar { top: 4px; bottom: 4px; }
+            .about-card { padding: 18px; }
             .quote-meta { gap: 6px; }
             .detail-panel { padding: 14px; }
         }
@@ -408,512 +642,670 @@
 </head>
 <body>
 
-    <h1>🏆 Respect Rank: La Liga</h1>
-    <div class="description">
-        Ranking football managers based on their respect for referees during post-game interviews.
-    </div>
-
-    <div class="controls">
-        <button id="btn-separate" class="active" aria-pressed="true" onclick="loadLeaderboard('separate')">Separate Mode</button>
-        <button id="btn-competitive" aria-pressed="false" onclick="loadLeaderboard('competitive')">Competitive Mode</button>
+<header class="site-header">
+    <div class="header-inner">
+        <div class="brand">
+            <div class="brand-trophy" aria-hidden="true">🏆</div>
+            <div>
+                <h1>Respect Rank</h1>
+                <p class="brand-sub">La Liga managers · respect for referees</p>
+            </div>
+        </div>
         <button id="btn-theme" aria-pressed="false" onclick="toggleTheme()">🌙 Dark mode</button>
     </div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+        <button class="tab active" id="tab-ranking" role="tab" aria-selected="true" aria-controls="view-ranking" onclick="switchTab('ranking')">Ranking</button>
+        <button class="tab" id="tab-coverage" role="tab" aria-selected="false" aria-controls="view-coverage" onclick="switchTab('coverage')">Coverage<span id="coverage-badge" class="tab-badge" hidden></span></button>
+        <button class="tab" id="tab-about" role="tab" aria-selected="false" aria-controls="view-about" onclick="switchTab('about')">About</button>
+    </nav>
+</header>
 
-    <div class="search-bar" role="search">
-        <label for="coach-search">Filter:</label>
-        <input id="coach-search" type="search" placeholder="Coach or team, e.g. Ancelotti, Barcelona…"
-               autocomplete="off" oninput="onSearchInput(this.value)">
-    </div>
+<main class="main">
 
-    <div id="updated-banner" class="updated-banner" role="status"></div>
+    <!-- ======================= RANKING ======================= -->
+    <section id="view-ranking" role="tabpanel" aria-labelledby="tab-ranking">
+        <div class="mode-box">
+            <div class="mode-switch" role="group" aria-label="Ranking mode">
+                <button id="btn-separate" class="mode-btn active" aria-pressed="true" onclick="loadLeaderboard('separate')">Season Total</button>
+                <button id="btn-competitive" class="mode-btn" aria-pressed="false" onclick="loadLeaderboard('competitive')">Head-to-Head</button>
+            </div>
+            <p id="mode-explainer" class="mode-explainer"></p>
+        </div>
 
-    <div class="table-container">
-        <table id="leaderboard-table">
-            <thead>
-                <tr>
-                    <th class="pos-col" scope="col">Pos</th>
-                    <th class="team-cell" scope="col">Coach & Team</th>
-                    <th class="gp-col" scope="col">GP</th>
-                    <th id="th-homeaway" class="ha-col" scope="col" title="Points earned in home games / away games">Home/Away</th>
-                    <th class="pts-col" scope="col">Points</th>
-                </tr>
-            </thead>
-            <tbody id="leaderboard-body">
-                <!-- Data will be injected here -->
-            </tbody>
-        </table>
-    </div>
+        <div class="toolbar">
+            <div class="search-bar" role="search">
+                <span class="search-icon" aria-hidden="true">🔍</span>
+                <label class="sr-only" for="coach-search" style="position:absolute;left:-9999px;">Filter coaches or teams</label>
+                <input id="coach-search" type="search" placeholder="Filter by coach or team, e.g. Ancelotti, Barcelona…"
+                       autocomplete="off" oninput="onSearchInput(this.value)">
+            </div>
+            <div id="updated-banner" class="updated-banner" role="status"></div>
+        </div>
 
-    <div id="coach-detail" class="detail-panel" hidden></div>
-
-    <div id="grading-notice" class="notice warning"></div>
-    <div id="pending-summary" class="notice info"></div>
-
-    <div class="pending-section" id="pending-section" style="display: none;">
-        <h2>Pending collection (will be retried)</h2>
         <div class="table-container">
-            <table class="pending-table">
+            <table id="leaderboard-table">
                 <thead>
                     <tr>
-                        <th>Game</th>
-                        <th>Date</th>
-                        <th>Coach</th>
-                        <th>Reason</th>
-                        <th>Attempts</th>
+                        <th class="pos-col" scope="col">Pos</th>
+                        <th class="coach-col" scope="col">Coach &amp; Team</th>
+                        <th class="gp-col" scope="col" title="Games played">GP</th>
+                        <th id="th-homeaway" class="ha-col" scope="col" title="Points earned in home games / away games">Home/Away</th>
+                        <th class="pts-col" scope="col">Points</th>
                     </tr>
                 </thead>
-                <tbody id="pending-body"></tbody>
+                <tbody id="leaderboard-body">
+                    <!-- Data will be injected here -->
+                </tbody>
             </table>
         </div>
-    </div>
 
-    <footer class="attribution">
-        Quotes are reproduced verbatim from the linked publisher articles and remain the property
-        of their respective publishers. This leaderboard is generated by an automated system:
-        quotes may be misattributed and scores are subjective. Games where a coach made no
-        referee-related comment count as respectful silence (3 points). Click a row for per-game detail.
-    </footer>
+        <div id="coach-detail" class="detail-panel" hidden></div>
 
-    <script>
-        'use strict';
+        <div id="grading-notice" class="notice warning"></div>
+    </section>
 
-        // All remote data, loaded once and cached.
-        const DATA = { teams: [], comments: [], games: [], pending: [], seasonStart: null };
-        const MAX_ATTEMPTS = 5;
-        // Current UI state: shown mode, fetched entries, search filter.
-        const STATE = { mode: 'separate', entries: [], filter: '', movement: null };
+    <!-- ======================= COVERAGE ======================= -->
+    <section id="view-coverage" role="tabpanel" aria-labelledby="tab-coverage" hidden>
+        <h2 class="section-title">Collection status</h2>
+        <p class="section-intro">
+            How much of the season has been searched for referee-related press quotes, and
+            which coach/game pairs are still pending. Pending pairs are retried automatically
+            on every weekly run.
+        </p>
 
-        // --- XSS hardening (F2): every dynamic value goes through esc()
-        // before being placed in an innerHTML template, and every URL is
-        // validated by safeUrl() before being used in an attribute.
-        function esc(value) {
-            return String(value ?? '').replace(/[&<>"']/g, ch => ({
-                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-            }[ch]));
+        <div class="stat-chips">
+            <div class="stat-chip"><span class="num" id="stat-games">–</span><label>games tracked</label></div>
+            <div class="stat-chip"><span class="num" id="stat-quotes">–</span><label>quotes collected</label></div>
+            <div class="stat-chip"><span class="num" id="stat-silence">–</span><label>resolved as silence</label></div>
+            <div class="stat-chip accent"><span class="num" id="stat-pending">–</span><label>pending collection</label></div>
+        </div>
+
+        <div id="pending-summary" class="notice info"></div>
+
+        <div class="pending-section" id="pending-section" style="display: none;">
+            <div class="table-container">
+                <table class="pending-table">
+                    <thead>
+                        <tr>
+                            <th>Game</th>
+                            <th>Date</th>
+                            <th>Coach</th>
+                            <th>Reason</th>
+                            <th>Attempts</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pending-body"></tbody>
+                </table>
+            </div>
+            <p class="pending-note">
+                Entries whose retries were exhausted stay listed until a full run resolves them
+                (seek-then-presume): after the search window passes with no referee-related
+                coverage found anywhere, the game is presumed respectful silence.
+            </p>
+        </div>
+    </section>
+
+    <!-- ======================= ABOUT ======================= -->
+    <section id="view-about" role="tabpanel" aria-labelledby="tab-about" hidden>
+        <div class="about-card">
+            <h3>What is this?</h3>
+            <p>
+                Respect Rank tracks how La Liga managers behave towards referees in
+                post-match press quotes. Every game, each coach's comments are collected from
+                public press coverage, quoted verbatim with a link to the publisher, and
+                graded for respect.
+            </p>
+
+            <h3>Scoring</h3>
+            <div class="scale-row">
+                <span class="score-badge score-3">3 · Respectful</span>
+                <span class="score-badge score-1">1 · Neutral</span>
+                <span class="score-badge score-0">0 · Disrespectful</span>
+                <span class="score-badge" style="background-color:#5c6b7a;">3 · Respectful silence</span>
+            </div>
+            <ul>
+                <li>Quotes are graded by an LLM against the referee-related comment; a
+                    low-confidence heuristic fallback marks the row when the LLM is unavailable.</li>
+                <li>A game where the coach spoke to the press but never mentioned the referee
+                    counts as <strong>confirmed respectful silence</strong> (3 points).</li>
+                <li>If no coverage at all can be found within the search window, the game is
+                    <strong>presumed respectful silence</strong> (3 points) — the burden of proof
+                    is on finding disrespect, not on proving innocence.</li>
+            </ul>
+
+            <h3>The two rankings</h3>
+            <p><strong>Season Total</strong> — each coach accumulates points from every game
+                they coached (including 3-point silences). This is the pure measure of
+                respectfulness across the season; a coach switching clubs mid-season gets one
+                row per club.</p>
+            <p><strong>Head-to-Head</strong> — every game becomes a duel between the two
+                coaches on the touchline that day: the more respectful of the two takes 3
+                points and the other 0, and a tie gives 1 point each. It reads like a league
+                table built from respect instead of goals, and rewards showing up your
+                counterpart.</p>
+
+            <h3>Limitations</h3>
+            <ul>
+                <li>This leaderboard is generated by an automated system: quotes may be
+                    misattributed and scores are subjective.</li>
+                <li>Press coverage in Spanish sport media is the only source; a comment not
+                    reported anywhere is invisible to the system.</li>
+                <li>Click any row in the Ranking tab to see the underlying quotes, scores and
+                    sources, and judge for yourself.</li>
+            </ul>
+
+            <h3>Data &amp; licensing</h3>
+            <p class="muted">
+                Quotes are reproduced verbatim from the linked publisher articles and remain
+                the property of their respective publishers. Team badges are generated
+                initials, not club crests. The collection pipeline and this site are open
+                source: <a href="https://github.com/dariogarcia/la_liga_respect" target="_blank" rel="noopener noreferrer">dariogarcia/la_liga_respect</a>.
+            </p>
+        </div>
+    </section>
+
+</main>
+
+<footer class="attribution">
+    Quotes are reproduced verbatim from the linked publisher articles and remain the property
+    of their respective publishers. Automated system: quotes may be misattributed, scores are
+    subjective, and games without a referee-related comment count as respectful silence
+    (3 points). Click a row for per-game detail ·
+    <a href="#" onclick="switchTab('about'); return false;">About the methodology</a>
+</footer>
+
+<script>
+    'use strict';
+
+    // All remote data, loaded once and cached.
+    const DATA = { teams: [], comments: [], games: [], pending: [], seasonStart: null };
+    const MAX_ATTEMPTS = 5;
+    // Current UI state: shown mode, fetched entries, search filter.
+    const STATE = { mode: 'separate', entries: [], filter: '', movement: null };
+
+    // Human labels + one-line explanation per ranking mode. The data
+    // files keep the historical keys ('separate' / 'competitive'); only
+    // the presentation is renamed.
+    const MODE_INFO = {
+        separate: {
+            blurb: '<strong>Season Total</strong> — each coach accumulates respect points from every game '
+                 + '(3 respectful · 1 neutral · 0 disrespectful; no referee comment counts as respectful '
+                 + 'silence). The pure season-long measure of respectfulness.',
+        },
+        competitive: {
+            blurb: '<strong>Head-to-Head</strong> — each game is a duel between the two coaches: the more '
+                 + 'respectful one takes 3 points, the other 0, a tie gives 1 each. A league table built '
+                 + 'from respect instead of goals.',
+        },
+    };
+
+    // --- XSS hardening (F2): every dynamic value goes through esc()
+    // before being placed in an innerHTML template, and every URL is
+    // validated by safeUrl() before being used in an attribute.
+    function esc(value) {
+        return String(value ?? '').replace(/[&<>"']/g, ch => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[ch]));
+    }
+
+    function safeUrl(url) {
+        const s = String(url || '');
+        return /^https?:\/\//i.test(s) ? s : null;
+    }
+
+    // F6: diacritic-insensitive, case-insensitive matching so
+    // "almeria" finds "Almería" and "alaves" finds "Alavés".
+    function norm(value) {
+        return String(value || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase();
+    }
+
+    function logoFor(teamData) {
+        return safeUrl(teamData && teamData.logo) || 'assets/teams/default.svg';
+    }
+
+    // --- E3: the previous coach is derived from coach_history, not
+    // from the legacy previous_coach field. It is only shown when the
+    // tenure ended during the tracked season (a mid-season change);
+    // a coach who left before the season started is irrelevant noise.
+    function previousCoachLabel(teamData) {
+        const history = (teamData && teamData.coach_history) || [];
+        if (!history.length || !DATA.seasonStart) return '';
+        let latest = null;
+        for (const h of history) {
+            if (h && h.coach && h.until && (!latest || h.until > latest.until)) latest = h;
+        }
+        if (!latest || latest.until < DATA.seasonStart) return '';
+        return ` <span class="prev-coach">(prev: ${esc(latest.coach)})</span>`;
+    }
+
+    async function ensureData() {
+        if (DATA._loaded) return;
+        const [teamsRes, commentsRes, gamesRes, pendingRes] = await Promise.all([
+            fetch('data/teams.json'),
+            fetch('data/comments.json'),
+            fetch('data/games.json'),
+            fetch('data/pending_requests.json'),
+        ]);
+        DATA.teams = await teamsRes.json();
+        DATA.comments = await commentsRes.json();
+        DATA.games = await gamesRes.json();
+        DATA.pending = await pendingRes.json();
+        const dates = DATA.games.map(g => g.date).filter(Boolean).sort();
+        DATA.seasonStart = dates.length ? dates[0] : null;
+        DATA._loaded = true;
+    }
+
+    // --- Section tabs: ranking stays the default view; the pending
+    // collection list lives in the Coverage tab so the main page stays
+    // clean, with a badge showing the pending count.
+    function switchTab(name) {
+        for (const t of ['ranking', 'coverage', 'about']) {
+            const view = document.getElementById('view-' + t);
+            const tab = document.getElementById('tab-' + t);
+            view.hidden = t !== name;
+            tab.classList.toggle('active', t === name);
+            tab.setAttribute('aria-selected', String(t === name));
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // F8: "data last updated" banner from the run report written by
+    // each pipeline run. Missing file (older runs) is not an error.
+    async function loadRunReport() {
+        try {
+            const res = await fetch('data/run_report.json');
+            if (!res.ok) return;
+            const report = await res.json();
+            if (!report || !report.generated_at) return;
+            const when = new Date(report.generated_at);
+            const banner = document.getElementById('updated-banner');
+            let text = `Updated: ${isNaN(when) ? esc(report.generated_at) : when.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}`;
+            if (report.since_used) text += ` · games since ${esc(report.since_used)}`;
+            banner.textContent = text;
+            banner.style.display = 'block';
+        } catch (e) {
+            /* run_report.json is optional: stay silent */
+        }
+    }
+
+    function renderLeaderboard() {
+        const body = document.getElementById('leaderboard-body');
+        body.innerHTML = '';
+        const filter = norm(STATE.filter);
+
+        const shown = STATE.entries.filter(entry => {
+            if (!filter) return true;
+            const teamData = DATA.teams.find(t => t.coach === entry.coach);
+            const teamName = teamData ? teamData.team : '';
+            return norm(entry.coach).includes(filter) || norm(teamName).includes(filter);
+        });
+
+        // E2: Home/Away split column only when the leaderboard
+        // actually carries it (older generated files do not).
+        const hasSplit = STATE.entries.some(e => 'home_points' in e);
+        document.getElementById('th-homeaway').style.display = hasSplit ? '' : 'none';
+
+        if (!shown.length) {
+            const row = document.createElement('tr');
+            row.className = 'no-match';
+            row.innerHTML = `<td colspan="5">No coach or team matches “${esc(STATE.filter)}”.</td>`;
+            body.appendChild(row);
+            return;
         }
 
-        function safeUrl(url) {
-            const s = String(url || '');
-            return /^https?:\/\//i.test(s) ? s : null;
-        }
+        const maxPoints = Math.max(...STATE.entries.map(e => Number(e.points) || 0), 1);
 
-        // F6: diacritic-insensitive, case-insensitive matching so
-        // "almeria" finds "Almería" and "alaves" finds "Alavés".
-        function norm(value) {
-            return String(value || '')
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .toLowerCase();
-        }
+        shown.forEach((entry, index) => {
+            const teamData = DATA.teams.find(t => t.coach === entry.coach);
+            const teamName = entry.team || (teamData ? teamData.team : 'Unknown Team');
+            const logoUrl = logoFor(teamData);
+            const homeAway = hasSplit
+                ? `<td class="ha-col" title="Home / Away points">${Number(entry.home_points) || 0}<span class="ha-sep">/</span>${Number(entry.away_points) || 0}</td>`
+                : '';
+            const mvKey = entry.coach + '|' + (entry.team || teamName);
+            const mv = (STATE.movement && STATE.mode === 'separate')
+                ? STATE.movement[mvKey] : undefined;
+            const mvHtml = (mv === undefined || mv === 0)
+                ? ''
+                : `<span class="movement ${mv > 0 ? 'up' : 'down'}" title="Moved ${mv > 0 ? 'up' : 'down'} ${Math.abs(mv)} place${Math.abs(mv) === 1 ? '' : 's'} since the previous run">${mv > 0 ? '▲' : '▼'}${Math.abs(mv)}</span>`;
 
-        function logoFor(teamData) {
-            return safeUrl(teamData && teamData.logo) || 'assets/teams/default.svg';
-        }
+            const points = Number(entry.points) || 0;
+            const barPct = Math.round((points / maxPoints) * 100);
 
-        // --- E3: the previous coach is derived from coach_history, not
-        // from the legacy previous_coach field. It is only shown when the
-        // tenure ended during the tracked season (a mid-season change);
-        // a coach who left before the season started is irrelevant noise.
-        function previousCoachLabel(teamData) {
-            const history = (teamData && teamData.coach_history) || [];
-            if (!history.length || !DATA.seasonStart) return '';
-            let latest = null;
-            for (const h of history) {
-                if (h && h.coach && h.until && (!latest || h.until > latest.until)) latest = h;
-            }
-            if (!latest || latest.until < DATA.seasonStart) return '';
-            return ` <span style="font-style: italic; opacity: 0.8;">(Prev: ${esc(latest.coach)})</span>`;
-        }
-
-        async function ensureData() {
-            if (DATA._loaded) return;
-            const [teamsRes, commentsRes, gamesRes, pendingRes] = await Promise.all([
-                fetch('data/teams.json'),
-                fetch('data/comments.json'),
-                fetch('data/games.json'),
-                fetch('data/pending_requests.json'),
-            ]);
-            DATA.teams = await teamsRes.json();
-            DATA.comments = await commentsRes.json();
-            DATA.games = await gamesRes.json();
-            DATA.pending = await pendingRes.json();
-            const dates = DATA.games.map(g => g.date).filter(Boolean).sort();
-            DATA.seasonStart = dates.length ? dates[0] : null;
-            DATA._loaded = true;
-        }
-
-        // F8: "data last updated" banner from the run report written by
-        // each pipeline run. Missing file (older runs) is not an error.
-        async function loadRunReport() {
-            try {
-                const res = await fetch('data/run_report.json');
-                if (!res.ok) return;
-                const report = await res.json();
-                if (!report || !report.generated_at) return;
-                const when = new Date(report.generated_at);
-                const banner = document.getElementById('updated-banner');
-                let text = `Data last updated: ${isNaN(when) ? esc(report.generated_at) : when.toLocaleString()}`;
-                if (report.since_used) text += ` · covering games since ${esc(report.since_used)}`;
-                banner.textContent = text;
-                banner.style.display = 'block';
-            } catch (e) {
-                /* run_report.json is optional: stay silent */
-            }
-        }
-
-        function renderLeaderboard() {
-            const body = document.getElementById('leaderboard-body');
-            body.innerHTML = '';
-            const filter = norm(STATE.filter);
-
-            const shown = STATE.entries.filter(entry => {
-                if (!filter) return true;
-                const teamData = DATA.teams.find(t => t.coach === entry.coach);
-                const teamName = teamData ? teamData.team : '';
-                return norm(entry.coach).includes(filter) || norm(teamName).includes(filter);
-            });
-
-            // E2: Home/Away split column only when the leaderboard
-            // actually carries it (older generated files do not).
-            const hasSplit = STATE.entries.some(e => 'home_points' in e);
-            document.getElementById('th-homeaway').style.display = hasSplit ? '' : 'none';
-
-            if (!shown.length) {
-                const row = document.createElement('tr');
-                row.className = 'no-match';
-                row.innerHTML = `<td colspan="5">No coach or team matches “${esc(STATE.filter)}”.</td>`;
-                body.appendChild(row);
-                return;
-            }
-
-            shown.forEach((entry, index) => {
-                const teamData = DATA.teams.find(t => t.coach === entry.coach);
-                const teamName = teamData ? teamData.team : 'Unknown Team';
-                const logoUrl = logoFor(teamData);
-                const homeAway = hasSplit
-                    ? `<td class="ha-col" title="Home / Away points">${Number(entry.home_points) || 0} / ${Number(entry.away_points) || 0}</td>`
-                    : '';
-                const mvKey = entry.coach + '|' + (entry.team || teamName);
-                const mv = (STATE.movement && STATE.mode === 'separate')
-                    ? STATE.movement[mvKey] : undefined;
-                const mvHtml = (mv === undefined || mv === 0)
-                    ? ''
-                    : `<span class="movement ${mv > 0 ? 'up' : 'down'}" title="Moved ${mv > 0 ? 'up' : 'down'} ${Math.abs(mv)} place${Math.abs(mv) === 1 ? '' : 's'} since the previous run">${mv > 0 ? '▲' : '▼'}${Math.abs(mv)}</span>`;
-
-                const row = document.createElement('tr');
-                row.className = 'leaderboard-row';
-                row.tabIndex = 0;
-                row.setAttribute('role', 'button');
-                row.setAttribute('aria-label', `Show quotes for ${teamName} coach ${entry.coach}`);
-                row.innerHTML = `
-                    <td class="pos-col">${index + 1}${mvHtml}</td>
-                    <td class="team-cell">
+            const row = document.createElement('tr');
+            row.className = 'leaderboard-row';
+            row.tabIndex = 0;
+            row.setAttribute('role', 'button');
+            row.setAttribute('aria-label', `Show quotes for ${teamName} coach ${entry.coach}`);
+            row.innerHTML = `
+                <td class="pos-col"><span class="pos-badge">${index + 1}</span>${mvHtml}</td>
+                <td class="coach-col">
+                    <div class="team-cell">
                         <div class="team-logo">
                             <img src="${esc(logoUrl)}" class="team-icon" alt="${esc(teamName)} logo" loading="lazy"
                                  onerror="this.onerror=null; this.src='assets/teams/default.svg';">
                         </div>
-                        <div>
-                            <div style="font-weight: bold;">${esc(teamName)}</div>
-                            <div style="font-size: 0.8rem; color: var(--fg-muted);">${esc(entry.coach)}${previousCoachLabel(teamData)}</div>
+                        <div class="coach-line">
+                            <div class="coach-name" title="${esc(entry.coach)}">${esc(entry.coach)}</div>
+                            <div class="coach-team" title="${esc(teamName)}">${esc(teamName)}${previousCoachLabel(teamData)}</div>
                             ${coverageLine(entry.coach)}
                         </div>
-                    </td>
-                    <td class="gp-col">${Number(entry.games_played) || 0}</td>
-                    ${homeAway}
-                    <td class="pts-col">${Number(entry.points) || 0}</td>
-                `;
-                const activate = () => showCoachDetail(entry.coach);
-                row.addEventListener('click', activate);
-                row.addEventListener('keydown', e => {
-                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
-                });
-                body.appendChild(row);
+                    </div>
+                </td>
+                <td class="gp-col" title="Games played">${Number(entry.games_played) || 0}</td>
+                ${homeAway}
+                <td class="pts-col">
+                    <div class="pts-cell">
+                        <div class="pts-bar" style="width: calc(${barPct}% - 12px);"></div>
+                        <span class="pts-num">${points}</span>
+                    </div>
+                </td>
+            `;
+            const activate = () => showCoachDetail(entry.coach);
+            row.addEventListener('click', activate);
+            row.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
             });
-        }
+            body.appendChild(row);
+        });
+    }
 
-        function onSearchInput(value) {
-            STATE.filter = value;
-            renderLeaderboard();
-        }
+    function onSearchInput(value) {
+        STATE.filter = value;
+        renderLeaderboard();
+    }
 
-        // U1: per-coach coverage transparency — how many of this row's
-        // games produced referee quotes vs resolved as respectful
-        // silence (confirmed coverage vs presumed after the window).
-        function coverageFor(coach) {
-            const cs = DATA.comments.filter(c => c.coach === coach);
-            const quotes = cs.filter(c => !c.no_ref_comment).length;
-            const clean = cs.filter(c => c.no_ref_comment).length;
-            const presumed = cs.filter(c => c.no_ref_comment && c.kind === 'presumed').length;
-            return { quotes, clean, presumed, confirmed: clean - presumed };
-        }
+    // U1: per-coach coverage transparency — how many of this row's
+    // games produced referee quotes vs resolved as respectful
+    // silence (confirmed coverage vs presumed after the window).
+    function coverageFor(coach) {
+        const cs = DATA.comments.filter(c => c.coach === coach);
+        const quotes = cs.filter(c => !c.no_ref_comment).length;
+        const clean = cs.filter(c => c.no_ref_comment).length;
+        const presumed = cs.filter(c => c.no_ref_comment && c.kind === 'presumed').length;
+        return { quotes, clean, presumed, confirmed: clean - presumed };
+    }
 
-        function coverageLine(coach) {
-            const cov = coverageFor(coach);
-            if (!cov.quotes && !cov.clean) return '';
-            const parts = [`${cov.quotes} quote${cov.quotes === 1 ? '' : 's'}`];
-            if (cov.clean) {
-                parts.push(`${cov.clean} no-ref (${cov.presumed} presumed)`);
-            }
-            return `<div title="Referee-related quotes found vs games resolved without a referee comment (presumed = nothing found within the 14-day window)" ` +
-                   `style="font-size: 0.72rem; color: var(--fg-muted);">${parts.join(' · ')}</div>`;
+    function coverageLine(coach) {
+        const cov = coverageFor(coach);
+        if (!cov.quotes && !cov.clean) return '';
+        const parts = [`${cov.quotes} quote${cov.quotes === 1 ? '' : 's'}`];
+        if (cov.clean) {
+            parts.push(`${cov.clean} no-ref (${cov.presumed} presumed)`);
         }
+        return `<div title="Referee-related quotes found vs games resolved without a referee comment (presumed = nothing found within the 14-day window)" `
+             + `style="font-size: 0.72rem; color: var(--fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${parts.join(' · ')}</div>`;
+    }
 
-        // F5: position movement between the last two recorded runs.
-        // Reads data/history/runs.jsonl (one run per line); older lines
-        // without leaderboard snapshots are skipped gracefully.
-        async function loadMovement() {
-            STATE.movement = {};
-            try {
-                const res = await fetch('data/history/runs.jsonl');
-                if (!res.ok) return;
-                const text = await res.text();
-                const runs = text.split('\n')
-                    .filter(line => line.trim())
-                    .map(line => { try { return JSON.parse(line); } catch (e) { return null; } })
-                    .filter(r => r && r.leaderboards && Array.isArray(r.leaderboards.separate));
-                if (runs.length < 2) return;
-                const posOf = lb => {
-                    const m = {};
-                    lb.forEach((row, i) => { m[row.coach + '|' + row.team] = i + 1; });
-                    return m;
-                };
-                const prev = posOf(runs[runs.length - 2].leaderboards.separate);
-                const now = posOf(runs[runs.length - 1].leaderboards.separate);
-                const mv = {};
-                for (const key of Object.keys(now)) {
-                    if (prev[key] !== undefined && prev[key] !== now[key]) {
-                        mv[key] = prev[key] - now[key];
-                    }
+    // F5: position movement between the last two recorded runs.
+    // Reads data/history/runs.jsonl (one run per line); older lines
+    // without leaderboard snapshots are skipped gracefully.
+    async function loadMovement() {
+        STATE.movement = {};
+        try {
+            const res = await fetch('data/history/runs.jsonl');
+            if (!res.ok) return;
+            const text = await res.text();
+            const runs = text.split('\n')
+                .filter(line => line.trim())
+                .map(line => { try { return JSON.parse(line); } catch (e) { return null; } })
+                .filter(r => r && r.leaderboards && Array.isArray(r.leaderboards.separate));
+            if (runs.length < 2) return;
+            const posOf = lb => {
+                const m = {};
+                lb.forEach((row, i) => { m[row.coach + '|' + row.team] = i + 1; });
+                return m;
+            };
+            const prev = posOf(runs[runs.length - 2].leaderboards.separate);
+            const now = posOf(runs[runs.length - 1].leaderboards.separate);
+            const mv = {};
+            for (const key of Object.keys(now)) {
+                if (prev[key] !== undefined && prev[key] !== now[key]) {
+                    mv[key] = prev[key] - now[key];
                 }
-                STATE.movement = mv;
-            } catch (e) {
-                /* history is optional: arrows simply stay hidden */
             }
+            STATE.movement = mv;
+        } catch (e) {
+            /* history is optional: arrows simply stay hidden */
+        }
+    }
+
+    async function loadLeaderboard(mode) {
+        try {
+            await ensureData();
+            const leaderboard = await (await fetch(
+                mode === 'separate' ? 'data/leaderboard.json' : 'data/leaderboard_competitive.json'
+            )).json();
+
+            STATE.mode = mode;
+            STATE.entries = leaderboard;
+            renderLeaderboard();
+
+            const btnSep = document.getElementById('btn-separate');
+            const btnComp = document.getElementById('btn-competitive');
+            btnSep.classList.toggle('active', mode === 'separate');
+            btnComp.classList.toggle('active', mode === 'competitive');
+            btnSep.setAttribute('aria-pressed', String(mode === 'separate'));
+            btnComp.setAttribute('aria-pressed', String(mode === 'competitive'));
+            document.getElementById('mode-explainer').innerHTML = MODE_INFO[mode].blurb;
+        } catch (e) {
+            console.error('Error loading data:', e);
+        }
+    }
+
+    // F7: light/dark toggle. The initial theme is applied by the
+    // inline <head> script; this persists explicit user choices.
+    function toggleTheme() {
+        const root = document.documentElement;
+        const dark = root.dataset.theme !== 'dark';
+        root.dataset.theme = dark ? 'dark' : 'light';
+        try { localStorage.setItem('rr-theme', dark ? 'dark' : 'light'); } catch (e) { /* ignore */ }
+        syncThemeButton();
+    }
+
+    function syncThemeButton() {
+        const dark = document.documentElement.dataset.theme === 'dark';
+        const btn = document.getElementById('btn-theme');
+        btn.textContent = dark ? '☀️ Light mode' : '🌙 Dark mode';
+        btn.setAttribute('aria-pressed', String(dark));
+    }
+
+    // --- F4: per-coach drill-down. Shows every collected quote with
+    // its game, score, grader, justification and source links (C4).
+    function scoreBadge(score) {
+        const labels = { 3: 'Respectful', 1: 'Neutral', 0: 'Disrespectful' };
+        const s = [0, 1, 3].includes(Number(score)) ? Number(score) : null;
+        if (s === null) return '<span class="score-badge" style="background:#888;">?</span>';
+        return `<span class="score-badge score-${s}" title="Score ${s} of 3">${s} · ${labels[s]}</span>`;
+    }
+
+    function graderBadge(gradedBy) {
+        if (gradedBy === 'llm') return '<span class="grader-badge grader-llm">LLM</span>';
+        if (gradedBy === 'heuristic') return '<span class="grader-badge grader-heuristic">Heuristic</span>';
+        if (gradedBy === 'coverage') return '<span class="grader-badge grader-coverage">No ref comment</span>';
+        return '';
+    }
+
+    function sourceLinks(comment) {
+        const urls = (comment.sources && comment.sources.length
+            ? comment.sources
+            : [comment.source_url]).filter(Boolean);
+        const links = urls.map(u => {
+            const safe = safeUrl(u);
+            if (!safe) return '';
+            let host = 'source';
+            try { host = new URL(safe).hostname.replace(/^www\./, ''); } catch (e) { /* keep default */ }
+            return `<a href="${esc(safe)}" target="_blank" rel="noopener noreferrer">${esc(host)}</a>`;
+        }).filter(Boolean);
+        if (!links.length) return '<div class="quote-sources">Source: not recorded</div>';
+        const pub = comment.published_at ? ` · published ${esc(comment.published_at.slice(0, 10))}` : '';
+        return `<div class="quote-sources">Source: ${links.join('')}${pub}</div>`;
+    }
+
+    function quoteCardDate(c, game) {
+        return game ? game.date : (c.published_at || '').slice(0, 10) || 'unknown date';
+    }
+
+    function showCoachDetail(coach) {
+        const panel = document.getElementById('coach-detail');
+        const teamData = DATA.teams.find(t => t.coach === coach);
+        const teamName = teamData ? teamData.team : 'Unknown Team';
+        const comments = DATA.comments
+            .filter(c => c.coach === coach)
+            .map(c => {
+                const game = DATA.games.find(g => g.game_id === c.game_id);
+                return { c, game };
+            })
+            .sort((a, b) => (b.game && b.game.date || '').localeCompare(a.game && a.game.date || ''));
+
+        const pendingForCoach = DATA.pending.filter(
+            p => p.coach === coach && (p.attempts || 0) < MAX_ATTEMPTS && !p.terminal
+        );
+
+        // F6: per-week (matchday) filter for this coach's quotes.
+        let weekFilter = '';
+        if (comments.length > 1) {
+            const weeks = [...new Set(comments.map(({ c, game }) => quoteCardDate(c, game)))].sort().reverse();
+            weekFilter = `
+                <div class="week-filter">
+                    <label for="week-select">Show quotes from:</label>
+                    <select id="week-select" onchange="onWeekFilterChange(this.value)">
+                        <option value="all">All weeks (${comments.length})</option>
+                        ${weeks.map(w => `<option value="${esc(w)}">${esc(w)}</option>`).join('')}
+                    </select>
+                </div>`;
         }
 
-        async function loadLeaderboard(mode) {
-            try {
-                await ensureData();
-                const leaderboard = await (await fetch(
-                    mode === 'separate' ? 'data/leaderboard.json' : 'data/leaderboard_competitive.json'
-                )).json();
+        let cards;
+        if (!comments.length) {
+            cards = '<p>No quotes collected for this coach yet this season.</p>';
+        } else {
+            cards = comments.map(({ c, game }) => {
+                const date = quoteCardDate(c, game);
+                const matchup = game ? `${game.home_team} vs ${game.away_team}` : c.game_id;
+                const justification = c.justification
+                    ? `<details class="quote-justification"><summary>Grading justification</summary>${esc(c.justification)}</details>`
+                    : '';
+                const quoteBody = c.no_ref_comment
+                    ? `<div class="quote-text" style="font-style: italic; color: var(--fg-muted);">${
+                        c.kind === 'confirmed'
+                            ? 'The coach spoke in the match coverage but made no comment about the referee.'
+                            : 'No referee-related comment found — presumed respectful.'
+                      }</div>`
+                    : `<div class="quote-text">«${esc(c.quote)}»</div>`;
+                return `
+                    <div class="quote-card" data-date="${esc(date)}">
+                        <div class="quote-meta">
+                            <span class="matchup">${esc(matchup)}</span>
+                            <span>${esc(date)}</span>
+                            ${scoreBadge(c.score)}
+                            ${graderBadge(c.graded_by)}
+                        </div>
+                        ${quoteBody}
+                        ${justification}
+                        ${sourceLinks(c)}
+                    </div>`;
+            }).join('');
+        }
 
-                STATE.mode = mode;
-                STATE.entries = leaderboard;
-                renderLeaderboard();
+        const pendingNote = pendingForCoach.length
+            ? `<div class="notice warning" style="display: block;">${pendingForCoach.length} game(s) for this coach are still pending collection and will be retried on the next run. <a href="#" onclick="switchTab('coverage'); return false;">See coverage status</a></div>`
+            : '';
 
-                const btnSep = document.getElementById('btn-separate');
-                const btnComp = document.getElementById('btn-competitive');
-                btnSep.classList.toggle('active', mode === 'separate');
-                btnComp.classList.toggle('active', mode === 'competitive');
-                btnSep.setAttribute('aria-pressed', String(mode === 'separate'));
-                btnComp.setAttribute('aria-pressed', String(mode === 'competitive'));
-            } catch (e) {
-                console.error('Error loading data:', e);
+        panel.innerHTML = `
+            <div class="detail-header">
+                <img src="${esc(logoFor(teamData))}" alt="" onerror="this.onerror=null; this.src='assets/teams/default.svg';">
+                <h2>${esc(coach)} — ${esc(teamName)}</h2>
+                <button class="detail-close" onclick="hideCoachDetail()" aria-label="Close detail panel">Close ✕</button>
+            </div>
+            <div class="detail-sub">Quotes per game, most recent first. Click a leaderboard row to switch coach.</div>
+            ${pendingNote}
+            ${weekFilter}
+            ${cards}
+        `;
+        panel.hidden = false;
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function onWeekFilterChange(value) {
+        const panel = document.getElementById('coach-detail');
+        panel.querySelectorAll('.quote-card').forEach(card => {
+            card.style.display = (value === 'all' || card.dataset.date === value) ? '' : 'none';
+        });
+    }
+
+    function hideCoachDetail() {
+        const panel = document.getElementById('coach-detail');
+        panel.hidden = true;
+        panel.innerHTML = '';
+    }
+
+    // Data-quality banner (ranking tab) + coverage stats and the
+    // pending-collection list (coverage tab, with a tab badge).
+    async function loadNotices() {
+        try {
+            await ensureData();
+
+            const heuristic = DATA.comments.filter(c => c.graded_by === 'heuristic').length;
+            const llm = DATA.comments.filter(c => c.graded_by === 'llm').length;
+            const notice = document.getElementById('grading-notice');
+            if (heuristic > 0) {
+                notice.style.display = 'block';
+                notice.textContent = `Data quality: ${heuristic} of ${DATA.comments.length} quotes were graded by the low-confidence heuristic fallback (${llm} by LLM). Treat those scores with caution.`;
             }
-        }
 
-        // F7: light/dark toggle. The initial theme is applied by the
-        // inline <head> script; this persists explicit user choices.
-        function toggleTheme() {
-            const root = document.documentElement;
-            const dark = root.dataset.theme !== 'dark';
-            root.dataset.theme = dark ? 'dark' : 'light';
-            try { localStorage.setItem('rr-theme', dark ? 'dark' : 'light'); } catch (e) { /* ignore */ }
-            syncThemeButton();
-        }
-
-        function syncThemeButton() {
-            const dark = document.documentElement.dataset.theme === 'dark';
-            const btn = document.getElementById('btn-theme');
-            btn.textContent = dark ? '☀️ Light mode' : '🌙 Dark mode';
-            btn.setAttribute('aria-pressed', String(dark));
-        }
-
-        // --- F4: per-coach drill-down. Shows every collected quote with
-        // its game, score, grader, justification and source links (C4).
-        function scoreBadge(score) {
-            const labels = { 3: 'Respectful', 1: 'Neutral', 0: 'Disrespectful' };
-            const s = [0, 1, 3].includes(Number(score)) ? Number(score) : null;
-            if (s === null) return '<span class="score-badge" style="background:#888;">?</span>';
-            return `<span class="score-badge score-${s}" title="Score ${s} of 3">${s} · ${labels[s]}</span>`;
-        }
-
-        function graderBadge(gradedBy) {
-            if (gradedBy === 'llm') return '<span class="grader-badge grader-llm">LLM</span>';
-            if (gradedBy === 'heuristic') return '<span class="grader-badge grader-heuristic">Heuristic</span>';
-            if (gradedBy === 'coverage') return '<span class="grader-badge grader-coverage">No ref comment</span>';
-            return '';
-        }
-
-        function sourceLinks(comment) {
-            const urls = (comment.sources && comment.sources.length
-                ? comment.sources
-                : [comment.source_url]).filter(Boolean);
-            const links = urls.map(u => {
-                const safe = safeUrl(u);
-                if (!safe) return '';
-                let host = 'source';
-                try { host = new URL(safe).hostname.replace(/^www\./, ''); } catch (e) { /* keep default */ }
-                return `<a href="${esc(safe)}" target="_blank" rel="noopener noreferrer">${esc(host)}</a>`;
-            }).filter(Boolean);
-            if (!links.length) return '<div class="quote-sources">Source: not recorded</div>';
-            const pub = comment.published_at ? ` · published ${esc(comment.published_at.slice(0, 10))}` : '';
-            return `<div class="quote-sources">Source: ${links.join('')}${pub}</div>`;
-        }
-
-        function quoteCardDate(c, game) {
-            return game ? game.date : (c.published_at || '').slice(0, 10) || 'unknown date';
-        }
-
-        function showCoachDetail(coach) {
-            const panel = document.getElementById('coach-detail');
-            const teamData = DATA.teams.find(t => t.coach === coach);
-            const teamName = teamData ? teamData.team : 'Unknown Team';
-            const comments = DATA.comments
-                .filter(c => c.coach === coach)
-                .map(c => {
-                    const game = DATA.games.find(g => g.game_id === c.game_id);
-                    return { c, game };
-                })
-                .sort((a, b) => (b.game && b.game.date || '').localeCompare(a.game && a.game.date || ''));
-
-            const pendingForCoach = DATA.pending.filter(
-                p => p.coach === coach && (p.attempts || 0) < MAX_ATTEMPTS && !p.terminal
+            const silence = DATA.comments.filter(c => c.no_ref_comment).length;
+            const active = DATA.pending.filter(
+                p => (p.attempts || 0) < MAX_ATTEMPTS && !p.terminal
             );
 
-            // F6: per-week (matchday) filter for this coach's quotes.
-            let weekFilter = '';
-            if (comments.length > 1) {
-                const weeks = [...new Set(comments.map(({ c, game }) => quoteCardDate(c, game)))].sort().reverse();
-                weekFilter = `
-                    <div class="week-filter">
-                        <label for="week-select">Show quotes from:</label>
-                        <select id="week-select" onchange="onWeekFilterChange(this.value)">
-                            <option value="all">All weeks (${comments.length})</option>
-                            ${weeks.map(w => `<option value="${esc(w)}">${esc(w)}</option>`).join('')}
-                        </select>
-                    </div>`;
-            }
+            document.getElementById('stat-games').textContent = DATA.games.length;
+            document.getElementById('stat-quotes').textContent = DATA.comments.length - silence;
+            document.getElementById('stat-silence').textContent = silence;
+            document.getElementById('stat-pending').textContent = active.length;
 
-            let cards;
-            if (!comments.length) {
-                cards = '<p>No quotes collected for this coach yet this season.</p>';
+            const badge = document.getElementById('coverage-badge');
+            badge.textContent = active.length;
+            badge.hidden = active.length === 0;
+
+            const summary = document.getElementById('pending-summary');
+            const section = document.getElementById('pending-section');
+            const body = document.getElementById('pending-body');
+            body.innerHTML = '';
+            if (active.length > 0) {
+                summary.style.display = 'block';
+                summary.textContent = `Collection incomplete: ${active.length} coach/game pair(s) still pending and will be retried on the next run.`;
+                section.style.display = 'block';
+                active.forEach(p => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${esc(p.game_id)}</td>
+                        <td>${esc(p.date)}</td>
+                        <td>${esc(p.coach)}</td>
+                        <td>${esc(p.reason)}</td>
+                        <td>${Number(p.attempts) || 0}</td>
+                    `;
+                    body.appendChild(row);
+                });
             } else {
-                cards = comments.map(({ c, game }) => {
-                    const date = quoteCardDate(c, game);
-                    const matchup = game ? `${game.home_team} vs ${game.away_team}` : c.game_id;
-                    const justification = c.justification
-                        ? `<details class="quote-justification"><summary>Grading justification</summary>${esc(c.justification)}</details>`
-                        : '';
-                    const quoteBody = c.no_ref_comment
-                        ? `<div class="quote-text" style="font-style: italic; color: var(--fg-muted);">${
-                            c.kind === 'confirmed'
-                                ? 'The coach spoke in the match coverage but made no comment about the referee.'
-                                : 'No referee-related comment found — presumed respectful.'
-                          }</div>`
-                        : `<div class="quote-text">«${esc(c.quote)}»</div>`;
-                    return `
-                        <div class="quote-card" data-date="${esc(date)}">
-                            <div class="quote-meta">
-                                <span class="matchup">${esc(matchup)}</span>
-                                <span>${esc(date)}</span>
-                                ${scoreBadge(c.score)}
-                                ${graderBadge(c.graded_by)}
-                            </div>
-                            ${quoteBody}
-                            ${justification}
-                            ${sourceLinks(c)}
-                        </div>`;
-                }).join('');
+                summary.style.display = 'block';
+                summary.textContent = 'Collection is complete: no pending coach/game pairs. New games appear here after each matchday.';
             }
-
-            const pendingNote = pendingForCoach.length
-                ? `<div class="notice warning" style="display: block;">${pendingForCoach.length} game(s) for this coach are still pending collection and will be retried on the next run.</div>`
-                : '';
-
-            panel.innerHTML = `
-                <div class="detail-header">
-                    <img src="${esc(logoFor(teamData))}" alt="" onerror="this.onerror=null; this.src='assets/teams/default.svg';">
-                    <h2>${esc(coach)} — ${esc(teamName)}</h2>
-                    <button class="detail-close" onclick="hideCoachDetail()" aria-label="Close detail panel">Close ✕</button>
-                </div>
-                <div class="detail-sub">Quotes per game, most recent first. Click a leaderboard row to switch coach.</div>
-                ${pendingNote}
-                ${weekFilter}
-                ${cards}
-            `;
-            panel.hidden = false;
-            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } catch (e) {
+            console.warn('Could not load notices:', e);
         }
+    }
 
-        function onWeekFilterChange(value) {
-            const panel = document.getElementById('coach-detail');
-            panel.querySelectorAll('.quote-card').forEach(card => {
-                card.style.display = (value === 'all' || card.dataset.date === value) ? '' : 'none';
-            });
-        }
-
-        function hideCoachDetail() {
-            const panel = document.getElementById('coach-detail');
-            panel.hidden = true;
-            panel.innerHTML = '';
-        }
-
-        async function loadNotices() {
-            // Heuristic-grading warning from comments.json
-            try {
-                await ensureData();
-                const heuristic = DATA.comments.filter(c => c.graded_by === 'heuristic').length;
-                const llm = DATA.comments.filter(c => c.graded_by === 'llm').length;
-                const notice = document.getElementById('grading-notice');
-                if (heuristic > 0) {
-                    notice.style.display = 'block';
-                    notice.textContent = `Data quality: ${heuristic} of ${DATA.comments.length} quotes were graded by the low-confidence heuristic fallback (${llm} by LLM). Treat those scores with caution.`;
-                }
-            } catch (e) {
-                console.warn('Could not load comments.json:', e);
-            }
-
-            // Pending collection requests. Exhausted entries stay listed
-            // until a full run resolves them (seek-then-presume).
-            try {
-                await ensureData();
-                const active = DATA.pending.filter(
-                    p => (p.attempts || 0) < MAX_ATTEMPTS && !p.terminal
-                );
-                const summary = document.getElementById('pending-summary');
-                const section = document.getElementById('pending-section');
-                const body = document.getElementById('pending-body');
-                body.innerHTML = '';
-                if (active.length > 0) {
-                    summary.style.display = 'block';
-                    summary.textContent = `Collection incomplete: ${active.length} coach/game pair(s) still pending and will be retried on the next run.`;
-                    section.style.display = 'block';
-                    active.forEach(p => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${esc(p.game_id)}</td>
-                            <td>${esc(p.date)}</td>
-                            <td>${esc(p.coach)}</td>
-                            <td>${esc(p.reason)}</td>
-                            <td>${Number(p.attempts) || 0}</td>
-                        `;
-                        body.appendChild(row);
-                    });
-                }
-            } catch (e) {
-                console.warn('Could not load pending_requests.json:', e);
-            }
-        }
-
-        window.onload = () => {
-            syncThemeButton();
-            loadLeaderboard('separate');
-            loadNotices();
-            loadRunReport();
-            loadMovement();
-        };
-    </script>
+    window.onload = () => {
+        syncThemeButton();
+        loadLeaderboard('separate');
+        loadNotices();
+        loadRunReport();
+        loadMovement();
+    };
+</script>
 </body>
 </html>
