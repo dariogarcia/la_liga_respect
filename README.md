@@ -167,4 +167,4 @@ python3 -m unittest discover -s tests -t . -v
 - `assets/teams/`: Generated SVG badges for the web UI.
 - `data/`: JSON files (`games.json`, `teams.json`, `comments.json`, `pending_requests.json`, leaderboards).
 - `tests/`: Unit tests.
-- `docs/`: Design specifications and usage guides.
+- `docs/`: Design specifications and usage guides. See `docs/OPERATIONS.md` for the weekly runbook, env knobs, and recovery playbooks.

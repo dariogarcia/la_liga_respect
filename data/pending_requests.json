@@ -1,29 +1,5 @@
 [
   {
-    "game_id": "espn-401882877",
-    "coach": "Iñigo Pérez",
-    "date": "2026-09-14",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:50:25.552843",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882877",
-    "coach": "Manuel Pellegrini",
-    "date": "2026-09-14",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:50:54.542490",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882868",
-    "coach": "Beñat San José",
-    "date": "2026-09-15",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:51:24.527354",
-    "reason": "no_quotes_extracted"
-  },
-  {
     "game_id": "espn-401882868",
     "coach": "Manolo González",
     "date": "2026-09-15",
