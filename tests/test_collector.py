@@ -198,6 +198,70 @@ class TestCollectCommentsForCoach(unittest.TestCase):
         self.assertEqual(reason, REASON_NO_QUOTES)
 
 
+class TestBatchWiring(unittest.TestCase):
+    """T2: batched extraction happy path and fallbacks."""
+
+    def _run(self, extractor):
+        provider = FakeSearchProvider([
+            SearchResult("https://www.as.com/a", "t", "s"),
+            SearchResult("https://www.marca.com/b", "t", "s"),
+        ])
+        fetcher = FakeFetcher(published_at=datetime(2026, 8, 16, 8, 0))
+        return collect_comments_for_coach(
+            GAME, "Coach A", provider, fetcher, extractor
+        )
+
+    def test_batch_results_used_without_per_doc_calls(self):
+        quote = {"text": "El árbitro lo hizo bien, fue un trabajo complicado",
+                 "referee_related": True}
+        calls = []
+
+        class BatchExtractor:
+            def extract_batch(self, coach, game_id, docs):
+                calls.append("batch")
+                return [[dict(quote)] for _ in docs]
+
+            def extract(self, coach, game_id, doc):
+                calls.append("single")
+                return []
+
+        merged, reason = self._run(BatchExtractor())
+        self.assertIsNone(reason)
+        self.assertIsNotNone(merged)
+        self.assertIn("árbitro", merged["text"])
+        self.assertEqual(calls, ["batch"])
+
+    def test_batch_length_mismatch_falls_back_per_doc(self):
+        quote = {"text": "El árbitro lo hizo bien, fue un trabajo complicado",
+                 "referee_related": True}
+
+        class MismatchExtractor:
+            def extract_batch(self, coach, game_id, docs):
+                return []
+
+            def extract(self, coach, game_id, doc):
+                return [dict(quote)]
+
+        merged, reason = self._run(MismatchExtractor())
+        self.assertIsNone(reason)
+        self.assertIn("árbitro", merged["text"])
+
+    def test_batch_exception_falls_back_per_doc(self):
+        quote = {"text": "El árbitro lo hizo bien, fue un trabajo complicado",
+                 "referee_related": True}
+
+        class ExplodingExtractor:
+            def extract_batch(self, coach, game_id, docs):
+                raise RuntimeError("boom")
+
+            def extract(self, coach, game_id, doc):
+                return [dict(quote)]
+
+        merged, reason = self._run(ExplodingExtractor())
+        self.assertIsNone(reason)
+        self.assertIn("árbitro", merged["text"])
+
+
 class TestQuerySelection(unittest.TestCase):
     def _record(self, game):
         seen = []

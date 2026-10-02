@@ -17,7 +17,7 @@ Finished La Liga matches are automatically fetched from [football-data.org](http
 
 ### 2. Data Collection
 The system identifies pending matches from the calendar and searches for post-game comments from both the home and away coaches.
-- **Discovery**: Publisher news sitemaps (Sport, Mundo Deportivo, Relevo — keyless, covers the last ~48h of articles) plus web search: SerpApi (with `SERPAPI_KEY`) or keyless Google News RSS / DuckDuckGo / Bing fallbacks. Google News RSS queries are date-bounded to each game's 48h publication window (`after:`/`before:`), so games older than the window stay collectable.
+- **Discovery**: Publisher news sitemaps (Mundo Deportivo, Relevo, Estadio Deportivo — keyless, covers the last ~48h of articles) plus web search: SerpApi (with `SERPAPI_KEY`) or keyless Google News RSS / DuckDuckGo / Bing fallbacks. Google News RSS queries are date-bounded to each game's 48h publication window (`after:`/`before:`), so games older than the window stay collectable.
 - **Fetching**: Articles from trusted sources (LaLiga.com, AS, Marca, Sport, Mundo Deportivo, Relevo, COPE) are downloaded and cleaned; only articles published within 48h of the match are accepted. The crawler identifies itself honestly (`RespectRankBot/1.0`), respects each site's robots.txt (fetched once per domain per run), rate-limits requests, honors `Retry-After` on 429/503 with capped exponential backoff, and circuit-breaks a domain after repeated 403/429 responses.
 - **Extraction**: Referee-related quotes are extracted verbatim by an LLM (or a keyword heuristic fallback) and validated against the source text.
 - **Output**: A `Collection Report` detailing how many quotes were successfully retrieved, plus `data/pending_requests.json` tracking what failed and why (retried on the next run, up to 5 attempts).
@@ -71,6 +71,7 @@ No `PYTHONPATH` configuration is needed.
 | `MAX_REQUESTS_PER_RUN` | No | Hard cap on HTTP fetches per run across all sources (default `600`, `0` disables) |
 | `MAX_LLM_CALLS_PER_RUN` | No | Hard cap on LLM calls per run (default `300`); when exhausted, extraction/grading degrade to the heuristic fallback |
 | `LLM_BATCH_EXTRACTION` | No | Set `0` to disable batched quote extraction (one LLM call per document instead of one per coach) |
+| `BATCH_DOC_CHARS` | No | Per-document character cap inside a batched extraction call (default `6000`). Lower than `MAX_DOC_CHARS` on purpose: batching multiplies prompt size by document count |
 | `RATE_LIMIT_FETCH` | No | Seconds between article fetches (default `1.0`, `0` disables) |
 | `RATE_LIMIT_SEARCH` | No | Seconds between keyless searches (default `2.0`, `0` disables) |
 | `RATE_LIMIT_SITEMAP` | No | Seconds between sitemap fetches (default `1.0`, `0` disables) |

@@ -17,8 +17,10 @@ QUOTE_RE = re.compile(r'[«“"]([^»”"]{25,800})[»”"]')
 
 MIN_QUOTE_LEN = 25
 MAX_DOC_CHARS = 12000
-# B3: per-document truncation inside a batched extraction call.
-BATCH_DOC_CHARS = 6000
+# B3: per-document truncation inside a batched extraction call. Lower
+# than MAX_DOC_CHARS on purpose: batching multiplies prompt size by the
+# number of documents, so we trade depth for cost.
+BATCH_DOC_CHARS = int(os.environ.get("BATCH_DOC_CHARS", "6000"))
 
 
 def _normalize(text: str) -> str:

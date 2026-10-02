@@ -167,6 +167,61 @@ class TestCalculateRankings(unittest.TestCase):
         self.assertIn("New Coach", coaches)
 
 
+class TestCoachNameCollision(unittest.TestCase):
+    """T3: two different coaches sharing a name must never merge points."""
+
+    TEAMS = [
+        {"team": "Alavés", "coach": "Luis García"},
+        {"team": "Getafe", "coach": "Luis García"},
+    ]
+    GAMES = [
+        {"game_id": "1", "date": "2026-08-15", "home_team": "Alavés", "away_team": "Espanyol",
+         "home_coach": "Luis García", "away_coach": "Other"},
+        {"game_id": "2", "date": "2026-08-16", "home_team": "Getafe", "away_team": "Espanyol",
+         "home_coach": "Luis García", "away_coach": "Other"},
+    ]
+
+    def _rankings(self, comments, mode="separate"):
+        with mock.patch("src.grading.grader.get_teams", return_value=self.TEAMS), \
+             mock.patch("src.grading.grader.get_games", return_value=self.GAMES):
+            return calculate_rankings(comments, mode=mode)
+
+    def test_same_name_coaches_keep_separate_points(self):
+        comments = [
+            {"game_id": "1", "coach": "Luis García", "quote": "q", "score": 3},
+            {"game_id": "2", "coach": "Luis García", "quote": "q", "score": 0},
+        ]
+        rankings, _ = self._rankings(comments)
+        by_team = {(r["coach"], r["team"]): r["points"] for r in rankings
+                   if r["coach"] == "Luis García"}
+        self.assertEqual(by_team[("Luis García", "Alavés")], 3)
+        self.assertEqual(by_team[("Luis García", "Getafe")], 0)
+
+    def test_midseason_switch_tracks_each_club_separately(self):
+        teams = [
+            {"team": "Espanyol", "coach": "Luis García"},
+            {"team": "Alavés", "coach": "New Coach",
+             "coach_history": [{"coach": "Luis García", "until": "2026-09-01"}]},
+        ]
+        games = [
+            {"game_id": "1", "date": "2026-08-15", "home_team": "Alavés", "away_team": "Espanyol",
+             "home_coach": "Luis García", "away_coach": "X"},
+            {"game_id": "2", "date": "2026-09-20", "home_team": "Espanyol", "away_team": "Alavés",
+             "home_coach": "Luis García", "away_coach": "New Coach"},
+        ]
+        comments = [
+            {"game_id": "1", "coach": "Luis García", "quote": "q", "score": 3},
+            {"game_id": "2", "coach": "Luis García", "quote": "q", "score": 0},
+        ]
+        with mock.patch("src.grading.grader.get_teams", return_value=teams), \
+             mock.patch("src.grading.grader.get_games", return_value=games):
+            rankings, _ = calculate_rankings(comments, mode="separate")
+        by_team = {(r["coach"], r["team"]): r["points"] for r in rankings
+                   if r["coach"] == "Luis García"}
+        self.assertEqual(by_team[("Luis García", "Alavés")], 3)
+        self.assertEqual(by_team[("Luis García", "Espanyol")], 0)
+
+
 if __name__ == "__main__":
     unittest.main()
 

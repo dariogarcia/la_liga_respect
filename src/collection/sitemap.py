@@ -21,7 +21,9 @@ USER_AGENT = BOT_USER_AGENT
 NEWS_SITEMAPS = {
     # as.com also publishes https://as.com/sitemaps/news.xml but its
     # article pages block datacenter IPs (HTTP 403), so it is not listed.
-    "sport.es": "https://www.sport.es/es/sitemapNews.xml",
+    # sport.es serves its news sitemap with HTTP 406 to us and its
+    # article pages are blocklisted anyway (Wayback-only), so it was
+    # removed here; search engines still surface its articles.
     "mundodeportivo.com": "https://www.mundodeportivo.com/sitemap-news-v7.xml",
     "relevo.com": "https://www.relevo.com/sitemap-news.xml",
     # Vocento regional daily: declares its news sitemap in robots.txt
