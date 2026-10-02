@@ -77,6 +77,8 @@ No `PYTHONPATH` configuration is needed.
 | `RATE_LIMIT_FETCH_DOMAIN` | No | Minimum seconds between requests to the *same domain* (default `3.0`, `0` disables) |
 | `HTTP_CACHE_DIR` | No | On-disk HTTP cache directory (default `.cache/http`, gitignored) |
 | `HTTP_CACHE_DISABLE` | No | Set `1` to bypass the on-disk HTTP cache |
+| `BLOCKED_DOMAINS` | No | Publishers that persistently hard-block this bot (default `as.com,sport.es`); never contacted directly, read via the Internet Archive instead. Empty string disables |
+| `WAYBACK_FALLBACK` | No | Set `0` to disable the Wayback Machine fallback for blocked publishers (fails hard instead) |
 | `GOOGLE_NEWS_DECODE` | No | Set `0` to skip the Google News base64 URL decoder (the batchexecute endpoint it queries is undocumented) |
 
 Everything degrades gracefully: without keys the system still runs using news-sitemap discovery, keyless search, and heuristic extraction/grading (lower quality, clearly flagged).
@@ -104,6 +106,8 @@ python3 src/main.py --full-history     # ignore the incremental window
 Pending requests that fail 5 times are normally given up on; `--retry-pending` resets their attempt counters so the next collection run tries them again (terminal `no_coverage` entries excepted).
 
 Every run writes `data/run_report.json` (run timestamp, window used, collection and grading stats, LLM usage); the web UI shows it as a "data last updated" banner.
+
+**Blocked publishers, handled ethically**: some outlets (currently as.com and sport.es) answer this bot's honest user agent with 403/406 bot-block responses. The pipeline respects that: those domains are on `BLOCKED_DOMAINS` and are never contacted — not even for robots.txt. Their articles, when discovered via search or sitemaps, are instead read from the Internet Archive's public Wayback Machine playback (documented availability API + snapshot page), at the same rate-limited, budgeted, cached pace as every other fetch, with robots.txt honored on the archive origins and the original publisher URL kept for attribution. Set `WAYBACK_FALLBACK=0` to fail hard instead, or edit `BLOCKED_DOMAINS` to change the list. Discovery breadth comes from machine-friendly sources: news sitemaps (Mundo Deportivo, Relevo, Estadio Deportivo), Google News RSS, and unblocked outlets like Marca, COPE and RTVE via search.
 
 **Weekly cadence**: a [GitHub Actions workflow](.github/workflows/weekly-reminder.yml) opens a `weekly-update` issue every Monday reminding you to run the pipeline locally (the LLM API key never leaves your machine, so the actual run cannot happen in CI). Close the issue once the updated `data/` is pushed.
 

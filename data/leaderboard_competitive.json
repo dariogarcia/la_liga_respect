@@ -1,13 +1,49 @@
 [
   {
-    "coach": "Iñigo Pérez",
-    "team": "Villarreal",
-    "points": 3,
-    "games_played": 1
+    "coach": "José Mourinho",
+    "team": "Real Madrid",
+    "points": 6,
+    "games_played": 5
+  },
+  {
+    "coach": "Claudio Giráldez",
+    "team": "Celta Vigo",
+    "points": 4,
+    "games_played": 2
+  },
+  {
+    "coach": "Diego Simeone",
+    "team": "Atlético Madrid",
+    "points": 4,
+    "games_played": 2
+  },
+  {
+    "coach": "Juan Francisco Funes",
+    "team": "Málaga",
+    "points": 4,
+    "games_played": 2
   },
   {
     "coach": "Luís Castro",
     "team": "Levante",
+    "points": 4,
+    "games_played": 2
+  },
+  {
+    "coach": "Manolo González",
+    "team": "Espanyol",
+    "points": 4,
+    "games_played": 5
+  },
+  {
+    "coach": "Edin Terzić",
+    "team": "Athletic Bilbao",
+    "points": 3,
+    "games_played": 1
+  },
+  {
+    "coach": "Iñigo Pérez",
+    "team": "Villarreal",
     "points": 3,
     "games_played": 1
   },
@@ -18,38 +54,44 @@
     "games_played": 1
   },
   {
-    "coach": "Diego Simeone",
-    "team": "Atlético Madrid",
-    "points": 1,
-    "games_played": 1
+    "coach": "Luis García",
+    "team": "Sevilla",
+    "points": 2,
+    "games_played": 2
+  },
+  {
+    "coach": "Luis Miguel Ramis",
+    "team": "Osasuna",
+    "points": 2,
+    "games_played": 2
   },
   {
     "coach": "Antonio Hidalgo",
     "team": "Deportivo A Coruña",
-    "points": 0,
-    "games_played": 0
+    "points": 1,
+    "games_played": 1
   },
   {
     "coach": "Beñat San José",
     "team": "Rayo Vallecano",
-    "points": 0,
-    "games_played": 0
+    "points": 1,
+    "games_played": 1
+  },
+  {
+    "coach": "José Bordalás",
+    "team": "Getafe",
+    "points": 1,
+    "games_played": 2
+  },
+  {
+    "coach": "Pellegrino Matarazzo",
+    "team": "Real Sociedad",
+    "points": 1,
+    "games_played": 2
   },
   {
     "coach": "Carlos Corberán",
     "team": "Valencia",
-    "points": 0,
-    "games_played": 0
-  },
-  {
-    "coach": "Claudio Giráldez",
-    "team": "Celta Vigo",
-    "points": 0,
-    "games_played": 0
-  },
-  {
-    "coach": "Edin Terzić",
-    "team": "Athletic Bilbao",
     "points": 0,
     "games_played": 0
   },
@@ -66,42 +108,6 @@
     "games_played": 1
   },
   {
-    "coach": "José Bordalás",
-    "team": "Getafe",
-    "points": 0,
-    "games_played": 1
-  },
-  {
-    "coach": "José Mourinho",
-    "team": "Real Madrid",
-    "points": 0,
-    "games_played": 0
-  },
-  {
-    "coach": "Juan Francisco Funes",
-    "team": "Málaga",
-    "points": 0,
-    "games_played": 0
-  },
-  {
-    "coach": "Luis García",
-    "team": "Sevilla",
-    "points": 0,
-    "games_played": 0
-  },
-  {
-    "coach": "Luis Miguel Ramis",
-    "team": "Osasuna",
-    "points": 0,
-    "games_played": 0
-  },
-  {
-    "coach": "Manolo González",
-    "team": "Espanyol",
-    "points": 0,
-    "games_played": 1
-  },
-  {
     "coach": "Manuel Pellegrini",
     "team": "Real Betis",
     "points": 0,
@@ -110,12 +116,6 @@
   {
     "coach": "Martín Anselmi",
     "team": "Elche",
-    "points": 0,
-    "games_played": 0
-  },
-  {
-    "coach": "Pellegrino Matarazzo",
-    "team": "Real Sociedad",
     "points": 0,
     "games_played": 0
   }

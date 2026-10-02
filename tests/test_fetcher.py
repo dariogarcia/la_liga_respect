@@ -1,3 +1,5 @@
+import json
+import os
 import unittest
 from datetime import datetime, timezone
 from unittest import mock
@@ -88,7 +90,9 @@ class FakeResponse:
 
     def raise_for_status(self):
         if self.status_code >= 400:
-            raise requests.HTTPError(f"HTTP {self.status_code}")
+            error = requests.HTTPError(f"HTTP {self.status_code}")
+            error.response = self
+            raise error
 
 
 class TestFetchPoliteness(unittest.TestCase):
@@ -167,6 +171,118 @@ class TestFetchPoliteness(unittest.TestCase):
                 self._fetcher().fetch(self.URL)
         self.assertEqual(get.call_count, 1)
         self.sleep.assert_not_called()
+
+
+WAYBACK_HTML = """
+<html>
+<head><title>Declaraciones del míster</title>
+<meta property="article:published_time" content="2026-09-16T08:30:00Z"></head>
+<body>
+<div id="wm-ipp">Wayback Machine toolbar http://archive.org/web/</div>
+<article>
+<p>«El árbitro actuó con criterio», dijo el entrenador en la rueda de prensa.</p>
+</article>
+</body>
+</html>
+"""
+
+WAYBACK_API_OK = json.dumps({
+    "url": "https://as.com/futbol/primera/foo/",
+    "archived_snapshots": {
+        "closest": {
+            "status": "200",
+            "available": True,
+            "url": "http://web.archive.org/web/20260915065517/https://as.com/futbol/primera/foo/",
+            "timestamp": "20260915065517",
+        }
+    },
+})
+
+WAYBACK_API_MISS = json.dumps({"archived_snapshots": {}})
+
+
+class TestWaybackFallback(unittest.TestCase):
+    """Blocklisted domains are read via the Internet Archive, never directly."""
+
+    BLOCKED_URL = "https://as.com/futbol/primera/foo/"
+
+    def setUp(self):
+        mock.patch("src.collection.fetcher.time.sleep").start()
+        mock.patch("src.collection.fetcher.FETCH_RATE_LIMITER").start()
+        mock.patch("src.collection.fetcher.FETCH_DOMAIN_RATE_LIMITER").start()
+        self.addCleanup(mock.patch.stopall)
+
+    def _fetcher(self):
+        return ArticleFetcher(robots=AllowAllRobots())
+
+    def _patch_get(self, *responses):
+        return mock.patch("src.utils.http.http_get", side_effect=list(responses))
+
+    def _env(self, **extra):
+        env = {"BLOCKED_DOMAINS": "as.com", "WAYBACK_FALLBACK": "1"}
+        env.update(extra)
+        return mock.patch.dict(os.environ, env)
+
+    def test_blocklisted_domain_uses_archive_only(self):
+        api = FakeResponse(200, WAYBACK_API_OK)
+        snapshot = FakeResponse(200, WAYBACK_HTML)
+        with self._env(), self._patch_get(api, snapshot) as get:
+            doc = self._fetcher().fetch(self.BLOCKED_URL)
+        called_urls = [c.args[0] for c in get.call_args_list]
+        # The publisher itself is never contacted: only the public
+        # availability API and the archive playback page.
+        self.assertTrue(called_urls[0].startswith("https://archive.org/wayback/available"))
+        self.assertTrue(called_urls[1].startswith("https://web.archive.org/web/20260915065517/"))
+        self.assertFalse(any(u.startswith("https://as.com") for u in called_urls))
+        # Provenance: the document keeps the original publisher URL.
+        self.assertEqual(doc.url, self.BLOCKED_URL)
+        self.assertEqual(doc.source_name, "as.com")
+        # Content: article text extracted, Wayback toolbar stripped.
+        self.assertIn("árbitro", doc.text)
+        self.assertNotIn("Wayback Machine", doc.text)
+
+    def test_no_snapshot_raises(self):
+        api = FakeResponse(200, WAYBACK_API_MISS)
+        with self._env(), self._patch_get(api) as get:
+            with self.assertRaises(requests.HTTPError):
+                self._fetcher().fetch(self.BLOCKED_URL)
+        self.assertEqual(get.call_count, 1)
+
+    def test_wayback_disabled_raises_without_any_request(self):
+        with self._env(WAYBACK_FALLBACK="0"), self._patch_get() as get:
+            with self.assertRaises(requests.HTTPError):
+                self._fetcher().fetch(self.BLOCKED_URL)
+        get.assert_not_called()
+
+    def test_robots_disallow_on_archive_skips_fallback(self):
+        class DisallowArchive:
+            def allowed(self, url):
+                return "archive.org" not in url
+
+        api = FakeResponse(200, WAYBACK_API_OK)
+        with self._env(), self._patch_get(api) as get:
+            fetcher = ArticleFetcher(robots=DisallowArchive())
+            with self.assertRaises(requests.HTTPError):
+                fetcher.fetch(self.BLOCKED_URL)
+        get.assert_not_called()
+
+    def test_hard_block_on_normal_domain_falls_back_to_archive(self):
+        blocked = FakeResponse(403)
+        api = FakeResponse(200, WAYBACK_API_OK)
+        snapshot = FakeResponse(200, WAYBACK_HTML)
+        with self._env(BLOCKED_DOMAINS="", WAYBACK_FALLBACK="1"), \
+             self._patch_get(blocked, api, snapshot) as get:
+            doc = self._fetcher().fetch(self.BLOCKED_URL)
+        self.assertEqual(get.call_count, 3)
+        self.assertIn("árbitro", doc.text)
+        self.assertEqual(doc.url, self.BLOCKED_URL)
+
+    def test_soft_errors_do_not_use_archive(self):
+        not_found = FakeResponse(404)
+        with self._env(BLOCKED_DOMAINS=""), self._patch_get(not_found) as get:
+            with self.assertRaises(requests.HTTPError):
+                self._fetcher().fetch(self.BLOCKED_URL)
+        self.assertEqual(get.call_count, 1)
 
 
 class TestParseRetryAfter(unittest.TestCase):

@@ -8,6 +8,11 @@ TRUSTED_DOMAINS = {
     "mundodeportivo.com",
     "relevo.com",
     "cope.es",
+    # Regional daily (Vocento group) with a public news sitemap and
+    # no bot blocking: adds discovery breadth without extra scraping.
+    "estadiodeportivo.com",
+    # Public radio: publishes full press-conference transcripts.
+    "rtve.es",
 }
 
 def get_domain(url: str) -> str:

@@ -72,7 +72,10 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-08-15T22:45:13",
-    "retrieved_at": "2026-10-02T07:47:42.585086"
+    "retrieved_at": "2026-10-02T07:47:42.585086",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach expresses disagreement with the decision (believing the disallowed goal should have stood), but does so without aggression or accusations of bias, explicitly stating 'no voy a juzgar lo que ellos han pitado' (I'm not going to judge what they called). This is a neutral expression of disagreement."
   },
   {
     "game_id": "espn-401882925",
@@ -85,7 +88,10 @@
     ],
     "source_name": "mundodeportivo.com",
     "published_at": "2026-08-19T22:11:18",
-    "retrieved_at": "2026-10-02T07:49:43.239360"
+    "retrieved_at": "2026-10-02T07:49:43.239360",
+    "score": 3,
+    "graded_by": "llm",
+    "justification": "The coach praises the referee's performance ('ha hecho un buen partido'), which qualifies as acknowledging good officiating. The phrase 'a pesar de todo' (despite everything) hints at controversy around the match, but the coach still chooses to compliment the referee rather than blame them, fitting the Respectful criteria."
   },
   {
     "game_id": "espn-401882912",
@@ -102,7 +108,10 @@
     ],
     "source_name": "mundodeportivo.com",
     "published_at": "2026-08-22T21:30:39",
-    "retrieved_at": "2026-10-02T07:59:10.802394"
+    "retrieved_at": "2026-10-02T07:59:10.802394",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach expresses clear disagreement with the referee's inconsistent criteria, noting that time-wasting and minimal contacts were called against his team but not against Real Madrid, which borders on implying unequal treatment. However, the quote avoids aggression and explicit accusations of bias: he explicitly states 'puedo entender que se equivoquen' (I can understand they make mistakes), 'no perdemos por el arbitraje para nada' (we don't lose because of the refereeing at all), and 'el arbitraje no condiciona el resultado' (the refereeing didn't determine the result). Because he acknowledges fallibility, refuses to blame the officials for the defeat, and voices his criticism of the criteria without hostile language or calls for sanctions, this lands as a neutral disagreement rather than open disrespect."
   },
   {
     "game_id": "espn-401882912",
@@ -119,7 +128,10 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-08-22T05:00:00",
-    "retrieved_at": "2026-10-02T08:00:30.671134"
+    "retrieved_at": "2026-10-02T08:00:30.671134",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The quote criticizes the opposing team's tactics (deliberately fouling a player in rotation to avoid red cards), not the referee. The referee's decisions (yellow cards) are mentioned only neutrally as context, with no blame, aggression, or implication of bias toward the official. This fits the neutral category."
   },
   {
     "game_id": "espn-401882916",
@@ -134,7 +146,10 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-08-22T05:00:00",
-    "retrieved_at": "2026-10-02T08:01:13.013812"
+    "retrieved_at": "2026-10-02T08:01:13.013812",
+    "score": 3,
+    "graded_by": "llm",
+    "justification": "The coach explicitly declines to discuss the referee's decisions ('No voy a hablar de las decisiones del árbitro') and focuses solely on his own team's performance. He mentions the red card and first goal as difficult moments but frames them as challenges his team responded well to, without blaming the official or questioning the calls. This is a model example of avoiding referee blame."
   },
   {
     "game_id": "espn-401882911",
@@ -148,7 +163,10 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-08-23T19:35:27",
-    "retrieved_at": "2026-10-02T08:02:40.294177"
+    "retrieved_at": "2026-10-02T08:02:40.294177",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach explicitly refuses to comment on the penalty to avoid controversy, which is a neutral stance. However, he does complain that the referee 'was not fair' with his player Martín and that many fouls against him went uncalled. This is criticism of the officiating, but it lacks aggressive language, explicit accusations of bias, or calls for sanctions, so it falls into the neutral category rather than disrespectful."
   },
   {
     "game_id": "espn-401882915",
@@ -162,7 +180,10 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-08-23T17:28:53",
-    "retrieved_at": "2026-10-02T08:04:55.839050"
+    "retrieved_at": "2026-10-02T08:04:55.839050",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach mentions the penalty calls but declines to elaborate on whether they were correct, avoiding blame or aggression. This is a neutral acknowledgment of the referee's decisions without praise, criticism, or accusations of bias."
   },
   {
     "game_id": "espn-401882909",
@@ -177,7 +198,10 @@
     ],
     "source_name": "mundodeportivo.com",
     "published_at": "2026-08-24T20:24:20",
-    "retrieved_at": "2026-10-02T08:07:03.665359"
+    "retrieved_at": "2026-10-02T08:07:03.665359",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The quote expresses confusion and disagreement about a player's suspension and eligibility rules ('yo no comprendo esto'), but it does not directly attack, blame, or accuse the referee of bias, nor does it use aggressive language or call for sanctions. It is a neutral expression of disagreement with an administrative/competition decision rather than a respectful acknowledgment or an open criticism of the official."
   },
   {
     "game_id": "espn-401882910",
@@ -189,7 +213,10 @@
     ],
     "source_name": "mundodeportivo.com",
     "published_at": "2026-08-25T16:41:16",
-    "retrieved_at": "2026-10-02T08:07:34.271518"
+    "retrieved_at": "2026-10-02T08:07:34.271518",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach expresses disagreement with a non-call in a non-aggressive way, using a somewhat ironic framing ('it's not a penalty because it wasn't whistled'). There is no accusation of bias, no aggressive language, and no call for sanctions — just a mild, veiled complaint about the decision, which fits the neutral category."
   },
   {
     "game_id": "espn-401882919",
@@ -204,7 +231,10 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-08-26T00:00:00",
-    "retrieved_at": "2026-10-02T08:10:16.125343"
+    "retrieved_at": "2026-10-02T08:10:16.125343",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The quote only mentions a yellow card as a neutral explanation for a substitution. There is no criticism, blame, or praise directed at the referee — it is a neutral factual statement about officiating decisions."
   },
   {
     "game_id": "espn-401882924",
@@ -219,7 +249,10 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-08-27T20:32:04",
-    "retrieved_at": "2026-10-02T08:12:56.820684"
+    "retrieved_at": "2026-10-02T08:12:56.820684",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach expresses clear disagreement with the referee's decision (stating he would have opted not to send the player off and noting the decision 'killed' his team and changed the match), but does so without aggression, accusations of bias, or calls for sanctions. He acknowledges the referee's right to make the call ('entiendo que lo pueda hacer') and urges acceptance ('hay que aceptarlo, respetarlo'), which keeps the tone civil. However, because he attributes the outcome of the match to the officiating decisions rather than fully avoiding blame, this is neutral disagreement rather than fully respectful."
   },
   {
     "game_id": "espn-401882897",
@@ -236,7 +269,10 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-08-29T00:00:00",
-    "retrieved_at": "2026-10-02T08:16:21.741217"
+    "retrieved_at": "2026-10-02T08:16:21.741217",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach expresses strong disagreement with the referee's decision, insisting it was a clear penalty and calling for it to be featured in the referees' video review. However, the tone is one of frustration with the decision itself rather than an attack on the referee's integrity, accusations of bias, aggressive language, or calls for sanctions. This falls under neutral disagreement with the officiating."
   },
   {
     "game_id": "espn-401882898",
@@ -253,7 +289,10 @@
     ],
     "source_name": "mundodeportivo.com",
     "published_at": "2026-08-29T00:00:00",
-    "retrieved_at": "2026-10-02T08:17:52.838905"
+    "retrieved_at": "2026-10-02T08:17:52.838905",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach expresses disagreement with the red card decision, calling it 'dura' (harsh), but does so without aggression or accusations of bias. He describes his confusion and surprise, reports a calm conversation with the referee afterward, and even suggests how the situation could have been handled differently (a yellow card and a warning). The tone is explanatory and measured rather than disrespectful, fitting the neutral category of expressing disagreement without hostility."
   },
   {
     "game_id": "espn-401882898",
@@ -269,7 +308,10 @@
     ],
     "source_name": "mundodeportivo.com",
     "published_at": "2026-08-29T00:00:00",
-    "retrieved_at": "2026-10-02T08:18:37.465326"
+    "retrieved_at": "2026-10-02T08:18:37.465326",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach criticizes the opponent's gamesmanship and the rule itself rather than attacking the referee. The closing remark 'en este aspecto sí que es mejorable' implies the officiating or handling of the situation could be better, which is a mild disagreement, but there is no aggressive language, accusation of bias, or call for sanctions. This is a neutral expression of disagreement."
   },
   {
     "game_id": "espn-401882899",
@@ -286,7 +328,10 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-08-30T17:59:46",
-    "retrieved_at": "2026-10-02T08:20:09.174585"
+    "retrieved_at": "2026-10-02T08:20:09.174585",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The quote 'No merece ningún comentario' (It doesn't deserve any comment) is dismissive and implies disapproval of the referee's performance, but it contains no explicit criticism, accusations of bias, aggressive language, or calls for sanctions. It expresses implicit disagreement in a passive, non-aggressive manner, which fits the neutral category."
   },
   {
     "game_id": "espn-401882867",
@@ -301,7 +346,10 @@
     ],
     "source_name": "mundodeportivo.com",
     "published_at": "2026-09-03T00:00:00",
-    "retrieved_at": "2026-10-02T08:25:47.944739"
+    "retrieved_at": "2026-10-02T08:25:47.944739",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The quote does not directly mention or criticize the referee. The coach expresses frustration about not being on the bench (apparently due to a suspension), but avoids blaming the official for the situation, implying no bias and using no aggressive language. This is a neutral expression of personal displeasure rather than an attack on the officiating."
   },
   {
     "game_id": "espn-401882867",
@@ -315,7 +363,10 @@
     ],
     "source_name": "mundodeportivo.com",
     "published_at": "2026-09-03T16:18:07",
-    "retrieved_at": "2026-10-02T08:26:23.689592"
+    "retrieved_at": "2026-10-02T08:26:23.689592",
+    "score": 3,
+    "graded_by": "llm",
+    "justification": "The coach praises the referee, calling him 'coherente' (consistent) and saying it's appreciated as a spectator that he lets the game flow. This is direct praise of the officiating, with no blame attributed to the referee for any decision."
   },
   {
     "game_id": "espn-401882894",
@@ -332,7 +383,10 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-09-04T05:56:10",
-    "retrieved_at": "2026-10-02T08:27:59.857619"
+    "retrieved_at": "2026-10-02T08:27:59.857619",
+    "score": 3,
+    "graded_by": "llm",
+    "justification": "The coach repeatedly declines to criticize the referee, saying he hasn't seen the incidents in detail and cannot comment. He explicitly refuses to blame the loss on officiating ('Después de perder, decir ahora que es por una amarilla... no lo hago') and even praises the referee's approach ('Ha dejado jugar, y eso es algo que me gusta'). While he mentions some confusion about cards, he does so without aggression or accusations of bias, and the overall tone acknowledges and respects the officiating."
   },
   {
     "game_id": "espn-401882892",
@@ -349,7 +403,10 @@
     ],
     "source_name": "mundodeportivo.com",
     "published_at": "2026-09-06T05:00:00",
-    "retrieved_at": "2026-10-02T08:34:56.065098"
+    "retrieved_at": "2026-10-02T08:34:56.065098",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach expresses disagreement and confusion about the officiating criteria ('criterios que no acabamos de entender', 'no sabemos por qué se anula el 1-0'), but does so without aggression, personal attacks on the referee, or accusations of bias. He questions the consistency of VAR/offside interpretations and argues the call was wrong, which is a neutral expression of disagreement rather than open disrespect."
   },
   {
     "game_id": "espn-401882892",
@@ -366,7 +423,10 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-09-06T05:00:00",
-    "retrieved_at": "2026-10-02T08:35:57.876662"
+    "retrieved_at": "2026-10-02T08:35:57.876662",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach expresses disagreement with the referee's decisions (the red card and lack of explanation on the goals), but does so without aggression, insults, or accusations of bias. He simply states his view that the tackle was not a red card and that the referee did not explain the goal decisions. This is neutral disagreement rather than open criticism or disrespect."
   },
   {
     "game_id": "espn-401882882",
@@ -379,7 +439,10 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-09-12T00:00:00",
-    "retrieved_at": "2026-10-02T08:43:27.071212"
+    "retrieved_at": "2026-10-02T08:43:27.071212",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach expresses strong disagreement with the VAR's decision on the unpunished penalty incident, calling it 'absolutely inexplicable.' However, he does not accuse the officials of bias, use aggressive or personal language, or call for sanctions—he criticizes the decision itself rather than attacking the referee, which places this in the neutral disagreement category."
   },
   {
     "game_id": "espn-401882882",
@@ -393,6 +456,61 @@
     ],
     "source_name": "marca.com",
     "published_at": "2026-09-12T00:00:00",
-    "retrieved_at": "2026-10-02T08:44:20.142899"
+    "retrieved_at": "2026-10-02T08:44:20.142899",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach refers to referee-related incidents (the disallowed goal and a throw-in situation) but frames them as errors without directing aggression at the referee, implying bias, or calling for sanctions. The mention is essentially neutral — expressing disagreement with the decisions in a measured way, without praise or acknowledgment of the referee's difficulty."
+  },
+  {
+    "game_id": "espn-401882875",
+    "coach": "Luis Miguel Ramis",
+    "quote": "Para mí está mal anulado, otra decisión que nos condena y que nos hace daño Es una disputa arriba, en la que los dos jugadores chocan y se dan con la cabeza, y el balón sale rechazado; en esa segunda acción hacemos el gol El cuarto árbitro me ha dicho que la ha revisado y que ya está, en tres segundos o en cuatro o en cinco, demasiado poco Hasta ahora sí; ha habido dos y las dos han sido negativas para nosotros, cuando considero que eran revisables Duele mucho por los jugadores, porque son momentos que buscas para cambiar dinámica y confianza en el partido y no están pasando",
+    "source_url": "https://www.cope.es/emisoras/navarra/navarra-provincia/pamplona/deportes-cope-navarra/noticias/luis-miguel-ramis-estalla-goleada-atletico-lamenta-decisiones-arbitrales-osasuna-decision-condena-dano-20260917_3438247.html",
+    "sources": [
+      "https://www.cope.es/emisoras/navarra/navarra-provincia/pamplona/deportes-cope-navarra/noticias/luis-miguel-ramis-estalla-goleada-atletico-lamenta-decisiones-arbitrales-osasuna-decision-condena-dano-20260917_3438247.html",
+      "https://www.mundodeportivo.com/futbol/atletico-madrid/20260916/1004228197/simeone-opino-sobre-ceuta-gente-tenga-solucionar-solucione-ciudad.html"
+    ],
+    "source_name": "cope.es",
+    "published_at": "2026-09-16T20:41:54",
+    "retrieved_at": "2026-10-02T08:58:16.861151",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach openly disagrees with the VAR decision, calling the disallowed goal wrongly annulled and saying the decisions 'condemn' and 'hurt' his team. However, he expresses this disagreement without aggression, without accusing the referee of bias, and without calling for sanctions. He also criticizes the review time as too short, which is a critique of process rather than a personal attack. This falls into the neutral category of expressing disagreement without hostility."
+  },
+  {
+    "game_id": "espn-401882863",
+    "coach": "Antonio Hidalgo",
+    "quote": "Lo del Cucho era roja clara Para mí es roja clarísima para mí es roja directa y clara, el árbitro me ha explicado su versión y es el juez, pero creo que era expulsión clara",
+    "source_url": "https://www.marca.com/futbol/betis/2026/09/21/audio-var-desvela-soto-grado-expulso-cucho-toca-balon-ese-jugador-mete-cabeza.html",
+    "sources": [
+      "https://www.marca.com/futbol/betis/2026/09/21/audio-var-desvela-soto-grado-expulso-cucho-toca-balon-ese-jugador-mete-cabeza.html",
+      "https://www.marca.com/futbol/deportivo/2026/09/20/antonio-hidalgo-cucho-roja-clara.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-09-20T19:04:49",
+    "retrieved_at": "2026-10-02T09:10:14.279689",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach strongly disagrees with the referee's decision, insisting it was a clear red card, but does so without aggression or accusations of bias. He acknowledges the referee's authority ('el árbitro me ha explicado su versión y es el juez'), which keeps the criticism within the bounds of respectful disagreement rather than open disrespect."
+  },
+  {
+    "game_id": "espn-401882865",
+    "coach": "José Mourinho",
+    "quote": "Son 2 tarjetas rojas claras... las dificultades que hemos tenido después 11 contra 10, pues podemos imaginar lo que sería 50 minutos, 11 contra 9 quien tiene que estar muy feliz es el comité de designación arbitral, que ha sido todo muy extraño La primera cosa es que una semana antes del partido ya se sabe quién es el árbitro, cuando, según me dicen, es 24 horas antes a los 41 años no tiene internacionalización, pues no será porque es un árbitro grande el pobre ha venido aquí y no ha podido con la presión, que es una presión, aquí lo llamo la presión de los años 80, que ya se ve muy poco en los días de hoy El señor Trujillo, que ha estado en el VAR, lo ha llamado a la primera roja, y pienso que no le ha llamado a la segunda, que es todavía más grande que la primera tiene una historia muy completa de cómo van en los partidos del Real Madrid dimensión para venir a un derbi no hay presión, o hay presión y nosotros no sabemos \"¿No me preguntáis por los penaltis? Extraño, ¿No?\" sí, podíamos ahorrar la rueda de prensa porque la historia del partido está aquí. Son dos rojas claras, hemos tenido muchas dificultades después con uno menos y me tengo que limitar a abrazar mis jugadores, que han hecho un gran primer tiempo, de clase y personalidad. Quien tiene que estar feliz, además del Atlético, es el Comité de Designación. Ha sido todo muy extraño. Una semana antes ya se sabía quién era el árbitro cuando normalmente son 24 horas antes. Después el colegiado tiene 41 años y no es internacional, por lo no será un gran árbitro. Después el pobre no ha pedido con la presión. Y después el señor Trujillo que ha sido el VAR que le ha llamado a la primera roja y creo que no a la segunda y que tiene una historia rica y tremenda con el Madrid. Sin ir más lejos el año pasado Osasuna, Real, Girona... Pobre árbitro que solo ha hecho partidos pequeñitos y el señor del VAR que tiene una gran historia con el Madrid. En Las Rozas no hay presión. Confieso que aún no la he visto y estaba muy lejos. Me dicen que la falta empieza fuera del área y si es así falta y expulsión y 0-0. Si es dentro y hay actitud obvia de empujar sería expulsión, pero has visto el segundo tiempo. En el primer tiempo es un derbi de once contra nueve y en la segunda once contra diez. Imagina once contra nueve como acaba\". Ya he entrado mucho, pero cosas que se han visto, como en el gol anulado ante Osasuna es para reír, el penalti en San Sebastián es para reír, el del Barcelona es para reír, la no expulsión contra el Athletic con este señor... Yo pensaba que encontraba una liga distinta de la que he dejado, me han dicho que no y me han explicado por qué, pero vamos a luchar. Si queremos recordar el Elche, la primera amarilla a Diomande no es normal. El primer tiempo muy complicado, pudo ser nueve contra once y la segunda acabó siendo diez contra once para ellos, pero me gustó más pero me gustó la determinación de mi equipo\". Si nos dejan competir en igualdad, lo haremos. No quiero decir que esto estaba preparado, quiero creer que se equivocan. Que el Comité se ha equivocado poniendo a uno de 41 años y a otro que tiene un historial en contra del Real Madrid... El gol anulado a Osasuna es un chiste, lo de San Sebastián...\". Si nos dejan en paz, tranquilos y nos dejan competir en igualdad de circunstancias, falta mucho. No quiero ir lejos y decir que esto es algo preparado. No quiero pensar en esto",
+    "source_url": "https://www.cope.es/programas/tiempo-de-juego/noticias/mourinho-estalla-arbitraje-derrota-real-madrid-atletico-feliz-comite-tecnico-arbitros-20260920_3440032.html",
+    "sources": [
+      "https://www.cope.es/programas/tiempo-de-juego/noticias/mourinho-estalla-arbitraje-derrota-real-madrid-atletico-feliz-comite-tecnico-arbitros-20260920_3440032.html",
+      "https://www.cope.es/programas/tiempo-de-juego/audios/paco-gonzalez-sobre-quejas-arbitrales-mourinho-real-madrid-necesitaba-entrenador-fichado-guionista-real-madrid-television-necesitaba-entrenador-moderno-traido-quince-anos-20260920_3440035.html",
+      "https://www.marca.com/futbol/real-madrid/2026/09/20/vuelve-mourinho-siempre-rajada-arbitros-lista-agravios-papeles-prensa.html",
+      "https://www.marca.com/futbol/real-madrid/2026/09/20/rajadon-mourinho-pensaba-me-iba-encontrar-liga-distinta-me-explicaron.html",
+      "https://us.marca.com/soccer/la-liga/2026/09/21/atletico-reacciona-stop-acoso-arbitral.html",
+      "https://us.marca.com/soccer/la-liga/2026/09/21/mayor-escandalo-arbitral.html"
+    ],
+    "source_name": "cope.es",
+    "published_at": "2026-09-20T16:44:39",
+    "retrieved_at": "2026-10-02T09:13:03.309326",
+    "score": 0,
+    "graded_by": "llm",
+    "justification": "The quote is openly disrespectful toward the officials. The coach mocks the referee's age and lack of international status ('41 años y no es internacional, por lo no será un gran árbitro'), condescendingly calls him 'el pobre' and says he couldn't handle the pressure, questions the appointment committee ('quien tiene que estar muy feliz es el comité de designación arbitral, que ha sido todo muy extraño'), and strongly implies bias by citing the VAR official's alleged history against Real Madrid. Although he stops just short of explicitly claiming the match was fixed ('No quiero decir que esto estaba preparado'), the insinuations of bias, the sarcastic and aggressive tone, and the repeated public criticism of the officials clearly fall into the disrespectful category."
   }
 ]

@@ -24,6 +24,9 @@ NEWS_SITEMAPS = {
     "sport.es": "https://www.sport.es/es/sitemapNews.xml",
     "mundodeportivo.com": "https://www.mundodeportivo.com/sitemap-news-v7.xml",
     "relevo.com": "https://www.relevo.com/sitemap-news.xml",
+    # Vocento regional daily: declares its news sitemap in robots.txt
+    # and serves articles without bot blocking.
+    "estadiodeportivo.com": "https://www.estadiodeportivo.com/sitemaps/news.xml",
 }
 
 # Terms that make an article more likely to contain referee-related quotes.

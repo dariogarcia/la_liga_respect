@@ -630,5 +630,221 @@
     "attempts": 1,
     "last_attempt": "2026-10-02T08:53:28.813452",
     "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882876",
+    "coach": "Carlos Corberán",
+    "date": "2026-09-15",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:54:01.706575",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882871",
+    "coach": "Hansi Flick",
+    "date": "2026-09-16",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:54:47.122074",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882871",
+    "coach": "José Alberto López",
+    "date": "2026-09-16",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:55:40.921572",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882873",
+    "coach": "Antonio Hidalgo",
+    "date": "2026-09-16",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:56:19.551028",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882873",
+    "coach": "Luis García",
+    "date": "2026-09-16",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:56:59.811657",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882875",
+    "coach": "Diego Simeone",
+    "date": "2026-09-16",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:57:36.155179",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882869",
+    "coach": "Juan Francisco Funes",
+    "date": "2026-09-17",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:58:47.062860",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882869",
+    "coach": "Iñigo Pérez",
+    "date": "2026-09-17",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:59:20.635407",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882874",
+    "coach": "Manuel Pellegrini",
+    "date": "2026-09-17",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T08:59:53.447288",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882874",
+    "coach": "José Bordalás",
+    "date": "2026-09-17",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:00:31.014830",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882862",
+    "coach": "Manolo González",
+    "date": "2026-09-18",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:01:06.000734",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882862",
+    "coach": "Martín Anselmi",
+    "date": "2026-09-18",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:01:32.595327",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882859",
+    "coach": "Luis García",
+    "date": "2026-09-19",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:02:30.828060",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882859",
+    "coach": "Hansi Flick",
+    "date": "2026-09-19",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:03:07.471646",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882860",
+    "coach": "Luis Miguel Ramis",
+    "date": "2026-09-19",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:03:34.966618",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882860",
+    "coach": "Beñat San José",
+    "date": "2026-09-19",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:04:05.040172",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882864",
+    "coach": "Claudio Giráldez",
+    "date": "2026-09-19",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:04:35.151392",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882864",
+    "coach": "José Alberto López",
+    "date": "2026-09-19",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:05:15.035661",
+    "reason": "no_trusted_sources"
+  },
+  {
+    "game_id": "espn-401882866",
+    "coach": "Edin Terzić",
+    "date": "2026-09-19",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:05:49.736333",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882866",
+    "coach": "Quique Sánchez Flores",
+    "date": "2026-09-19",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:06:18.140388",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882857",
+    "coach": "Iñigo Pérez",
+    "date": "2026-09-20",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:06:56.895065",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882857",
+    "coach": "Luís Castro",
+    "date": "2026-09-20",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:07:25.430190",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882858",
+    "coach": "Carlos Corberán",
+    "date": "2026-09-20",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:07:58.379109",
+    "reason": "publication_window_filtered"
+  },
+  {
+    "game_id": "espn-401882858",
+    "coach": "Pellegrino Matarazzo",
+    "date": "2026-09-20",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:08:27.967057",
+    "reason": "publication_window_filtered"
+  },
+  {
+    "game_id": "espn-401882861",
+    "coach": "José Bordalás",
+    "date": "2026-09-20",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:09:06.273683",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882861",
+    "coach": "Juan Francisco Funes",
+    "date": "2026-09-20",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:09:34.143790",
+    "reason": "no_quotes_extracted"
+  },
+  {
+    "game_id": "espn-401882863",
+    "coach": "Manuel Pellegrini",
+    "date": "2026-09-20",
+    "attempts": 1,
+    "last_attempt": "2026-10-02T09:10:47.187048",
+    "reason": "no_quotes_extracted"
   }
 ]
