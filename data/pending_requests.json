@@ -1,29 +1,5 @@
 [
   {
-    "game_id": "espn-401882883",
-    "coach": "Luís Castro",
-    "date": "2026-09-13",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:47:01.484670",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882883",
-    "coach": "Hansi Flick",
-    "date": "2026-09-13",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:47:37.675912",
-    "reason": "no_quotes_extracted"
-  },
-  {
-    "game_id": "espn-401882884",
-    "coach": "José Bordalás",
-    "date": "2026-09-13",
-    "attempts": 1,
-    "last_attempt": "2026-10-02T08:48:06.179934",
-    "reason": "publication_window_filtered"
-  },
-  {
     "game_id": "espn-401882884",
     "coach": "Antonio Hidalgo",
     "date": "2026-09-13",

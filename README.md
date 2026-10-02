@@ -109,7 +109,7 @@ python3 src/main.py --full-history     # ignore the incremental window
 
 Pending requests that fail 5 times are normally given up on; `--retry-pending` resets their attempt counters so the next collection run tries them again.
 
-Every run writes `data/run_report.json` (run timestamp, window used, collection and grading stats, LLM usage); the web UI shows it as a "data last updated" banner.
+Every run writes `data/run_report.json` (run timestamp, window used, collection and grading stats, LLM usage) and appends the same report to `data/history/runs.jsonl`, so past runs are never lost when the current report is overwritten; the web UI shows the report as a "data last updated" banner.
 
 **Blocked publishers, handled ethically**: some outlets (currently as.com and sport.es) answer this bot's honest user agent with 403/406 bot-block responses. The pipeline respects that: those domains are on `BLOCKED_DOMAINS` and are never contacted — not even for robots.txt. Their articles, when discovered via search or sitemaps, are instead read from the Internet Archive's public Wayback Machine playback (documented availability API + snapshot page), at the same rate-limited, budgeted, cached pace as every other fetch, with robots.txt honored on the archive origins and the original publisher URL kept for attribution. Set `WAYBACK_FALLBACK=0` to fail hard instead, or edit `BLOCKED_DOMAINS` to change the list. Discovery breadth comes from machine-friendly sources: news sitemaps (Mundo Deportivo, Relevo, Estadio Deportivo), Google News RSS, and unblocked outlets like Marca, COPE and RTVE via search.
 

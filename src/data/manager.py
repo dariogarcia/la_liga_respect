@@ -10,6 +10,8 @@ LEADERBOARD_FILE = os.path.join(DATA_DIR, "leaderboard.json")
 LEADERBOARD_COMPETITIVE_FILE = os.path.join(DATA_DIR, "leaderboard_competitive.json")
 PENDING_REQUESTS_FILE = os.path.join(DATA_DIR, "pending_requests.json")
 RUN_REPORT_FILE = os.path.join(DATA_DIR, "run_report.json")
+HISTORY_DIR = os.path.join(DATA_DIR, "history")
+RUN_HISTORY_FILE = os.path.join(HISTORY_DIR, "runs.jsonl")
 
 LIST_FILES = ("leaderboard", "comments", "games", "teams", "pending_requests")
 
@@ -87,3 +89,29 @@ def get_run_report():
 
 def save_run_report(report):
     save_json(RUN_REPORT_FILE, report)
+    append_run_history(report)
+
+
+def append_run_history(report):
+    """U2: append the report to data/history/runs.jsonl so runs are
+    never lost when run_report.json is overwritten. One JSON object
+    per line; consumers read it line by line."""
+    os.makedirs(HISTORY_DIR, exist_ok=True)
+    with open(RUN_HISTORY_FILE, "a", encoding="utf-8") as f:
+        f.write(json.dumps(report, ensure_ascii=False, default=str) + "\n")
+
+
+def get_run_history():
+    """All recorded runs, oldest first; [] when none exist yet."""
+    if not os.path.exists(RUN_HISTORY_FILE):
+        return []
+    runs = []
+    with open(RUN_HISTORY_FILE, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                try:
+                    runs.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
+    return runs
