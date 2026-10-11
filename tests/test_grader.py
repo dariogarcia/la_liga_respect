@@ -347,3 +347,71 @@ class TestQuotedGameStats(unittest.TestCase):
         for r in rankings:
             self.assertEqual(r["quoted_games"], 0)
             self.assertEqual(r["quoted_points"], 0)
+
+
+class TestMeasuredGameStats(unittest.TestCase):
+    """Measured base for the Projected view: quotes AND confirmed
+    silences are observations; presumed silences (no coverage found)
+    are not — they must not inflate or deflate a coach's average."""
+
+    TEAMS = [
+        {"team": "Alavés", "coach": "A"},
+        {"team": "Getafe", "coach": "B"},
+    ]
+    GAMES = [
+        {"game_id": "1", "date": "2026-08-15", "home_team": "Alavés", "away_team": "Getafe",
+         "home_coach": "A", "away_coach": "B"},
+        {"game_id": "2", "date": "2026-08-22", "home_team": "Getafe", "away_team": "Alavés",
+         "home_coach": "B", "away_coach": "A"},
+    ]
+
+    def _rankings(self, comments, mode):
+        with mock.patch("src.grading.grader.get_teams", return_value=self.TEAMS), \
+             mock.patch("src.grading.grader.get_games", return_value=self.GAMES):
+            return calculate_rankings(comments, mode=mode)
+
+    def _silence(self, coach, game_id, kind="confirmed"):
+        return {
+            "game_id": game_id, "coach": coach, "quote": "",
+            "no_ref_comment": True, "kind": kind, "score": 3,
+            "graded_by": "coverage", "justification": "no referee comment",
+        }
+
+    def test_confirmed_silence_is_measured(self):
+        # Flick regression: a coach whose every game is a confirmed
+        # press silence is fully measured and projects to the maximum.
+        comments = [self._silence("A", "1"), self._silence("A", "2")]
+        rankings, _ = self._rankings(comments, "separate")
+        entry = next(r for r in rankings if r["coach"] == "A")
+        self.assertEqual(entry["measured_games"], 2)
+        self.assertEqual(entry["measured_points"], 6)
+        self.assertEqual(entry["quoted_games"], 0)  # quote-only base unchanged
+
+    def test_presumed_silence_is_not_measured(self):
+        comments = [self._silence("A", "1", kind="presumed")]
+        rankings, _ = self._rankings(comments, "separate")
+        entry = next(r for r in rankings if r["coach"] == "A")
+        self.assertEqual(entry["measured_games"], 0)
+        self.assertEqual(entry["measured_points"], 0)
+        self.assertEqual(entry["points"], 3)  # still counts for the totals
+
+    def test_competitive_measured_uses_duel_points(self):
+        # Game 1: both measured, A quoted 5 vs B confirmed silence 3
+        # -> duel 3/0. Game 2: A presumed silence vs B quoted 1 -> B
+        # wins 3; A's presumed game is not measured for A.
+        comments = [
+            {"game_id": "1", "coach": "A", "quote": "q", "score": 5},
+            self._silence("B", "1", kind="confirmed"),
+            self._silence("A", "2", kind="presumed"),
+            {"game_id": "2", "coach": "B", "quote": "q", "score": 1},
+        ]
+        rankings, _ = self._rankings(comments, "competitive")
+        stats = {r["coach"]: (r["measured_games"], r["measured_points"]) for r in rankings}
+        self.assertEqual(stats["A"], (1, 3))   # measured in game 1 only
+        self.assertEqual(stats["B"], (2, 0))   # measured twice, lost + won
+
+    def test_quoted_game_is_measured(self):
+        comments = [{"game_id": "1", "coach": "A", "quote": "q", "score": 1}]
+        rankings, _ = self._rankings(comments, "separate")
+        entry = next(r for r in rankings if r["coach"] == "A")
+        self.assertEqual((entry["measured_games"], entry["measured_points"]), (1, 1))

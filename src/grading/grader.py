@@ -149,6 +149,7 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
                 "coach": coach, "team": team, "points": 0, "games_played": 0,
                 "home_points": 0, "away_points": 0,
                 "quoted_games": 0, "quoted_points": 0,
+                "measured_games": 0, "measured_points": 0,
             }
         return leaderboard[key]
 
@@ -159,6 +160,13 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
         if game.get("away_coach") == coach:
             return "away"
         return ""
+
+    def _measured(comment: Dict) -> bool:
+        """True when the coach's behavior was actually observed: a
+        retrieved quote, or a confirmed press silence (the coach spoke
+        to the press and never mentioned the referee). Presumed
+        silences (no coverage found at all) are not observations."""
+        return not comment.get("no_ref_comment") or comment.get("kind") == "confirmed"
 
     def _team_for(game: Dict, coach: str, fallback: str) -> str:
         """The team the coach represented in this game."""
@@ -208,6 +216,11 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
                     # retrieved count towards the per-game average.
                     entry["quoted_games"] += 1
                     entry["quoted_points"] += c["score"]
+                if _measured(c):
+                    # Fairer base: confirmed silences are observations
+                    # too, not absence of data.
+                    entry["measured_games"] += 1
+                    entry["measured_points"] += c["score"]
             missing = [c["coach"] for c in quotes if "score" not in c]
             if missing:
                 incomplete_games.append(f"Game {gid} (ungraded quotes: {', '.join(missing)})")
@@ -221,6 +234,9 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
                     if not c.get("no_ref_comment"):
                         entry["quoted_games"] += 1
                         entry["quoted_points"] += c["score"]
+                    if _measured(c):
+                        entry["measured_games"] += 1
+                        entry["measured_points"] += c["score"]
                 continue
 
             home_coach = game.get("home_coach")
@@ -259,15 +275,19 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
                     awarded[sorted_pairs[0][0]] = 1
                     awarded[sorted_pairs[1][0]] = 1
             for c in scored:
+                entry = _entry(c["coach"], _team(game, c["coach"]))
                 if not c.get("no_ref_comment"):
-                    entry = _entry(c["coach"], _team(game, c["coach"]))
                     entry["quoted_games"] += 1
                     entry["quoted_points"] += awarded.get(c["coach"], 0)
+                if _measured(c):
+                    entry["measured_games"] += 1
+                    entry["measured_points"] += awarded.get(c["coach"], 0)
 
     final_rankings = []
     emitted = set()
     _zero = {"points": 0, "games_played": 0, "home_points": 0, "away_points": 0,
-             "quoted_games": 0, "quoted_points": 0}
+             "quoted_games": 0, "quoted_points": 0,
+             "measured_games": 0, "measured_points": 0}
     for t in teams_data:
         coach = t["coach"]
         entry = leaderboard.get((coach, t["team"]), _zero)
@@ -280,6 +300,8 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
             "away_points": entry["away_points"],
             "quoted_games": entry["quoted_games"],
             "quoted_points": entry["quoted_points"],
+            "measured_games": entry["measured_games"],
+            "measured_points": entry["measured_points"],
         })
         emitted.add((coach, t["team"]))
 
@@ -297,6 +319,8 @@ def calculate_rankings(comments: List[Dict], mode: str = "separate"):
                 "away_points": entry["away_points"],
                 "quoted_games": entry["quoted_games"],
                 "quoted_points": entry["quoted_points"],
+                "measured_games": entry["measured_games"],
+                "measured_points": entry["measured_points"],
             })
 
     sorted_leaderboard = sorted(final_rankings, key=lambda x: (-x["points"], x["coach"]))

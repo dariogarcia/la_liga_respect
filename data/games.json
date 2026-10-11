@@ -550,5 +550,45 @@
     "away_team": "Real Madrid",
     "home_coach": "Diego Simeone",
     "away_coach": "José Mourinho"
+  },
+  {
+    "game_id": "espn-401882851",
+    "date": "2026-10-09",
+    "home_team": "Málaga",
+    "away_team": "Espanyol",
+    "home_coach": "Juan Francisco Funes",
+    "away_coach": "Manolo González"
+  },
+  {
+    "game_id": "espn-401882848",
+    "date": "2026-10-10",
+    "home_team": "Real Madrid",
+    "away_team": "Villarreal",
+    "home_coach": "José Mourinho",
+    "away_coach": "Iñigo Pérez"
+  },
+  {
+    "game_id": "espn-401882853",
+    "date": "2026-10-10",
+    "home_team": "Barcelona",
+    "away_team": "Getafe",
+    "home_coach": "Hansi Flick",
+    "away_coach": "José Bordalás"
+  },
+  {
+    "game_id": "espn-401882856",
+    "date": "2026-10-10",
+    "home_team": "Alavés",
+    "away_team": "Atlético Madrid",
+    "home_coach": "Quique Sánchez Flores",
+    "away_coach": "Diego Simeone"
+  },
+  {
+    "game_id": "espn-401882854",
+    "date": "2026-10-11",
+    "home_team": "Elche",
+    "away_team": "Celta Vigo",
+    "home_coach": "Martín Anselmi",
+    "away_coach": "Claudio Giráldez"
   }
 ]

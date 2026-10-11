@@ -2,12 +2,98 @@
   {
     "coach": "Hansi Flick",
     "team": "Barcelona",
+    "points": 24,
+    "games_played": 8,
+    "home_points": 12,
+    "away_points": 12,
+    "quoted_games": 0,
+    "quoted_points": 0,
+    "measured_games": 8,
+    "measured_points": 24
+  },
+  {
+    "coach": "Martín Anselmi",
+    "team": "Elche",
+    "points": 24,
+    "games_played": 8,
+    "home_points": 12,
+    "away_points": 12,
+    "quoted_games": 0,
+    "quoted_points": 0,
+    "measured_games": 6,
+    "measured_points": 18
+  },
+  {
+    "coach": "Claudio Giráldez",
+    "team": "Celta Vigo",
+    "points": 22,
+    "games_played": 8,
+    "home_points": 10,
+    "away_points": 12,
+    "quoted_games": 2,
+    "quoted_points": 4,
+    "measured_games": 7,
+    "measured_points": 19
+  },
+  {
+    "coach": "Iñigo Pérez",
+    "team": "Villarreal",
+    "points": 22,
+    "games_played": 8,
+    "home_points": 9,
+    "away_points": 13,
+    "quoted_games": 1,
+    "quoted_points": 1,
+    "measured_games": 4,
+    "measured_points": 10
+  },
+  {
+    "coach": "Quique Sánchez Flores",
+    "team": "Alavés",
+    "points": 22,
+    "games_played": 8,
+    "home_points": 13,
+    "away_points": 9,
+    "quoted_games": 2,
+    "quoted_points": 4,
+    "measured_games": 2,
+    "measured_points": 4
+  },
+  {
+    "coach": "Carlos Corberán",
+    "team": "Valencia",
+    "points": 21,
+    "games_played": 7,
+    "home_points": 12,
+    "away_points": 9,
+    "quoted_games": 0,
+    "quoted_points": 0,
+    "measured_games": 4,
+    "measured_points": 12
+  },
+  {
+    "coach": "Manuel Pellegrini",
+    "team": "Real Betis",
     "points": 21,
     "games_played": 7,
     "home_points": 9,
     "away_points": 12,
     "quoted_games": 0,
-    "quoted_points": 0
+    "quoted_points": 0,
+    "measured_games": 2,
+    "measured_points": 6
+  },
+  {
+    "coach": "Juan Francisco Funes",
+    "team": "Málaga",
+    "points": 20,
+    "games_played": 8,
+    "home_points": 8,
+    "away_points": 12,
+    "quoted_games": 3,
+    "quoted_points": 5,
+    "measured_games": 5,
+    "measured_points": 11
   },
   {
     "coach": "Antonio Hidalgo",
@@ -17,67 +103,57 @@
     "home_points": 10,
     "away_points": 9,
     "quoted_games": 1,
-    "quoted_points": 1
+    "quoted_points": 1,
+    "measured_games": 5,
+    "measured_points": 13
   },
   {
-    "coach": "Claudio Giráldez",
-    "team": "Celta Vigo",
+    "coach": "Beñat San José",
+    "team": "Rayo Vallecano",
     "points": 19,
     "games_played": 7,
+    "home_points": 9,
+    "away_points": 10,
+    "quoted_games": 1,
+    "quoted_points": 1,
+    "measured_games": 4,
+    "measured_points": 10
+  },
+  {
+    "coach": "José Bordalás",
+    "team": "Getafe",
+    "points": 19,
+    "games_played": 8,
     "home_points": 10,
     "away_points": 9,
     "quoted_games": 2,
-    "quoted_points": 4
+    "quoted_points": 1,
+    "measured_games": 5,
+    "measured_points": 10
   },
   {
-    "coach": "Carlos Corberán",
-    "team": "Valencia",
+    "coach": "Diego Simeone",
+    "team": "Atlético Madrid",
     "points": 18,
-    "games_played": 6,
-    "home_points": 9,
-    "away_points": 9,
-    "quoted_games": 0,
-    "quoted_points": 0
+    "games_played": 8,
+    "home_points": 8,
+    "away_points": 10,
+    "quoted_games": 3,
+    "quoted_points": 3,
+    "measured_games": 8,
+    "measured_points": 18
   },
   {
-    "coach": "Manuel Pellegrini",
-    "team": "Real Betis",
-    "points": 18,
-    "games_played": 6,
-    "home_points": 9,
-    "away_points": 9,
-    "quoted_games": 0,
-    "quoted_points": 0
-  },
-  {
-    "coach": "Martín Anselmi",
-    "team": "Elche",
-    "points": 18,
-    "games_played": 6,
-    "home_points": 9,
-    "away_points": 9,
-    "quoted_games": 0,
-    "quoted_points": 0
-  },
-  {
-    "coach": "Quique Sánchez Flores",
-    "team": "Alavés",
+    "coach": "Edin Terzić",
+    "team": "Athletic Bilbao",
     "points": 18,
     "games_played": 6,
     "home_points": 12,
     "away_points": 6,
     "quoted_games": 1,
-    "quoted_points": 3
-  },
-  {
-    "coach": "Diego Simeone",
-    "team": "Atlético Madrid",
-    "points": 17,
-    "games_played": 7,
-    "home_points": 8,
-    "away_points": 9,
-    "quoted_games": 2,
-    "quoted_points": 2
+    "quoted_points": 3,
+    "measured_games": 5,
+    "measured_points": 15
   },
   {
     "coach": "Luis García",
@@ -87,116 +163,80 @@
     "home_points": 10,
     "away_points": 7,
     "quoted_games": 2,
-    "quoted_points": 2
-  },
-  {
-    "coach": "Beñat San José",
-    "team": "Rayo Vallecano",
-    "points": 16,
-    "games_played": 6,
-    "home_points": 9,
-    "away_points": 7,
-    "quoted_games": 1,
-    "quoted_points": 1
-  },
-  {
-    "coach": "Iñigo Pérez",
-    "team": "Villarreal",
-    "points": 16,
-    "games_played": 6,
-    "home_points": 6,
-    "away_points": 10,
-    "quoted_games": 1,
-    "quoted_points": 1
-  },
-  {
-    "coach": "Juan Francisco Funes",
-    "team": "Málaga",
-    "points": 16,
-    "games_played": 6,
-    "home_points": 7,
-    "away_points": 9,
-    "quoted_games": 2,
-    "quoted_points": 4
-  },
-  {
-    "coach": "Edin Terzić",
-    "team": "Athletic Bilbao",
-    "points": 15,
-    "games_played": 5,
-    "home_points": 9,
-    "away_points": 6,
-    "quoted_games": 1,
-    "quoted_points": 3
+    "quoted_points": 2,
+    "measured_games": 5,
+    "measured_points": 11
   },
   {
     "coach": "Luis Miguel Ramis",
     "team": "Osasuna",
-    "points": 14,
-    "games_played": 6,
-    "home_points": 7,
+    "points": 17,
+    "games_played": 7,
+    "home_points": 10,
     "away_points": 7,
     "quoted_games": 2,
-    "quoted_points": 2
+    "quoted_points": 2,
+    "measured_games": 6,
+    "measured_points": 14
   },
   {
     "coach": "José Alberto López",
     "team": "Racing Santander",
-    "points": 13,
-    "games_played": 6,
+    "points": 16,
+    "games_played": 7,
     "home_points": 6,
-    "away_points": 7,
+    "away_points": 10,
     "quoted_games": 2,
-    "quoted_points": 1
-  },
-  {
-    "coach": "José Bordalás",
-    "team": "Getafe",
-    "points": 13,
-    "games_played": 6,
-    "home_points": 7,
-    "away_points": 6,
-    "quoted_games": 2,
-    "quoted_points": 1
+    "quoted_points": 1,
+    "measured_games": 4,
+    "measured_points": 7
   },
   {
     "coach": "Luís Castro",
     "team": "Levante",
-    "points": 13,
-    "games_played": 5,
+    "points": 16,
+    "games_played": 6,
     "home_points": 6,
-    "away_points": 7,
+    "away_points": 10,
     "quoted_games": 3,
-    "quoted_points": 7
+    "quoted_points": 7,
+    "measured_games": 4,
+    "measured_points": 10
   },
   {
     "coach": "José Mourinho",
     "team": "Real Madrid",
-    "points": 12,
-    "games_played": 7,
-    "home_points": 5,
+    "points": 15,
+    "games_played": 8,
+    "home_points": 8,
     "away_points": 7,
     "quoted_games": 5,
-    "quoted_points": 6
+    "quoted_points": 6,
+    "measured_games": 8,
+    "measured_points": 15
   },
   {
     "coach": "Pellegrino Matarazzo",
     "team": "Real Sociedad",
-    "points": 12,
-    "games_played": 6,
+    "points": 15,
+    "games_played": 7,
     "home_points": 5,
-    "away_points": 7,
+    "away_points": 10,
     "quoted_games": 3,
-    "quoted_points": 3
+    "quoted_points": 3,
+    "measured_games": 6,
+    "measured_points": 12
   },
   {
     "coach": "Manolo González",
     "team": "Espanyol",
-    "points": 11,
-    "games_played": 7,
+    "points": 14,
+    "games_played": 8,
     "home_points": 6,
-    "away_points": 5,
+    "away_points": 8,
     "quoted_games": 5,
-    "quoted_points": 5
+    "quoted_points": 5,
+    "measured_games": 8,
+    "measured_points": 14
   }
 ]
