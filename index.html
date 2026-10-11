@@ -496,6 +496,18 @@
         .score-3 { background-color: #27ae60; }
         .score-1 { background-color: #e67e22; }
         .score-0 { background-color: #c0392b; }
+        .duel-chip {
+            display: inline-block; padding: 3px 10px; border-radius: 999px;
+            font-size: 0.74rem; font-weight: 600; color: #fff;
+            white-space: nowrap;
+        }
+        .duel-won { background-color: #27ae60; }
+        .duel-drew { background-color: #5c6b7a; }
+        .duel-lost { background-color: #c0392b; }
+        .table-hint {
+            text-align: center; font-size: 0.86rem; color: var(--fg-muted);
+            margin: 10px 0 0;
+        }
         /* --- Coach detail panel --- */
         .detail-panel {
             width: 100%;
@@ -711,6 +723,9 @@
                 </tbody>
             </table>
         </div>
+
+        <p class="table-hint">👆 <strong>Click any row</strong> to open the coach's full record —
+            every quote, score and source behind their points, game by game.</p>
 
         <p id="pergame-note" class="pending-note" hidden>
             * Projected points: the average score over the games where the coach's behavior was
@@ -1201,6 +1216,10 @@
             btnSep.setAttribute('aria-pressed', String(mode === 'separate'));
             btnComp.setAttribute('aria-pressed', String(mode === 'competitive'));
             document.getElementById('mode-explainer').innerHTML = MODE_INFO[mode].blurb;
+
+            // Keep an open drill-down panel coherent when the mode
+            // changes (Season Total vs Head-to-Head scoring).
+            if (STATE.detailCoach) showCoachDetail(STATE.detailCoach);
         } catch (e) {
             console.error('Error loading data:', e);
         }
@@ -1230,6 +1249,44 @@
         const s = [0, 1, 3].includes(Number(score)) ? Number(score) : null;
         if (s === null) return '<span class="score-badge" style="background:#888;">?</span>';
         return `<span class="score-badge score-${s}" title="Score ${s} of 3">${s} · ${labels[s]}</span>`;
+    }
+
+    // Head-to-Head duel for one coach in one game, mirroring the
+    // grader's competitive logic: the more respectful of the two
+    // coaches takes 3 duel points, the other 0, a tie gives 1 each.
+    // A game with no opponent comment scores the raw respect score
+    // (incomplete-duel fallback).
+    function duelFor(game, coach) {
+        if (!game) return null;
+        const scored = DATA.comments.filter(
+            c => c.game_id === game.game_id && c.coach !== undefined && c.score !== undefined
+        );
+        const mine = scored.find(c => c.coach === coach);
+        if (!mine) return null;
+        const others = scored.filter(c => c.coach !== coach);
+        if (!others.length) return { solo: true, points: Number(mine.score) || 0 };
+        // The opponent is the highest-scoring other coach (matches the
+        // grader's sorted-pairs duel).
+        const opp = others.slice().sort((a, b) => b.score - a.score)[0];
+        const sMe = Number(mine.score) || 0;
+        const sOpp = Number(opp.score) || 0;
+        if (sMe > sOpp) return { solo: false, opponent: opp.coach, points: 3, outcome: 'won' };
+        if (sMe < sOpp) return { solo: false, opponent: opp.coach, points: 0, outcome: 'lost' };
+        return { solo: false, opponent: opp.coach, points: 1, outcome: 'drew' };
+    }
+
+    function duelChip(duel) {
+        if (!duel) return '';
+        if (duel.solo) {
+            return `<span class="duel-chip duel-drew" title="No graded opponent comment in this game — duel incomplete, raw respect score kept">⚔ no opponent</span>`;
+        }
+        const labels = { won: `⚔ won the duel`, drew: `⚔ drew the duel`, lost: `⚔ lost the duel` };
+        const titles = {
+            won: `More respectful than ${duel.opponent} — 3 duel points`,
+            drew: `Level with ${duel.opponent} — 1 duel point each`,
+            lost: `Less respectful than ${duel.opponent} — 0 duel points`,
+        };
+        return `<span class="duel-chip duel-${duel.outcome}" title="${esc(titles[duel.outcome])}">${labels[duel.outcome]}</span>`;
     }
 
     function graderBadge(gradedBy) {
@@ -1263,6 +1320,8 @@
         const panel = document.getElementById('coach-detail');
         const teamData = DATA.teams.find(t => t.coach === coach);
         const teamName = teamData ? teamData.team : 'Unknown Team';
+        const h2h = STATE.mode === 'competitive';
+        STATE.detailCoach = coach;
         const comments = DATA.comments
             .filter(c => c.coach === coach)
             .map(c => {
@@ -1274,6 +1333,36 @@
         const pendingForCoach = DATA.pending.filter(
             p => p.coach === coach && (p.attempts || 0) < MAX_ATTEMPTS && !p.terminal
         );
+
+        // Mode-specific summary line over the quote cards.
+        let summaryLine;
+        if (h2h) {
+            const duels = comments
+                .map(({ c, game }) => (c.score === undefined ? null : duelFor(game, coach)))
+                .filter(Boolean);
+            const pts = duels.reduce((sum, d) => sum + d.points, 0);
+            const w = duels.filter(d => d.outcome === 'won').length;
+            const d = duels.filter(d => d.outcome === 'drew').length;
+            const l = duels.filter(d => d.outcome === 'lost').length;
+            summaryLine = `
+                <div class="detail-sub">
+                    <strong>Head-to-Head</strong> — each game is a duel between the two coaches on the
+                    touchline: the more respectful takes <strong>3 duel points</strong>, the other 0, a
+                    tie gives 1 each. ${esc(coach)} has <strong>${pts} duel points</strong> from
+                    ${duels.length} game${duels.length === 1 ? '' : 's'}
+                    (${w} won · ${d} drawn · ${l} lost). Respect scores per game are shown alongside.
+                </div>`;
+        } else {
+            const scored = comments.filter(c => c.score !== undefined);
+            const pts = scored.reduce((sum, c) => sum + (Number(c.score) || 0), 0);
+            summaryLine = `
+                <div class="detail-sub">
+                    <strong>Season Total</strong> — every game scores <strong>3</strong> respectful ·
+                    <strong>1</strong> neutral · <strong>0</strong> disrespectful; a game without a
+                    referee comment counts as respectful silence (3). ${esc(coach)} has
+                    <strong>${pts} points</strong> from ${scored.length} game${scored.length === 1 ? '' : 's'}.
+                </div>`;
+        }
 
         // F6: per-week (matchday) filter for this coach's quotes.
         let weekFilter = '';
@@ -1296,6 +1385,7 @@
             cards = comments.map(({ c, game }) => {
                 const date = quoteCardDate(c, game);
                 const matchup = game ? `${game.home_team} vs ${game.away_team}` : c.game_id;
+                const duel = h2h ? duelFor(game, coach) : null;
                 const justification = c.justification
                     ? `<details class="quote-justification"><summary>Grading justification</summary>${esc(c.justification)}</details>`
                     : '';
@@ -1313,6 +1403,7 @@
                             <span>${esc(date)}</span>
                             ${scoreBadge(c.score)}
                             ${graderBadge(c.graded_by)}
+                            ${duelChip(duel)}
                         </div>
                         ${quoteBody}
                         ${justification}
@@ -1331,10 +1422,11 @@
                 <h2>${esc(coach)} — ${esc(teamName)}</h2>
                 <button class="detail-close" onclick="hideCoachDetail()" aria-label="Close detail panel">Close ✕</button>
             </div>
-            <div class="detail-sub">Quotes per game, most recent first. Click a leaderboard row to switch coach.</div>
+            ${summaryLine}
             ${pendingNote}
             ${weekFilter}
             ${cards}
+            <div class="detail-sub" style="margin-top: 12px;">Click a leaderboard row to switch coach.</div>
         `;
         panel.hidden = false;
         panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1351,6 +1443,7 @@
         const panel = document.getElementById('coach-detail');
         panel.hidden = true;
         panel.innerHTML = '';
+        STATE.detailCoach = null;
     }
 
     // Data-quality banner (ranking tab) + coverage stats and the
