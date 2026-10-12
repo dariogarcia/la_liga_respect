@@ -1381,13 +1381,17 @@
         return t('prev_coach', { coach: esc(latest.coach) });
     }
 
+    async function fetchFresh(url) {
+        return fetch(url, { cache: 'no-cache' });
+    }
+
     async function ensureData() {
         if (DATA._loaded) return;
         const [teamsRes, commentsRes, gamesRes, pendingRes] = await Promise.all([
-            fetch('data/teams.json'),
-            fetch('data/comments.json'),
-            fetch('data/games.json'),
-            fetch('data/pending_requests.json'),
+            fetchFresh('data/teams.json'),
+            fetchFresh('data/comments.json'),
+            fetchFresh('data/games.json'),
+            fetchFresh('data/pending_requests.json'),
         ]);
         DATA.teams = await teamsRes.json();
         DATA.comments = await commentsRes.json();
@@ -1416,7 +1420,7 @@
     // each pipeline run. Missing file (older runs) is not an error.
     async function loadRunReport() {
         try {
-            const res = await fetch('data/run_report.json');
+            const res = await fetchFresh('data/run_report.json');
             if (!res.ok) return;
             const report = await res.json();
             if (!report || !report.generated_at) return;
@@ -1617,7 +1621,7 @@
     async function loadMovement() {
         STATE.movement = {};
         try {
-            const res = await fetch('data/history/runs.jsonl');
+            const res = await fetchFresh('data/history/runs.jsonl');
             if (!res.ok) return;
             const text = await res.text();
             const runs = text.split('\n')
@@ -1647,7 +1651,7 @@
     async function loadLeaderboard(mode) {
         try {
             await ensureData();
-            const leaderboard = await (await fetch(
+            const leaderboard = await (await fetchFresh(
                 mode === 'separate' ? 'data/leaderboard.json' : 'data/leaderboard_competitive.json'
             )).json();
 
