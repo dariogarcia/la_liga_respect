@@ -109,5 +109,83 @@ class TestTeamAssets(unittest.TestCase):
                 )
 
 
+def _load_i18n(html):
+    # The I18N dictionary in index.html is kept pure JSON between
+    # marker comments so it can be parsed and checked here.
+    match = re.search(
+        r"/\* I18N:START \*/\s*(const I18N = .*?);\s*/\* I18N:END \*/",
+        html,
+        re.S,
+    )
+    if not match:
+        raise AssertionError("I18N block not found in index.html")
+    return json.loads(match.group(1)[len("const I18N = "):])
+
+
+class TestI18n(unittest.TestCase):
+    def setUp(self):
+        self.html = (ROOT / "index.html").read_text(encoding="utf-8")
+        self.i18n = _load_i18n(self.html)
+
+    def test_three_languages_with_identical_keys(self):
+        self.assertEqual(
+            sorted(self.i18n.keys()), ["ca", "en", "es"],
+            "I18N must define exactly en/es/ca",
+        )
+        en, es, ca = (set(self.i18n[l].keys()) for l in ("en", "es", "ca"))
+        self.assertEqual(en, es, f"es keys differ: only-es={sorted(es - en)}, only-en={sorted(en - es)}")
+        self.assertEqual(en, ca, f"ca keys differ: only-ca={sorted(ca - en)}, only-en={sorted(en - ca)}")
+
+    def test_placeholders_match_across_languages(self):
+        def placeholders(value):
+            return sorted(re.findall(r"\{(\w+)\}", value))
+        for key, en_value in self.i18n["en"].items():
+            self.assertEqual(
+                placeholders(en_value),
+                placeholders(self.i18n["es"][key]),
+                f"es '{key}' placeholder mismatch",
+            )
+            self.assertEqual(
+                placeholders(en_value),
+                placeholders(self.i18n["ca"][key]),
+                f"ca '{key}' placeholder mismatch",
+            )
+
+    def test_every_markup_reference_resolves(self):
+        # Every data-i18n(-html/-title/-placeholder/-aria) attribute in
+        # the static markup must name an existing key.
+        referenced = set(re.findall(
+            r'data-i18n(?:-html|-title|-placeholder|-aria)?="([a-z0-9_]+)"',
+            self.html,
+        ))
+        self.assertTrue(referenced)
+        for key in referenced:
+            self.assertIn(key, self.i18n["en"], f"markup references unknown key '{key}'")
+
+    def test_every_t_literal_resolves(self):
+        # Every t('key', ...) call in the script must name an existing
+        # key. Runtime-composed keys (duel_*, movement_*_one/many,
+        # mode_blurb_*, pending_*_one/many) are whitelisted.
+        dynamic = {
+            "duel_won", "duel_drew", "duel_lost", "duel_solo",
+            "duel_won_title", "duel_drew_title", "duel_lost_title", "duel_solo_title",
+            "movement_up_one", "movement_up_many",
+            "movement_down_one", "movement_down_many",
+            "mode_blurb_season", "mode_blurb_h2h",
+            "pending_note_coach_one", "pending_note_coach_many",
+            "pending_summary_active_one", "pending_summary_active_many",
+        }
+        for key in dynamic:
+            self.assertIn(key, self.i18n["en"], f"missing runtime-composed key '{key}'")
+        called = set(re.findall(r"\bt\('([a-z0-9_]+)'", self.html))
+        for key in called - dynamic:
+            self.assertIn(key, self.i18n["en"], f"t() references unknown key '{key}'")
+
+    def test_language_switcher_present(self):
+        self.assertIn("lang-btn", self.html)
+        self.assertIn("setLang('es')", self.html)
+        self.assertIn("setLang('ca')", self.html)
+
+
 if __name__ == "__main__":
     unittest.main()

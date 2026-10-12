@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Respect Rank - La Liga</title>
+    <title data-i18n="page_title">Respect Rank - La Liga</title>
     <script>
         // F7: apply the stored (or system) theme before first paint to
         // avoid a light-to-dark flash.
@@ -159,6 +159,25 @@
             flex: 0 0 auto;
         }
         button#btn-theme:hover { background: rgba(255, 255, 255, 0.2); transform: none; }
+        .header-actions { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+        .lang-switch { display: flex; gap: 4px; }
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.12);
+            color: var(--header-fg-muted);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            box-shadow: none;
+            cursor: pointer;
+        }
+        .lang-btn:hover { background: rgba(255, 255, 255, 0.2); transform: none; color: var(--header-fg); }
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.92);
+            color: #17222c;
+            border-color: transparent;
+        }
         .tabs {
             max-width: 960px;
             margin: 18px auto 0;
@@ -661,15 +680,22 @@
             <div class="brand-trophy" aria-hidden="true">🏆</div>
             <div>
                 <h1>Respect Rank</h1>
-                <p class="brand-sub">La Liga managers · respect for referees</p>
+                <p class="brand-sub" data-i18n="brand_sub">La Liga managers · respect for referees</p>
             </div>
         </div>
-        <button id="btn-theme" aria-pressed="false" onclick="toggleTheme()">🌙 Dark mode</button>
+        <div class="header-actions">
+            <div class="lang-switch" role="group" data-i18n-aria="aria_lang" aria-label="Language">
+                <button class="lang-btn" data-lang="en" aria-pressed="false" onclick="setLang('en')" title="English">EN</button>
+                <button class="lang-btn" data-lang="es" aria-pressed="false" onclick="setLang('es')" title="Español">ES</button>
+                <button class="lang-btn" data-lang="ca" aria-pressed="false" onclick="setLang('ca')" title="Català">CA</button>
+            </div>
+            <button id="btn-theme" aria-pressed="false" onclick="toggleTheme()">🌙 Dark mode</button>
+        </div>
     </div>
-    <nav class="tabs" role="tablist" aria-label="Sections">
-        <button class="tab active" id="tab-ranking" role="tab" aria-selected="true" aria-controls="view-ranking" onclick="switchTab('ranking')">Ranking</button>
-        <button class="tab" id="tab-coverage" role="tab" aria-selected="false" aria-controls="view-coverage" onclick="switchTab('coverage')">Coverage<span id="coverage-badge" class="tab-badge" hidden></span></button>
-        <button class="tab" id="tab-about" role="tab" aria-selected="false" aria-controls="view-about" onclick="switchTab('about')">About</button>
+    <nav class="tabs" role="tablist" data-i18n-aria="aria_sections" aria-label="Sections">
+        <button class="tab active" id="tab-ranking" role="tab" aria-selected="true" aria-controls="view-ranking" onclick="switchTab('ranking')" data-i18n="tab_ranking">Ranking</button>
+        <button class="tab" id="tab-coverage" role="tab" aria-selected="false" aria-controls="view-coverage" onclick="switchTab('coverage')"><span data-i18n="tab_coverage">Coverage</span><span id="coverage-badge" class="tab-badge" hidden></span></button>
+        <button class="tab" id="tab-about" role="tab" aria-selected="false" aria-controls="view-about" onclick="switchTab('about')" data-i18n="tab_about">About</button>
     </nav>
 </header>
 
@@ -678,13 +704,13 @@
     <!-- ======================= RANKING ======================= -->
     <section id="view-ranking" role="tabpanel" aria-labelledby="tab-ranking">
         <div class="mode-box">
-            <div class="mode-switch" role="group" aria-label="Ranking mode">
-                <button id="btn-separate" class="mode-btn active" aria-pressed="true" onclick="loadLeaderboard('separate')">Season Total</button>
-                <button id="btn-competitive" class="mode-btn" aria-pressed="false" onclick="loadLeaderboard('competitive')">Head-to-Head</button>
+            <div class="mode-switch" role="group" data-i18n-aria="aria_mode" aria-label="Ranking mode">
+                <button id="btn-separate" class="mode-btn active" aria-pressed="true" onclick="loadLeaderboard('separate')" data-i18n="mode_season">Season Total</button>
+                <button id="btn-competitive" class="mode-btn" aria-pressed="false" onclick="loadLeaderboard('competitive')" data-i18n="mode_h2h">Head-to-Head</button>
             </div>
-            <div class="mode-switch metric-switch" role="group" aria-label="Points display">
-                <button id="btn-total" class="mode-btn active" aria-pressed="true" onclick="setMetric('total')">Total Points</button>
-                <button id="btn-pergame" class="mode-btn" aria-pressed="false" onclick="setMetric('pergame')" title="Average points per measured game (quote or confirmed press silence), scaled to games played — league-table magnitude. Not directly comparable across coaches.">Projected*</button>
+            <div class="mode-switch metric-switch" role="group" data-i18n-aria="aria_metric" aria-label="Points display">
+                <button id="btn-total" class="mode-btn active" aria-pressed="true" onclick="setMetric('total')" data-i18n="metric_total">Total Points</button>
+                <button id="btn-pergame" class="mode-btn" aria-pressed="false" onclick="setMetric('pergame')" data-i18n="metric_projected" data-i18n-title="btn_projected_title" title="Average points per measured game (quote or confirmed press silence), scaled to games played — league-table magnitude. Not directly comparable across coaches.">Projected*</button>
             </div>
             <p id="mode-explainer" class="mode-explainer"></p>
         </div>
@@ -692,14 +718,14 @@
         <div class="toolbar">
             <div class="search-bar" role="search">
                 <span class="search-icon" aria-hidden="true">🔍</span>
-                <label class="sr-only" for="coach-search" style="position:absolute;left:-9999px;">Filter coaches or teams</label>
-                <input id="coach-search" type="search" placeholder="Filter by coach or team, e.g. Ancelotti, Barcelona…"
+                <label class="sr-only" for="coach-search" style="position:absolute;left:-9999px;" data-i18n="search_label">Filter coaches or teams</label>
+                <input id="coach-search" type="search" data-i18n-placeholder="search_placeholder" placeholder="Filter by coach or team, e.g. Ancelotti, Barcelona…"
                        autocomplete="off" oninput="onSearchInput(this.value)">
             </div>
             <div id="updated-banner" class="updated-banner" role="status"></div>
         </div>
 
-        <div id="metric-disclaimer" class="notice warning" hidden>
+        <div id="metric-disclaimer" class="notice warning" data-i18n-html="metric_disclaimer" hidden>
             ⚠ <strong>Fairness note:</strong> positioning in this view depends on how many of a
             coach's games were <em>measured</em> (a retrieved quote or a confirmed press silence).
             Coaches with fewer measured games — an asterisk marks fewer than 5 — are ranked from
@@ -711,11 +737,11 @@
             <table id="leaderboard-table">
                 <thead>
                     <tr>
-                        <th class="pos-col" scope="col">Pos</th>
-                        <th class="coach-col" scope="col">Coach &amp; Team</th>
-                        <th class="gp-col" scope="col" title="Games played">GP</th>
-                        <th id="th-homeaway" class="ha-col" scope="col" title="Points earned in home games / away games">Home/Away</th>
-                        <th id="th-points" class="pts-col" scope="col">Points</th>
+                        <th class="pos-col" scope="col" data-i18n="th_pos">Pos</th>
+                        <th class="coach-col" scope="col" data-i18n="th_coach">Coach &amp; Team</th>
+                        <th class="gp-col" scope="col" data-i18n="th_gp" data-i18n-title="gp_title" title="Games played">GP</th>
+                        <th id="th-homeaway" class="ha-col" scope="col" data-i18n="th_homeaway" data-i18n-title="ha_title" title="Points earned in home games / away games">Home/Away</th>
+                        <th id="th-points" class="pts-col" scope="col" data-i18n="th_points">Points</th>
                     </tr>
                 </thead>
                 <tbody id="leaderboard-body">
@@ -724,10 +750,10 @@
             </table>
         </div>
 
-        <p class="table-hint">👆 <strong>Click any row</strong> to open the coach's full record —
+        <p class="table-hint" data-i18n-html="table_hint">👆 <strong>Click any row</strong> to open the coach's full record —
             every quote, score and source behind their points, game by game.</p>
 
-        <p id="pergame-note" class="pending-note" hidden>
+        <p id="pergame-note" class="pending-note" data-i18n-html="pergame_note" hidden>
             * Projected points: the average score over the games where the coach's behavior was
             measured (a retrieved quote, or a confirmed press silence — the coach spoke and never
             mentioned the referee), scaled to the number of games played so far. The result sits
@@ -743,18 +769,18 @@
 
     <!-- ======================= COVERAGE ======================= -->
     <section id="view-coverage" role="tabpanel" aria-labelledby="tab-coverage" hidden>
-        <h2 class="section-title">Collection status</h2>
-        <p class="section-intro">
+        <h2 class="section-title" data-i18n="coverage_title">Collection status</h2>
+        <p class="section-intro" data-i18n-html="coverage_intro">
             How much of the season has been searched for referee-related press quotes, and
             which coach/game pairs are still pending. Pending pairs are retried automatically
             on every weekly run.
         </p>
 
         <div class="stat-chips">
-            <div class="stat-chip"><span class="num" id="stat-games">–</span><label>games tracked</label></div>
-            <div class="stat-chip"><span class="num" id="stat-quotes">–</span><label>quotes collected</label></div>
-            <div class="stat-chip"><span class="num" id="stat-silence">–</span><label>resolved as silence</label></div>
-            <div class="stat-chip accent"><span class="num" id="stat-pending">–</span><label>pending collection</label></div>
+            <div class="stat-chip"><span class="num" id="stat-games">–</span><label data-i18n="stat_games">games tracked</label></div>
+            <div class="stat-chip"><span class="num" id="stat-quotes">–</span><label data-i18n="stat_quotes">quotes collected</label></div>
+            <div class="stat-chip"><span class="num" id="stat-silence">–</span><label data-i18n="stat_silence">resolved as silence</label></div>
+            <div class="stat-chip accent"><span class="num" id="stat-pending">–</span><label data-i18n="stat_pending">pending collection</label></div>
         </div>
 
         <div id="pending-summary" class="notice info"></div>
@@ -764,17 +790,17 @@
                 <table class="pending-table">
                     <thead>
                         <tr>
-                            <th>Game</th>
-                            <th>Date</th>
-                            <th>Coach</th>
-                            <th>Reason</th>
-                            <th>Attempts</th>
+                            <th data-i18n="th_game">Game</th>
+                            <th data-i18n="th_date">Date</th>
+                            <th data-i18n="th_coach_col">Coach</th>
+                            <th data-i18n="th_reason">Reason</th>
+                            <th data-i18n="th_attempts">Attempts</th>
                         </tr>
                     </thead>
                     <tbody id="pending-body"></tbody>
                 </table>
             </div>
-            <p class="pending-note">
+            <p class="pending-note" data-i18n-html="pending_note">
                 Entries whose retries were exhausted stay listed until a full run resolves them
                 (seek-then-presume): after the search window passes with no referee-related
                 coverage found anywhere, the game is presumed respectful silence.
@@ -785,42 +811,42 @@
     <!-- ======================= ABOUT ======================= -->
     <section id="view-about" role="tabpanel" aria-labelledby="tab-about" hidden>
         <div class="about-card">
-            <h3>What is this?</h3>
-            <p>
+            <h3 data-i18n="about_what_h">What is this?</h3>
+            <p data-i18n-html="about_what_p">
                 Respect Rank tracks how La Liga managers behave towards referees in
                 post-match press quotes. Every game, each coach's comments are collected from
                 public press coverage, quoted verbatim with a link to the publisher, and
                 graded for respect.
             </p>
 
-            <h3>Scoring</h3>
+            <h3 data-i18n="about_scoring_h">Scoring</h3>
             <div class="scale-row">
-                <span class="score-badge score-3">3 · Respectful</span>
-                <span class="score-badge score-1">1 · Neutral</span>
-                <span class="score-badge score-0">0 · Disrespectful</span>
-                <span class="score-badge" style="background-color:#5c6b7a;">3 · Respectful silence</span>
+                <span class="score-badge score-3" data-i18n="score_3_label">3 · Respectful</span>
+                <span class="score-badge score-1" data-i18n="score_1_label">1 · Neutral</span>
+                <span class="score-badge score-0" data-i18n="score_0_label">0 · Disrespectful</span>
+                <span class="score-badge" style="background-color:#5c6b7a;" data-i18n="score_silence_label">3 · Respectful silence</span>
             </div>
             <ul>
-                <li>Quotes are graded by an LLM against the referee-related comment; a
+                <li data-i18n-html="about_s_li1">Quotes are graded by an LLM against the referee-related comment; a
                     low-confidence heuristic fallback marks the row when the LLM is unavailable.</li>
-                <li>A game where the coach spoke to the press but never mentioned the referee
+                <li data-i18n-html="about_s_li2">A game where the coach spoke to the press but never mentioned the referee
                     counts as <strong>confirmed respectful silence</strong> (3 points).</li>
-                <li>If no coverage at all can be found within the search window, the game is
+                <li data-i18n-html="about_s_li3">If no coverage at all can be found within the search window, the game is
                     <strong>presumed respectful silence</strong> (3 points) — the burden of proof
                     is on finding disrespect, not on proving innocence.</li>
             </ul>
 
-            <h3>The two rankings</h3>
-            <p><strong>Season Total</strong> — each coach accumulates points from every game
+            <h3 data-i18n="about_rankings_h">The two rankings</h3>
+            <p data-i18n-html="about_r_season"><strong>Season Total</strong> — each coach accumulates points from every game
                 they coached (including 3-point silences). This is the pure measure of
                 respectfulness across the season; a coach switching clubs mid-season gets one
                 row per club.</p>
-            <p><strong>Head-to-Head</strong> — every game becomes a duel between the two
+            <p data-i18n-html="about_r_h2h"><strong>Head-to-Head</strong> — every game becomes a duel between the two
                 coaches on the touchline that day: the more respectful of the two takes 3
                 points and the other 0, and a tie gives 1 point each. It reads like a league
                 table built from respect instead of goals, and rewards showing up your
                 counterpart.</p>
-            <p><strong>Projected view</strong> — absolute points grow with the number of
+            <p data-i18n-html="about_r_projected"><strong>Projected view</strong> — absolute points grow with the number of
                 games coached, so the ranking can also be normalized: the average score
                 over the games where the coach's behavior was <em>measured</em> — a
                 retrieved quote, or a confirmed press silence (the coach spoke to the
@@ -833,18 +859,18 @@
                 than 5 measured games — a small sample. Games where no coverage at all
                 could be found (presumed silence) are excluded from the average.</p>
 
-            <h3>Limitations</h3>
+            <h3 data-i18n="about_limits_h">Limitations</h3>
             <ul>
-                <li>This leaderboard is generated by an automated system: quotes may be
+                <li data-i18n-html="about_l_li1">This leaderboard is generated by an automated system: quotes may be
                     misattributed and scores are subjective.</li>
-                <li>Press coverage in Spanish sport media is the only source; a comment not
+                <li data-i18n-html="about_l_li2">Press coverage in Spanish sport media is the only source; a comment not
                     reported anywhere is invisible to the system.</li>
-                <li>Click any row in the Ranking tab to see the underlying quotes, scores and
+                <li data-i18n-html="about_l_li3">Click any row in the Ranking tab to see the underlying quotes, scores and
                     sources, and judge for yourself.</li>
             </ul>
 
-            <h3>Data &amp; licensing</h3>
-            <p class="muted">
+            <h3 data-i18n="about_data_h">Data &amp; licensing</h3>
+            <p class="muted" data-i18n-html="about_data_p">
                 Quotes are reproduced verbatim from the linked publisher articles and remain
                 the property of their respective publishers. Team shields are the official
                 crests served by ESPN's public CDN, with locally generated initials badges as
@@ -856,7 +882,7 @@
 
 </main>
 
-<footer class="attribution">
+<footer class="attribution" data-i18n-html="footer">
     Quotes are reproduced verbatim from the linked publisher articles and remain the property
     of their respective publishers. Automated system: quotes may be misattributed, scores are
     subjective, and games without a referee-related comment count as respectful silence
@@ -874,22 +900,436 @@
     // average), fetched entries, search filter.
     const STATE = { mode: 'separate', metric: 'total', entries: [], filter: '', movement: null };
 
-    // Human labels + one-line explanation per ranking mode. The data
-    // files keep the historical keys ('separate' / 'competitive'); only
-    // the presentation is renamed.
-    const MODE_INFO = {
-        separate: {
-            blurb: '<strong>Season Total</strong> — each coach accumulates respect points from every game '
-                 + '(3 respectful · 1 neutral · 0 disrespectful; no referee comment counts as respectful '
-                 + 'silence). The pure season-long measure of respectfulness.',
+    // --- I18N: English / Spanish / Catalan. The dictionary below is
+    // pure JSON (tests parse it to keep the three languages in
+    // sync); {placeholders} are interpolated by fmt(). Dynamic
+    // strings call t(key, vars); static markup carries
+    // data-i18n(-html/-title/-placeholder/-aria) attributes.
+    /* I18N:START */
+    const I18N = {
+        "en": {
+            "page_title": "Respect Rank - La Liga",
+            "brand_sub": "La Liga managers · respect for referees",
+            "aria_lang": "Language",
+            "aria_sections": "Sections",
+            "aria_mode": "Ranking mode",
+            "aria_metric": "Points display",
+            "aria_close": "Close detail panel",
+            "theme_dark": "🌙 Dark mode",
+            "theme_light": "☀️ Light mode",
+            "tab_ranking": "Ranking",
+            "tab_coverage": "Coverage",
+            "tab_about": "About",
+            "mode_season": "Season Total",
+            "mode_h2h": "Head-to-Head",
+            "metric_total": "Total Points",
+            "metric_projected": "Projected*",
+            "btn_projected_title": "Average points per measured game (quote or confirmed press silence), scaled to games played — league-table magnitude. Not directly comparable across coaches.",
+            "search_label": "Filter coaches or teams",
+            "search_placeholder": "Filter by coach or team, e.g. Ancelotti, Barcelona…",
+            "mode_blurb_season": "<strong>Season Total</strong> — each coach accumulates respect points from every game (3 respectful · 1 neutral · 0 disrespectful; no referee comment counts as respectful silence). The pure season-long measure of respectfulness.",
+            "mode_blurb_h2h": "<strong>Head-to-Head</strong> — each game is a duel between the two coaches: the more respectful one takes 3 points, the other 0, a tie gives 1 each (respect scores: 3 respectful silence or quote · 1 neutral · 0 disrespectful). A league table built from respect instead of goals.",
+            "metric_disclaimer": "⚠ <strong>Fairness note:</strong> positioning in this view depends on how many of a coach's games were <em>measured</em> (a retrieved quote or a confirmed press silence). Coaches with fewer measured games — an asterisk marks fewer than 5 — are ranked from thinner evidence, and coaches with none cannot be ranked at all. Compare with care; <em>Total Points</em> is the official view.",
+            "th_pos": "Pos",
+            "th_coach": "Coach & Team",
+            "th_gp": "GP",
+            "gp_title": "Games played",
+            "th_homeaway": "Home/Away",
+            "ha_title": "Points earned in home games / away games",
+            "th_points": "Points",
+            "th_points_projected": "Projected*",
+            "th_points_title_total": "Total respect points",
+            "th_points_title_pergame": "Average points per measured game (quote or confirmed press silence), scaled to games played (asterisk: fewer than 5)",
+            "table_hint": "👆 <strong>Click any row</strong> to open the coach's full record — every quote, score and source behind their points, game by game.",
+            "pergame_note": "* Projected points: the average score over the games where the coach's behavior was measured (a retrieved quote, or a confirmed press silence — the coach spoke and never mentioned the referee), scaled to the number of games played so far. The result sits on the league-table scale: a perfectly respectful coach projects to 3 points per game, like a team winning every match. An asterisk marks coaches with fewer than 5 measured games (small sample).",
+            "no_match": "No coach or team matches “{filter}”.",
+            "movement_up_one": "Moved up {n} place since the previous run",
+            "movement_up_many": "Moved up {n} places since the previous run",
+            "movement_down_one": "Moved down {n} place since the previous run",
+            "movement_down_many": "Moved down {n} places since the previous run",
+            "row_aria": "Show quotes for {team} coach {coach}",
+            "pts_title_none": "No measured games yet (no coverage found)",
+            "pts_title_avg": "avg {avg} per measured game × {games} games played",
+            "pts_title_total": "{n} points",
+            "game_one": "game",
+            "games_many": "games",
+            "cov_quote_one": "1 quote",
+            "cov_quotes": "{n} quotes",
+            "cov_noref": "{n} no-ref ({p} presumed)",
+            "cov_tooltip": "Referee-related quotes found vs games resolved without a referee comment (presumed = nothing found within the 14-day window)",
+            "score_3": "Respectful",
+            "score_1": "Neutral",
+            "score_0": "Disrespectful",
+            "score_of": "Score {s} of 3",
+            "score_3_label": "3 · Respectful",
+            "score_1_label": "1 · Neutral",
+            "score_0_label": "0 · Disrespectful",
+            "score_silence_label": "3 · Respectful silence",
+            "grader_heuristic": "Heuristic",
+            "grader_coverage": "No ref comment",
+            "matchup": "{home} vs {away}",
+            "duel_won": "⚔ won the duel vs {opp} · respect {me}–{oppS}",
+            "duel_drew": "⚔ drew the duel vs {opp} · respect {me}–{oppS}",
+            "duel_lost": "⚔ lost the duel vs {opp} · respect {me}–{oppS}",
+            "duel_solo": "⚔ no opponent",
+            "duel_won_title": "Respect scores: {me} (mine) vs {oppS} ({opp}). The more respectful coach takes the 3 duel points.",
+            "duel_drew_title": "Both coaches scored {me} on respect — 1 duel point each.",
+            "duel_lost_title": "Respect scores: {me} (mine) vs {oppS} ({opp}). The more respectful coach takes the 3 duel points.",
+            "duel_solo_title": "No graded opponent comment in this game — duel incomplete, raw respect score kept.",
+            "justification_summary": "Grading justification",
+            "silence_confirmed": "The coach spoke in the match coverage but made no comment about the referee.",
+            "silence_presumed": "No referee-related comment found — presumed respectful.",
+            "source_label": "Source: ",
+            "source_not_recorded": "Source: not recorded",
+            "source_published": " · published {date}",
+            "prev_coach": " <span class=\"prev-coach\">(prev: {coach})</span>",
+            "detail_summary_season": "<strong>Season Total</strong> — every game scores <strong>3</strong> respectful · <strong>1</strong> neutral · <strong>0</strong> disrespectful; a game without a referee comment counts as respectful silence (3). {coach} has <strong>{pts} points</strong> from {games}.",
+            "detail_summary_h2h": "<strong>Head-to-Head</strong> — each game is a duel between the two coaches on the touchline: the more respectful takes <strong>3 duel points</strong>, the other 0, a tie gives 1 each (respect scores: 3 respectful silence or quote · 1 neutral · 0 disrespectful). {coach} has <strong>{pts} duel points</strong> from {games} (won {w} · drawn {d} · lost {l}). Respect scores per game are shown alongside.",
+            "week_filter_label": "Show quotes from:",
+            "all_weeks": "All weeks ({n})",
+            "no_quotes": "No quotes collected for this coach yet this season.",
+            "pending_note_coach_one": "{n} game for this coach is still pending collection and will be retried on the next run.",
+            "pending_note_coach_many": "{n} games for this coach are still pending collection and will be retried on the next run.",
+            "see_coverage": "See coverage status",
+            "close_panel": "Close ✕",
+            "switch_coach_hint": "Click a leaderboard row to switch coach.",
+            "coverage_title": "Collection status",
+            "coverage_intro": "How much of the season has been searched for referee-related press quotes, and which coach/game pairs are still pending. Pending pairs are retried automatically on every weekly run.",
+            "stat_games": "games tracked",
+            "stat_quotes": "quotes collected",
+            "stat_silence": "resolved as silence",
+            "stat_pending": "pending collection",
+            "th_game": "Game",
+            "th_date": "Date",
+            "th_coach_col": "Coach",
+            "th_reason": "Reason",
+            "th_attempts": "Attempts",
+            "pending_note": "Entries whose retries were exhausted stay listed until a full run resolves them (seek-then-presume): after the search window passes with no referee-related coverage found anywhere, the game is presumed respectful silence.",
+            "pending_summary_active_one": "Collection incomplete: {n} coach/game pair still pending and will be retried on the next run.",
+            "pending_summary_active_many": "Collection incomplete: {n} coach/game pairs still pending and will be retried on the next run.",
+            "pending_summary_done": "Collection is complete: no pending coach/game pairs. New games appear here after each matchday.",
+            "grading_notice": "Data quality: {h} of {total} quotes were graded by the low-confidence heuristic fallback ({llm} by LLM). Treat those scores with caution.",
+            "updated_prefix": "Updated: {date}",
+            "games_since": " · games since {date}",
+            "about_what_h": "What is this?",
+            "about_what_p": "Respect Rank tracks how La Liga managers behave towards referees in post-match press quotes. Every game, each coach's comments are collected from public press coverage, quoted verbatim with a link to the publisher, and graded for respect.",
+            "about_scoring_h": "Scoring",
+            "about_s_li1": "Quotes are graded by an LLM against the referee-related comment; a low-confidence heuristic fallback marks the row when the LLM is unavailable.",
+            "about_s_li2": "A game where the coach spoke to the press but never mentioned the referee counts as <strong>confirmed respectful silence</strong> (3 points).",
+            "about_s_li3": "If no coverage at all can be found within the search window, the game is <strong>presumed respectful silence</strong> (3 points) — the burden of proof is on finding disrespect, not on proving innocence.",
+            "about_rankings_h": "The two rankings",
+            "about_r_season": "<strong>Season Total</strong> — each coach accumulates points from every game they coached (including 3-point silences). This is the pure measure of respectfulness across the season; a coach switching clubs mid-season gets one row per club.",
+            "about_r_h2h": "<strong>Head-to-Head</strong> — every game becomes a duel between the two coaches on the touchline that day: the more respectful of the two takes 3 points and the other 0, and a tie gives 1 point each. It reads like a league table built from respect instead of goals, and rewards showing up your counterpart.",
+            "about_r_projected": "<strong>Projected view</strong> — absolute points grow with the number of games coached, so the ranking can also be normalized: the average score over the games where the coach's behavior was <em>measured</em> — a retrieved quote, or a confirmed press silence (the coach spoke to the press and never mentioned the referee) — is scaled to the number of games they have played so far. The result sits on the same scale as the league table: a perfectly respectful coach projects to 3 points per game, like a team winning every match. <em>Note that this view is not directly comparable across coaches:</em> it depends on how many of their games were measured, and an asterisk marks coaches with fewer than 5 measured games — a small sample. Games where no coverage at all could be found (presumed silence) are excluded from the average.",
+            "about_limits_h": "Limitations",
+            "about_l_li1": "This leaderboard is generated by an automated system: quotes may be misattributed and scores are subjective.",
+            "about_l_li2": "Press coverage in Spanish sport media is the only source; a comment not reported anywhere is invisible to the system.",
+            "about_l_li3": "Click any row in the Ranking tab to see the underlying quotes, scores and sources, and judge for yourself.",
+            "about_data_h": "Data & licensing",
+            "about_data_p": "Quotes are reproduced verbatim from the linked publisher articles and remain the property of their respective publishers. Team shields are the official crests served by ESPN's public CDN, with locally generated initials badges as a fallback. The collection pipeline and this site are open source: <a href=\"https://github.com/dariogarcia/la_liga_respect\" target=\"_blank\" rel=\"noopener noreferrer\">dariogarcia/la_liga_respect</a>.",
+            "footer": "Quotes are reproduced verbatim from the linked publisher articles and remain the property of their respective publishers. Automated system: quotes may be misattributed, scores are subjective, and games without a referee-related comment count as respectful silence (3 points). Click a row for per-game detail · <a href=\"#\" onclick=\"switchTab('about'); return false;\">About the methodology</a>",
+            "date_locale": "en-GB",
+            "decimal": "."
         },
-        competitive: {
-            blurb: '<strong>Head-to-Head</strong> — each game is a duel between the two coaches: the more '
-                 + 'respectful one takes 3 points, the other 0, a tie gives 1 each (respect scores: '
-                 + '3 respectful silence or quote · 1 neutral · 0 disrespectful). A league table built '
-                 + 'from respect instead of goals.',
+        "es": {
+            "page_title": "Respect Rank - La Liga",
+            "brand_sub": "Entrenadores de La Liga · respeto a los árbitros",
+            "aria_lang": "Idioma",
+            "aria_sections": "Secciones",
+            "aria_mode": "Modo de clasificación",
+            "aria_metric": "Presentación de puntos",
+            "aria_close": "Cerrar panel de detalle",
+            "theme_dark": "🌙 Modo oscuro",
+            "theme_light": "☀️ Modo claro",
+            "tab_ranking": "Clasificación",
+            "tab_coverage": "Cobertura",
+            "tab_about": "Acerca de",
+            "mode_season": "Total temporada",
+            "mode_h2h": "Cara a cara",
+            "metric_total": "Puntos totales",
+            "metric_projected": "Proyección*",
+            "btn_projected_title": "Media de puntos por partido medido (cita o silencio confirmado en prensa), escalada a los partidos jugados — magnitud de tabla de liga. No es directamente comparable entre entrenadores.",
+            "search_label": "Filtrar entrenadores o equipos",
+            "search_placeholder": "Filtra por entrenador o equipo, p. ej. Ancelotti, Barcelona…",
+            "mode_blurb_season": "<strong>Total temporada</strong> — cada entrenador acumula puntos de respeto en todos los partidos (3 respetuoso · 1 neutral · 0 irrespetuoso; sin comentario al árbitro cuenta como silencio respetuoso). La medida pura de respeto de toda la temporada.",
+            "mode_blurb_h2h": "<strong>Cara a cara</strong> — cada partido es un duelo entre los dos entrenadores: el más respetuoso se lleva 3 puntos, el otro 0, y un empate da 1 a cada uno (puntuaciones de respeto: 3 silencio o cita respetuosa · 1 neutral · 0 irrespetuosa). Una tabla de liga construida con respeto en vez de goles.",
+            "metric_disclaimer": "⚠ <strong>Nota de equidad:</strong> la posición en esta vista depende de cuántos partidos de cada entrenador han sido <em>medidos</em> (una cita recuperada o un silencio confirmado en prensa). Los entrenadores con menos partidos medidos — el asterisco marca menos de 5 — se clasifican con pruebas más débiles, y los que no tienen ninguno no se pueden clasificar. Compara con cautela; los <em>Puntos totales</em> son la vista oficial.",
+            "th_pos": "Pos",
+            "th_coach": "Entrenador y equipo",
+            "th_gp": "PJ",
+            "gp_title": "Partidos jugados",
+            "th_homeaway": "Casa/Fuera",
+            "ha_title": "Puntos conseguidos en partidos en casa / fuera",
+            "th_points": "Puntos",
+            "th_points_projected": "Proyección*",
+            "th_points_title_total": "Puntos de respeto totales",
+            "th_points_title_pergame": "Media de puntos por partido medido (cita o silencio confirmado en prensa), escalada a los partidos jugados (asterisco: menos de 5)",
+            "table_hint": "👆 <strong>Haz clic en cualquier fila</strong> para abrir el historial completo del entrenador: cada cita, puntuación y fuente detrás de sus puntos, partido a partido.",
+            "pergame_note": "* Puntos proyectados: la media de puntuación en los partidos en los que se midió el comportamiento del entrenador (una cita recuperada o un silencio confirmado en prensa — habló y no mencionó al árbitro), escalada al número de partidos jugados hasta ahora. El resultado está en la escala de la tabla de liga: un entrenador perfectamente respetuoso proyecta 3 puntos por partido, como un equipo que gana todos los encuentros. El asterisco marca entrenadores con menos de 5 partidos medidos (muestra pequeña).",
+            "no_match": "Ningún entrenador o equipo coincide con “{filter}”.",
+            "movement_up_one": "Ha subido {n} puesto desde la ejecución anterior",
+            "movement_up_many": "Ha subido {n} puestos desde la ejecución anterior",
+            "movement_down_one": "Ha bajado {n} puesto desde la ejecución anterior",
+            "movement_down_many": "Ha bajado {n} puestos desde la ejecución anterior",
+            "row_aria": "Ver citas de {coach}, entrenador del {team}",
+            "pts_title_none": "Aún sin partidos medidos (no se encontró cobertura)",
+            "pts_title_avg": "media de {avg} por partido medido × {games} partidos jugados",
+            "pts_title_total": "{n} puntos",
+            "game_one": "partido",
+            "games_many": "partidos",
+            "cov_quote_one": "1 cita",
+            "cov_quotes": "{n} citas",
+            "cov_noref": "{n} sin árbitro ({p} presuntos)",
+            "cov_tooltip": "Citas sobre árbitros encontradas frente a partidos resueltos sin comentario al árbitro (presunto = no se encontró nada en la ventana de 14 días)",
+            "score_3": "Respetuoso",
+            "score_1": "Neutral",
+            "score_0": "Irrespetuoso",
+            "score_of": "Puntuación {s} de 3",
+            "score_3_label": "3 · Respetuoso",
+            "score_1_label": "1 · Neutral",
+            "score_0_label": "0 · Irrespetuoso",
+            "score_silence_label": "3 · Silencio respetuoso",
+            "grader_heuristic": "Heurística",
+            "grader_coverage": "Sin comentario al árbitro",
+            "matchup": "{home} – {away}",
+            "duel_won": "⚔ ganó el duelo contra {opp} · respeto {me}–{oppS}",
+            "duel_drew": "⚔ empató el duelo contra {opp} · respeto {me}–{oppS}",
+            "duel_lost": "⚔ perdió el duelo contra {opp} · respeto {me}–{oppS}",
+            "duel_solo": "⚔ sin rival",
+            "duel_won_title": "Puntuaciones de respeto: {me} (propia) frente a {oppS} ({opp}). El entrenador más respetuoso se lleva los 3 puntos del duelo.",
+            "duel_drew_title": "Ambos entrenadores puntuaron {me} en respeto — 1 punto de duelo cada uno.",
+            "duel_lost_title": "Puntuaciones de respeto: {me} (propia) frente a {oppS} ({opp}). El entrenador más respetuoso se lleva los 3 puntos del duelo.",
+            "duel_solo_title": "Sin comentario evaluado del rival en este partido — duelo incompleto, se mantiene la puntuación de respeto.",
+            "justification_summary": "Justificación de la evaluación",
+            "silence_confirmed": "El entrenador habló en la cobertura del partido pero no hizo ningún comentario sobre el árbitro.",
+            "silence_presumed": "No se encontró ningún comentario sobre el árbitro — se presume respetuoso.",
+            "source_label": "Fuente: ",
+            "source_not_recorded": "Fuente: no registrada",
+            "source_published": " · publicado el {date}",
+            "prev_coach": " <span class=\"prev-coach\">(ant.: {coach})</span>",
+            "detail_summary_season": "<strong>Total temporada</strong> — cada partido puntúa <strong>3</strong> respetuoso · <strong>1</strong> neutral · <strong>0</strong> irrespetuoso; un partido sin comentario sobre el árbitro cuenta como silencio respetuoso (3). {coach} tiene <strong>{pts} puntos</strong> de {games}.",
+            "detail_summary_h2h": "<strong>Cara a cara</strong> — cada partido es un duelo entre los dos entrenadores del banquillo: el más respetuoso se lleva <strong>3 puntos de duelo</strong>, el otro 0, y un empate da 1 a cada uno (puntuaciones de respeto: 3 silencio o cita respetuosa · 1 neutral · 0 irrespetuosa). {coach} tiene <strong>{pts} puntos de duelo</strong> de {games} (ganados {w} · empatados {d} · perdidos {l}). Las puntuaciones de respeto por partido se muestran al lado.",
+            "week_filter_label": "Mostrar citas de:",
+            "all_weeks": "Todas las semanas ({n})",
+            "no_quotes": "Todavía no se han recogido citas de este entrenador esta temporada.",
+            "pending_note_coach_one": "{n} partido de este entrenador sigue pendiente de recogida y se reintentará en la próxima ejecución.",
+            "pending_note_coach_many": "{n} partidos de este entrenador siguen pendientes de recogida y se reintentarán en la próxima ejecución.",
+            "see_coverage": "Ver estado de la cobertura",
+            "close_panel": "Cerrar ✕",
+            "switch_coach_hint": "Haz clic en una fila de la clasificación para cambiar de entrenador.",
+            "coverage_title": "Estado de la recogida",
+            "coverage_intro": "Cuánto de la temporada se ha buscado en busca de citas sobre árbitros y qué pares entrenador/partido siguen pendientes. Los pares pendientes se reintentan automáticamente en cada ejecución semanal.",
+            "stat_games": "partidos registrados",
+            "stat_quotes": "citas recogidas",
+            "stat_silence": "resueltos como silencio",
+            "stat_pending": "pendientes de recoger",
+            "th_game": "Partido",
+            "th_date": "Fecha",
+            "th_coach_col": "Entrenador",
+            "th_reason": "Motivo",
+            "th_attempts": "Intentos",
+            "pending_note": "Las entradas cuyos reintentos se agotaron permanecen listadas hasta que una ejecución completa las resuelva (buscar-y-presumir): cuando pasa la ventana de búsqueda sin encontrar en ninguna parte cobertura sobre el árbitro, el partido se presume silencio respetuoso.",
+            "pending_summary_active_one": "Recogida incompleta: {n} par entrenador/partido sigue pendiente y se reintentará en la próxima ejecución.",
+            "pending_summary_active_many": "Recogida incompleta: {n} pares entrenador/partido siguen pendientes y se reintentarán en la próxima ejecución.",
+            "pending_summary_done": "Recogida completa: no hay pares entrenador/partido pendientes. Los partidos nuevos aparecen aquí después de cada jornada.",
+            "grading_notice": "Calidad de datos: {h} de {total} citas fueron evaluadas por el respaldo heurístico de baja confianza ({llm} por LLM). Trata esas puntuaciones con cautela.",
+            "updated_prefix": "Actualizado: {date}",
+            "games_since": " · partidos desde {date}",
+            "about_what_h": "¿Qué es esto?",
+            "about_what_p": "Respect Rank sigue cómo se comportan los entrenadores de La Liga con los árbitros en sus citas de prensa tras los partidos. En cada partido se recogen los comentarios de cada entrenador desde cobertura de prensa pública, se citan literalmente con enlace a la editorial y se evalúan por respeto.",
+            "about_scoring_h": "Puntuación",
+            "about_s_li1": "Las citas las evalúa un LLM sobre el comentario relacionado con el árbitro; un respaldo heurístico de baja confianza marca la fila cuando el LLM no está disponible.",
+            "about_s_li2": "Un partido en el que el entrenador habló con la prensa pero no mencionó al árbitro cuenta como <strong>silencio respetuoso confirmado</strong> (3 puntos).",
+            "about_s_li3": "Si no se encuentra ninguna cobertura dentro de la ventana de búsqueda, el partido se <strong>presume silencio respetuoso</strong> (3 puntos): la carga de la prueba está en encontrar la falta de respeto, no en demostrar la inocencia.",
+            "about_rankings_h": "Las dos clasificaciones",
+            "about_r_season": "<strong>Total temporada</strong> — cada entrenador acumula puntos de todos los partidos que dirigió (incluidos los silencios de 3 puntos). Es la medida pura de respeto a lo largo de la temporada; un entrenador que cambie de club a mitad de temporada obtiene una fila por club.",
+            "about_r_h2h": "<strong>Cara a cara</strong> — cada partido se convierte en un duelo entre los dos entrenadores del banquillo ese día: el más respetuoso de los dos se lleva 3 puntos y el otro 0, y un empate da 1 punto a cada uno. Se lee como una tabla de liga construida con respeto en vez de goles.",
+            "about_r_projected": "<strong>Vista proyectada</strong> — los puntos absolutos crecen con el número de partidos dirigidos, así que la clasificación también puede normalizarse: la media de puntuación en los partidos en los que el comportamiento del entrenador fue <em>medido</em> — una cita recuperada o un silencio confirmado en prensa (habló con la prensa y no mencionó al árbitro) — se escala al número de partidos jugados hasta ahora. El resultado está en la misma escala que la tabla de liga: un entrenador perfectamente respetuoso proyecta 3 puntos por partido, como un equipo que gana todos los encuentros. <em>Ten en cuenta que esta vista no es directamente comparable entre entrenadores:</em> depende de cuántos partidos suyos se midieron, y el asterisco marca a los que tienen menos de 5 partidos medidos — una muestra pequeña. Los partidos sin ninguna cobertura encontrada (silencio presunto) quedan excluidos de la media.",
+            "about_limits_h": "Limitaciones",
+            "about_l_li1": "Esta clasificación la genera un sistema automatizado: las citas pueden estar mal atribuidas y las puntuaciones son subjetivas.",
+            "about_l_li2": "La única fuente es la cobertura de la prensa deportiva española; un comentario que no se publique en ningún sitio es invisible para el sistema.",
+            "about_l_li3": "Haz clic en cualquier fila de la pestaña Clasificación para ver las citas, puntuaciones y fuentes subyacentes, y juzga por ti mismo.",
+            "about_data_h": "Datos y licencia",
+            "about_data_p": "Las citas se reproducen literalmente de los artículos enlazados y siguen siendo propiedad de sus respectivas editoriales. Los escudos de los equipos son los oficiales, servidos por el CDN público de ESPN, con insignias locales de iniciales como respaldo. El pipeline de recogida y este sitio son de código abierto: <a href=\"https://github.com/dariogarcia/la_liga_respect\" target=\"_blank\" rel=\"noopener noreferrer\">dariogarcia/la_liga_respect</a>.",
+            "footer": "Las citas se reproducen literalmente de los artículos enlazados y siguen siendo propiedad de sus respectivas editoriales. Sistema automatizado: las citas pueden estar mal atribuidas, las puntuaciones son subjetivas y los partidos sin comentario sobre el árbitro cuentan como silencio respetuoso (3 puntos). Haz clic en una fila para ver el detalle por partido · <a href=\"#\" onclick=\"switchTab('about'); return false;\">Sobre la metodología</a>",
+            "date_locale": "es-ES",
+            "decimal": ","
         },
+        "ca": {
+            "page_title": "Respect Rank - La Liga",
+            "brand_sub": "Entrenadors de La Liga · respecte als àrbitres",
+            "aria_lang": "Idioma",
+            "aria_sections": "Seccions",
+            "aria_mode": "Mode de classificació",
+            "aria_metric": "Presentació de punts",
+            "aria_close": "Tanca el panell de detall",
+            "theme_dark": "🌙 Mode fosc",
+            "theme_light": "☀️ Mode clar",
+            "tab_ranking": "Classificació",
+            "tab_coverage": "Cobertura",
+            "tab_about": "Quant a",
+            "mode_season": "Total temporada",
+            "mode_h2h": "Cara a cara",
+            "metric_total": "Punts totals",
+            "metric_projected": "Projecció*",
+            "btn_projected_title": "Mitjana de punts per partit mesurat (cita o silenci confirmat a la premsa), escalada als partits jugats — magnitud de taula de lliga. No és directament comparable entre entrenadors.",
+            "search_label": "Filtrar entrenadors o equips",
+            "search_placeholder": "Filtra per entrenador o equip, p. ex. Ancelotti, Barcelona…",
+            "mode_blurb_season": "<strong>Total temporada</strong> — cada entrenador acumula punts de respecte a tots els partits (3 respectuós · 1 neutral · 0 irrespectuós; sense comentari a l'àrbitre compta com a silenci respectuós). La mesura pura de respecte de tota la temporada.",
+            "mode_blurb_h2h": "<strong>Cara a cara</strong> — cada partit és un duel entre els dos entrenadors: el més respectuós s'emporta 3 punts, l'altre 0, i un empat dona 1 a cadascun (puntuacions de respecte: 3 silenci o cita respectuosa · 1 neutral · 0 irrespectuosa). Una taula de lliga construïda amb respecte en lloc de gols.",
+            "metric_disclaimer": "⚠ <strong>Nota d'equitat:</strong> la posició en aquesta vista depèn de quants partits de cada entrenador s'han <em>mesurat</em> (una cita recuperada o un silenci confirmat a la premsa). Els entrenadors amb menys partits mesurats — l'asterisc marca menys de 5 — es classifiquen amb proves més febles, i els que no en tenen cap no es poden classificar. Compara amb cautela; els <em>Punts totals</em> són la vista oficial.",
+            "th_pos": "Pos",
+            "th_coach": "Entrenador i equip",
+            "th_gp": "PJ",
+            "gp_title": "Partits jugats",
+            "th_homeaway": "Casa/Fora",
+            "ha_title": "Punts aconseguits en partits a casa / fora",
+            "th_points": "Punts",
+            "th_points_projected": "Projecció*",
+            "th_points_title_total": "Punts de respecte totals",
+            "th_points_title_pergame": "Mitjana de punts per partit mesurat (cita o silenci confirmat a la premsa), escalada als partits jugats (asterisc: menys de 5)",
+            "table_hint": "👆 <strong>Fes clic a qualsevol fila</strong> per obrir l'historial complet de l'entrenador: cada cita, puntuació i font darrere dels seus punts, partit a partit.",
+            "pergame_note": "* Punts projectats: la mitjana de puntuació als partits en què es va mesurar el comportament de l'entrenador (una cita recuperada o un silenci confirmat a la premsa — va parlar i no va mencionar l'àrbitre), escalada al nombre de partits jugats fins ara. El resultat és a l'escala de la taula de lliga: un entrenador perfectament respectuós projecta 3 punts per partit, com un equip que guanya tots els partits. L'asterisc marca entrenadors amb menys de 5 partits mesurats (mostra petita).",
+            "no_match": "Cap entrenador o equip coincideix amb “{filter}”.",
+            "movement_up_one": "Ha pujat {n} lloc des de l'execució anterior",
+            "movement_up_many": "Ha pujat {n} llocs des de l'execució anterior",
+            "movement_down_one": "Ha baixat {n} lloc des de l'execució anterior",
+            "movement_down_many": "Ha baixat {n} llocs des de l'execució anterior",
+            "row_aria": "Veure cites de {coach}, entrenador del {team}",
+            "pts_title_none": "Encara sense partits mesurats (no s'ha trobat cobertura)",
+            "pts_title_avg": "mitjana de {avg} per partit mesurat × {games} partits jugats",
+            "pts_title_total": "{n} punts",
+            "game_one": "partit",
+            "games_many": "partits",
+            "cov_quote_one": "1 cita",
+            "cov_quotes": "{n} cites",
+            "cov_noref": "{n} sense àrbitre ({p} presumptes)",
+            "cov_tooltip": "Cites sobre àrbitres trobades davant de partits resolts sense comentari a l'àrbitre (presumpte = no s'ha trobat res dins de la finestra de 14 dies)",
+            "score_3": "Respectuós",
+            "score_1": "Neutral",
+            "score_0": "Irrespectuós",
+            "score_of": "Puntuació {s} de 3",
+            "score_3_label": "3 · Respectuós",
+            "score_1_label": "1 · Neutral",
+            "score_0_label": "0 · Irrespectuós",
+            "score_silence_label": "3 · Silenci respectuós",
+            "grader_heuristic": "Heurístic",
+            "grader_coverage": "Sense comentari a l'àrbitre",
+            "matchup": "{home} – {away}",
+            "duel_won": "⚔ ha guanyat el duel contra {opp} · respecte {me}–{oppS}",
+            "duel_drew": "⚔ ha empatat el duel contra {opp} · respecte {me}–{oppS}",
+            "duel_lost": "⚔ ha perdut el duel contra {opp} · respecte {me}–{oppS}",
+            "duel_solo": "⚔ sense rival",
+            "duel_won_title": "Puntuacions de respecte: {me} (pròpia) davant de {oppS} ({opp}). L'entrenador més respectuós s'emporta els 3 punts del duel.",
+            "duel_drew_title": "Ambdós entrenadors van puntuar {me} en respecte — 1 punt de duel cadascun.",
+            "duel_lost_title": "Puntuacions de respecte: {me} (pròpia) davant de {oppS} ({opp}). L'entrenador més respectuós s'emporta els 3 punts del duel.",
+            "duel_solo_title": "Sense comentari avaluat del rival en aquest partit — duel incomplet, es manté la puntuació de respecte.",
+            "justification_summary": "Justificació de l'avaluació",
+            "silence_confirmed": "L'entrenador va parlar a la cobertura del partit però no va fer cap comentari sobre l'àrbitre.",
+            "silence_presumed": "No s'ha trobat cap comentari sobre l'àrbitre — es presumeix respectuós.",
+            "source_label": "Font: ",
+            "source_not_recorded": "Font: no registrada",
+            "source_published": " · publicat el {date}",
+            "prev_coach": " <span class=\"prev-coach\">(ant.: {coach})</span>",
+            "detail_summary_season": "<strong>Total temporada</strong> — cada partit puntua <strong>3</strong> respectuós · <strong>1</strong> neutral · <strong>0</strong> irrespectuós; un partit sense comentari sobre l'àrbitre compta com a silenci respectuós (3). {coach} té <strong>{pts} punts</strong> de {games}.",
+            "detail_summary_h2h": "<strong>Cara a cara</strong> — cada partit és un duel entre els dos entrenadors de la banqueta: el més respectuós s'emporta <strong>3 punts de duel</strong>, l'altre 0, i un empat dona 1 a cadascun (puntuacions de respecte: 3 silenci o cita respectuosa · 1 neutral · 0 irrespectuosa). {coach} té <strong>{pts} punts de duel</strong> de {games} (guanyats {w} · empatats {d} · perduts {l}). Les puntuacions de respecte per partit es mostren al costat.",
+            "week_filter_label": "Mostra cites de:",
+            "all_weeks": "Totes les setmanes ({n})",
+            "no_quotes": "Encara no s'han recollit cites d'aquest entrenador aquesta temporada.",
+            "pending_note_coach_one": "{n} partit d'aquest entrenador continua pendent de recollida i es reintentarà a la propera execució.",
+            "pending_note_coach_many": "{n} partits d'aquest entrenador continuen pendents de recollida i es reintentaran a la propera execució.",
+            "see_coverage": "Veure l'estat de la cobertura",
+            "close_panel": "Tanca ✕",
+            "switch_coach_hint": "Fes clic a una fila de la classificació per canviar d'entrenador.",
+            "coverage_title": "Estat de la recollida",
+            "coverage_intro": "Quant de la temporada s'ha cercat en busca de cites sobre àrbitres i quines parelles entrenador/partit continuen pendents. Les parelles pendents es reintenten automàticament a cada execució setmanal.",
+            "stat_games": "partits registrats",
+            "stat_quotes": "cites recollides",
+            "stat_silence": "resolts com a silenci",
+            "stat_pending": "pendents de recollida",
+            "th_game": "Partit",
+            "th_date": "Data",
+            "th_coach_col": "Entrenador",
+            "th_reason": "Motiu",
+            "th_attempts": "Intents",
+            "pending_note": "Les entrades els reintentis de les quals s'han esgotat es mantenen llistades fins que una execució completa les resolgui (cercar-i-presumir): quan passa la finestra de cerca sense trobar enlloc cobertura sobre l'àrbitre, el partit es presumeix silenci respectuós.",
+            "pending_summary_active_one": "Recollida incompleta: {n} parella entrenador/partit continua pendent i es reintentarà a la propera execució.",
+            "pending_summary_active_many": "Recollida incompleta: {n} parelles entrenador/partit continuen pendents i es reintentaran a la propera execució.",
+            "pending_summary_done": "Recollida completa: no hi ha parelles entrenador/partit pendents. Els partits nous apareixen aquí després de cada jornada.",
+            "grading_notice": "Qualitat de dades: {h} de {total} cites van ser avaluades pel suport heurístic de baixa confiança ({llm} per LLM). Tracta aquestes puntuacions amb cautela.",
+            "updated_prefix": "Actualitzat: {date}",
+            "games_since": " · partits des de {date}",
+            "about_what_h": "Què és això?",
+            "about_what_p": "Respect Rank segueix com es comporten els entrenadors de La Liga amb els àrbitres en les seves cites de premsa després dels partits. A cada partit es recullen els comentaris de cada entrenador des de cobertura de premsa pública, es citen literalment amb enllaç a l'editorial i s'avaluen per respecte.",
+            "about_scoring_h": "Puntuació",
+            "about_s_li1": "Les cites les avalua un LLM sobre el comentari relacionat amb l'àrbitre; un suport heurístic de baixa confiança marca la fila quan l'LLM no està disponible.",
+            "about_s_li2": "Un partit en què l'entrenador va parlar amb la premsa però no va mencionar l'àrbitre compta com a <strong>silenci respectuós confirmat</strong> (3 punts).",
+            "about_s_li3": "Si no es troba cap cobertura dins de la finestra de cerca, el partit es <strong>presumeix silenci respectuós</strong> (3 punts): la càrrega de la prova és trobar la manca de respecte, no demostrar la innocència.",
+            "about_rankings_h": "Les dues classificacions",
+            "about_r_season": "<strong>Total temporada</strong> — cada entrenador acumula punts de tots els partits que va dirigir (inclosos els silencis de 3 punts). És la mesura pura de respecte al llarg de la temporada; un entrenador que canviï de club a mitja temporada obté una fila per club.",
+            "about_r_h2h": "<strong>Cara a cara</strong> — cada partit es converteix en un duel entre els dos entrenadors de la banqueta aquell dia: el més respectuós dels dos s'emporta 3 punts i l'altre 0, i un empat dona 1 punt a cadascun. Es llegeix com una taula de lliga construïda amb respecte en lloc de gols.",
+            "about_r_projected": "<strong>Vista projectada</strong> — els punts absoluts creixen amb el nombre de partits dirigits, així que la classificació també es pot normalitzar: la mitjana de puntuació als partits en què el comportament de l'entrenador va ser <em>mesurat</em> — una cita recuperada o un silenci confirmat a la premsa (va parlar amb la premsa i no va mencionar l'àrbitre) — s'escala al nombre de partits jugats fins ara. El resultat és a la mateixa escala que la taula de lliga: un entrenador perfectament respectuós projecta 3 punts per partit, com un equip que guanya tots els partits. <em>Tingues present que aquesta vista no és directament comparable entre entrenadors:</em> depèn de quants partits seus es van mesurar, i l'asterisc marca els que tenen menys de 5 partits mesurats — una mostra petita. Els partits sense cap cobertura trobada (silenci presumpte) queden exclosos de la mitjana.",
+            "about_limits_h": "Limitacions",
+            "about_l_li1": "Aquesta classificació la genera un sistema automatitzat: les cites poden estar mal atribuïdes i les puntuacions són subjectives.",
+            "about_l_li2": "L'única font és la cobertura de la premsa esportiva espanyola; un comentari que no es publiqui enlloc és invisible per al sistema.",
+            "about_l_li3": "Fes clic a qualsevol fila de la pestanya Classificació per veure les cites, puntuacions i fonts subjacents, i jutja tu mateix.",
+            "about_data_h": "Dades i llicència",
+            "about_data_p": "Les cites es reprodueixen literalment dels articles enllaçats i continuen sent propietat de les seves respectives editorials. Els escuts dels equips són els oficials, servits pel CDN públic d'ESPN, amb insígnies locals d'inicials com a suport. El pipeline de recollida i aquest lloc són de codi obert: <a href=\"https://github.com/dariogarcia/la_liga_respect\" target=\"_blank\" rel=\"noopener noreferrer\">dariogarcia/la_liga_respect</a>.",
+            "footer": "Les cites es reprodueixen literalment dels articles enllaçats i continuen sent propietat de les seves respectives editorials. Sistema automatitzat: les cites poden estar mal atribuïdes, les puntuacions són subjectives i els partits sense comentari sobre l'àrbitre compten com a silenci respectuós (3 punts). Fes clic a una fila per veure el detall per partit · <a href=\"#\" onclick=\"switchTab('about'); return false;\">Sobre la metodologia</a>",
+            "date_locale": "ca-ES",
+            "decimal": ","
+        }
     };
+    /* I18N:END */
+
+    const LANGS = ['en', 'es', 'ca'];
+    let LANG = 'en';
+    (function detectLang() {
+        let cand = null;
+        try { cand = new URLSearchParams(location.search).get('lang'); } catch (e) { /* ignore */ }
+        if (!cand) { try { cand = localStorage.getItem('rr-lang'); } catch (e) { /* ignore */ } }
+        if (!cand) cand = (navigator.language || '').slice(0, 2);
+        if (LANGS.includes(cand)) LANG = cand;
+    })();
+
+    function fmt(template, vars) {
+        return String(template).replace(/\{(\w+)\}/g, (m, k) =>
+            (vars && Object.prototype.hasOwnProperty.call(vars, k)) ? String(vars[k]) : m);
+    }
+
+    function t(key, vars) {
+        const dict = I18N[LANG] || I18N.en;
+        const value = (dict && dict[key] !== undefined) ? dict[key] : I18N.en[key];
+        return fmt(value === undefined ? key : value, vars);
+    }
+
+    // Applies the current language to all static markup, updates
+    // the switcher buttons and the <html lang> attribute.
+    function applyI18n() {
+        document.documentElement.lang = LANG;
+        document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+        document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+        document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+        document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+        document.querySelectorAll('.lang-btn').forEach(b => {
+            const on = b.dataset.lang === LANG;
+            b.classList.toggle('active', on);
+            b.setAttribute('aria-pressed', String(on));
+        });
+        syncThemeButton();
+    }
+
+    function setLang(lang) {
+        if (!I18N[lang] || lang === LANG) return;
+        LANG = lang;
+        try { localStorage.setItem('rr-lang', lang); } catch (e) { /* ignore */ }
+        applyI18n();
+        // Re-render every dynamic view in the new language.
+        loadLeaderboard(STATE.mode);
+        loadNotices();
+        loadRunReport();
+    }
 
     // --- XSS hardening (F2): every dynamic value goes through esc()
     // before being placed in an innerHTML template, and every URL is
@@ -938,7 +1378,7 @@
             if (h && h.coach && h.until && (!latest || h.until > latest.until)) latest = h;
         }
         if (!latest || latest.until < DATA.seasonStart) return '';
-        return ` <span class="prev-coach">(prev: ${esc(latest.coach)})</span>`;
+        return t('prev_coach', { coach: esc(latest.coach) });
     }
 
     async function ensureData() {
@@ -982,8 +1422,12 @@
             if (!report || !report.generated_at) return;
             const when = new Date(report.generated_at);
             const banner = document.getElementById('updated-banner');
-            let text = `Updated: ${isNaN(when) ? esc(report.generated_at) : when.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}`;
-            if (report.since_used) text += ` · games since ${esc(report.since_used)}`;
+            const locale = t('date_locale') || undefined;
+            const dateStr = isNaN(when)
+                ? esc(report.generated_at)
+                : when.toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' });
+            let text = t('updated_prefix', { date: dateStr });
+            if (report.since_used) text += t('games_since', { date: esc(report.since_used) });
             banner.textContent = text;
             banner.style.display = 'block';
         } catch (e) {
@@ -1036,17 +1480,15 @@
         }
 
         const thPoints = document.getElementById('th-points');
-        thPoints.textContent = perGame ? 'Projected*' : 'Points';
-        thPoints.title = perGame
-            ? 'Average points per measured game (quote or confirmed press silence), scaled to games played so far (asterisk: fewer than 5)'
-            : 'Total respect points';
+        thPoints.textContent = perGame ? t('th_points_projected') : t('th_points');
+        thPoints.title = perGame ? t('th_points_title_pergame') : t('th_points_title_total');
         document.getElementById('pergame-note').hidden = !perGame;
         document.getElementById('metric-disclaimer').hidden = !perGame;
 
         if (!shown.length) {
             const row = document.createElement('tr');
             row.className = 'no-match';
-            row.innerHTML = `<td colspan="5">No coach or team matches “${esc(STATE.filter)}”.</td>`;
+            row.innerHTML = `<td colspan="5">${t('no_match', { filter: esc(STATE.filter) })}</td>`;
             body.appendChild(row);
             return;
         }
@@ -1060,14 +1502,14 @@
             const teamName = entry.team || (teamData ? teamData.team : 'Unknown Team');
             const logoUrl = logoFor(teamData);
             const homeAway = hasSplit
-                ? `<td class="ha-col" title="Home / Away points">${Number(entry.home_points) || 0}<span class="ha-sep">/</span>${Number(entry.away_points) || 0}</td>`
+                ? `<td class="ha-col" title="${esc(t('ha_title'))}">${Number(entry.home_points) || 0}<span class="ha-sep">/</span>${Number(entry.away_points) || 0}</td>`
                 : '';
             const mvKey = entry.coach + '|' + (entry.team || teamName);
             const mv = (STATE.movement && STATE.mode === 'separate' && !perGame)
                 ? STATE.movement[mvKey] : undefined;
             const mvHtml = (mv === undefined || mv === 0)
                 ? ''
-                : `<span class="movement ${mv > 0 ? 'up' : 'down'}" title="Moved ${mv > 0 ? 'up' : 'down'} ${Math.abs(mv)} place${Math.abs(mv) === 1 ? '' : 's'} since the previous run">${mv > 0 ? '▲' : '▼'}${Math.abs(mv)}</span>`;
+                : `<span class="movement ${mv > 0 ? 'up' : 'down'}" title="${esc(t((mv > 0 ? 'movement_up_' : 'movement_down_') + (Math.abs(mv) === 1 ? 'one' : 'many'), { n: Math.abs(mv) }))}">${mv > 0 ? '▲' : '▼'}${Math.abs(mv)}</span>`;
 
             const points = Number(entry.points) || 0;
             const measuredGames = Number(entry.measured_games ?? entry.quoted_games) || 0;
@@ -1084,15 +1526,18 @@
                 : String(points);
             const ptsTitle = perGame
                 ? (projected === null
-                    ? 'No measured games yet (no coverage found)'
-                    : `avg ${(measuredPoints / measuredGames).toFixed(2)} per measured game × ${gamesPlayed} games played`)
-                : `${points} points`;
+                    ? t('pts_title_none')
+                    : t('pts_title_avg', {
+                        avg: (measuredPoints / measuredGames).toFixed(2).replace('.', t('decimal')),
+                        games: gamesPlayed,
+                    }))
+                : t('pts_title_total', { n: points });
 
             const row = document.createElement('tr');
             row.className = 'leaderboard-row';
             row.tabIndex = 0;
             row.setAttribute('role', 'button');
-            row.setAttribute('aria-label', `Show quotes for ${teamName} coach ${entry.coach}`);
+            row.setAttribute('aria-label', t('row_aria', { team: teamName, coach: entry.coach }));
             row.innerHTML = `
                 <td class="pos-col"><span class="pos-badge">${index + 1}</span>${mvHtml}</td>
                 <td class="coach-col">
@@ -1108,7 +1553,7 @@
                         </div>
                     </div>
                 </td>
-                <td class="gp-col" title="Games played">${Number(entry.games_played) || 0}</td>
+                <td class="gp-col" title="${esc(t('gp_title'))}">${Number(entry.games_played) || 0}</td>
                 ${homeAway}
                 <td class="pts-col">
                     <div class="pts-cell" title="${esc(ptsTitle)}">
@@ -1158,11 +1603,11 @@
     function coverageLine(coach) {
         const cov = coverageFor(coach);
         if (!cov.quotes && !cov.clean) return '';
-        const parts = [`${cov.quotes} quote${cov.quotes === 1 ? '' : 's'}`];
+        const parts = [cov.quotes === 1 ? t('cov_quote_one') : t('cov_quotes', { n: cov.quotes })];
         if (cov.clean) {
-            parts.push(`${cov.clean} no-ref (${cov.presumed} presumed)`);
+            parts.push(t('cov_noref', { n: cov.clean, p: cov.presumed }));
         }
-        return `<div title="Referee-related quotes found vs games resolved without a referee comment (presumed = nothing found within the 14-day window)" `
+        return `<div title="${esc(t('cov_tooltip'))}" `
              + `style="font-size: 0.72rem; color: var(--fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${parts.join(' · ')}</div>`;
     }
 
@@ -1216,7 +1661,7 @@
             btnComp.classList.toggle('active', mode === 'competitive');
             btnSep.setAttribute('aria-pressed', String(mode === 'separate'));
             btnComp.setAttribute('aria-pressed', String(mode === 'competitive'));
-            document.getElementById('mode-explainer').innerHTML = MODE_INFO[mode].blurb;
+            document.getElementById('mode-explainer').innerHTML = t(mode === 'separate' ? 'mode_blurb_season' : 'mode_blurb_h2h');
 
             // Keep an open drill-down panel coherent when the mode
             // changes (Season Total vs Head-to-Head scoring).
@@ -1239,17 +1684,17 @@
     function syncThemeButton() {
         const dark = document.documentElement.dataset.theme === 'dark';
         const btn = document.getElementById('btn-theme');
-        btn.textContent = dark ? '☀️ Light mode' : '🌙 Dark mode';
+        btn.textContent = dark ? t('theme_light') : t('theme_dark');
         btn.setAttribute('aria-pressed', String(dark));
     }
 
     // --- F4: per-coach drill-down. Shows every collected quote with
     // its game, score, grader, justification and source links (C4).
     function scoreBadge(score) {
-        const labels = { 3: 'Respectful', 1: 'Neutral', 0: 'Disrespectful' };
+        const labels = { 3: t('score_3'), 1: t('score_1'), 0: t('score_0') };
         const s = [0, 1, 3].includes(Number(score)) ? Number(score) : null;
         if (s === null) return '<span class="score-badge" style="background:#888;">?</span>';
-        return `<span class="score-badge score-${s}" title="Score ${s} of 3">${s} · ${labels[s]}</span>`;
+        return `<span class="score-badge score-${s}" title="${esc(t('score_of', { s }))}">${s} · ${esc(labels[s])}</span>`;
     }
 
     // Head-to-Head duel for one coach in one game, mirroring the
@@ -1280,28 +1725,20 @@
     function duelChip(duel) {
         if (!duel) return '';
         if (duel.solo) {
-            return `<span class="duel-chip duel-drew" title="No graded opponent comment in this game — duel incomplete, raw respect score kept">⚔ no opponent</span>`;
+            return `<span class="duel-chip duel-drew" title="${esc(t('duel_solo_title'))}">${esc(t('duel_solo'))}</span>`;
         }
         // Respect scores are shown so a silence beating a quote (or
         // vice versa) is self-explanatory: 3 = respectful silence or
         // quote, 1 = neutral, 0 = disrespectful.
-        const labels = {
-            won: `⚔ won the duel vs ${duel.opponent} · respect ${duel.sMe}–${duel.sOpp}`,
-            drew: `⚔ drew the duel vs ${duel.opponent} · respect ${duel.sMe}–${duel.sOpp}`,
-            lost: `⚔ lost the duel vs ${duel.opponent} · respect ${duel.sMe}–${duel.sOpp}`,
-        };
-        const titles = {
-            won: `Respect scores: ${duel.sMe} (mine) vs ${duel.sOpp} (${duel.opponent}). The more respectful coach takes the 3 duel points.`,
-            drew: `Both coaches scored ${duel.sMe} on respect — 1 duel point each.`,
-            lost: `Respect scores: ${duel.sMe} (mine) vs ${duel.sOpp} (${duel.opponent}). The more respectful coach takes the 3 duel points.`,
-        };
-        return `<span class="duel-chip duel-${duel.outcome}" title="${esc(titles[duel.outcome])}">${esc(labels[duel.outcome])}</span>`;
+        const vars = { opp: esc(duel.opponent), me: duel.sMe, oppS: duel.sOpp };
+        const key = 'duel_' + duel.outcome;
+        return `<span class="duel-chip duel-${duel.outcome}" title="${esc(t(key + '_title', vars))}">${t(key, vars)}</span>`;
     }
 
     function graderBadge(gradedBy) {
         if (gradedBy === 'llm') return '<span class="grader-badge grader-llm">LLM</span>';
-        if (gradedBy === 'heuristic') return '<span class="grader-badge grader-heuristic">Heuristic</span>';
-        if (gradedBy === 'coverage') return '<span class="grader-badge grader-coverage">No ref comment</span>';
+        if (gradedBy === 'heuristic') return `<span class="grader-badge grader-heuristic">${esc(t('grader_heuristic'))}</span>`;
+        if (gradedBy === 'coverage') return `<span class="grader-badge grader-coverage">${esc(t('grader_coverage'))}</span>`;
         return '';
     }
 
@@ -1316,9 +1753,9 @@
             try { host = new URL(safe).hostname.replace(/^www\./, ''); } catch (e) { /* keep default */ }
             return `<a href="${esc(safe)}" target="_blank" rel="noopener noreferrer">${esc(host)}</a>`;
         }).filter(Boolean);
-        if (!links.length) return '<div class="quote-sources">Source: not recorded</div>';
-        const pub = comment.published_at ? ` · published ${esc(comment.published_at.slice(0, 10))}` : '';
-        return `<div class="quote-sources">Source: ${links.join('')}${pub}</div>`;
+        if (!links.length) return `<div class="quote-sources">${esc(t('source_not_recorded'))}</div>`;
+        const pub = comment.published_at ? t('source_published', { date: esc(comment.published_at.slice(0, 10)) }) : '';
+        return `<div class="quote-sources">${esc(t('source_label'))}${links.join('')}${pub}</div>`;
     }
 
     function quoteCardDate(c, game) {
@@ -1345,6 +1782,7 @@
 
         // Mode-specific summary line over the quote cards.
         let summaryLine;
+        const gamesLabel = n => `${n} ${n === 1 ? t('game_one') : t('games_many')}`;
         if (h2h) {
             const duels = comments
                 .map(({ c, game }) => (c.score === undefined ? null : duelFor(game, coach)))
@@ -1355,22 +1793,18 @@
             const l = duels.filter(d => d.outcome === 'lost').length;
             summaryLine = `
                 <div class="detail-sub">
-                    <strong>Head-to-Head</strong> — each game is a duel between the two coaches on the
-                    touchline: the more respectful takes <strong>3 duel points</strong>, the other 0, a
-                    tie gives 1 each (respect scores: 3 respectful silence or quote · 1 neutral ·
-                    0 disrespectful). ${esc(coach)} has <strong>${pts} duel points</strong> from
-                    ${duels.length} game${duels.length === 1 ? '' : 's'}
-                    (${w} won · ${d} drawn · ${l} lost). Respect scores per game are shown alongside.
+                    ${t('detail_summary_h2h', {
+                        coach: esc(coach), pts, games: gamesLabel(duels.length), w, d, l,
+                    })}
                 </div>`;
         } else {
             const scored = comments.filter(c => c.score !== undefined);
             const pts = scored.reduce((sum, c) => sum + (Number(c.score) || 0), 0);
             summaryLine = `
                 <div class="detail-sub">
-                    <strong>Season Total</strong> — every game scores <strong>3</strong> respectful ·
-                    <strong>1</strong> neutral · <strong>0</strong> disrespectful; a game without a
-                    referee comment counts as respectful silence (3). ${esc(coach)} has
-                    <strong>${pts} points</strong> from ${scored.length} game${scored.length === 1 ? '' : 's'}.
+                    ${t('detail_summary_season', {
+                        coach: esc(coach), pts, games: gamesLabel(scored.length),
+                    })}
                 </div>`;
         }
 
@@ -1380,9 +1814,9 @@
             const weeks = [...new Set(comments.map(({ c, game }) => quoteCardDate(c, game)))].sort().reverse();
             weekFilter = `
                 <div class="week-filter">
-                    <label for="week-select">Show quotes from:</label>
+                    <label for="week-select">${esc(t('week_filter_label'))}</label>
                     <select id="week-select" onchange="onWeekFilterChange(this.value)">
-                        <option value="all">All weeks (${comments.length})</option>
+                        <option value="all">${esc(t('all_weeks', { n: comments.length }))}</option>
                         ${weeks.map(w => `<option value="${esc(w)}">${esc(w)}</option>`).join('')}
                     </select>
                 </div>`;
@@ -1390,26 +1824,26 @@
 
         let cards;
         if (!comments.length) {
-            cards = '<p>No quotes collected for this coach yet this season.</p>';
+            cards = `<p>${esc(t('no_quotes'))}</p>`;
         } else {
             cards = comments.map(({ c, game }) => {
                 const date = quoteCardDate(c, game);
-                const matchup = game ? `${game.home_team} vs ${game.away_team}` : c.game_id;
+                const matchup = game
+                    ? t('matchup', { home: esc(game.home_team), away: esc(game.away_team) })
+                    : esc(c.game_id);
                 const duel = h2h ? duelFor(game, coach) : null;
                 const justification = c.justification
-                    ? `<details class="quote-justification"><summary>Grading justification</summary>${esc(c.justification)}</details>`
+                    ? `<details class="quote-justification"><summary>${esc(t('justification_summary'))}</summary>${esc(c.justification)}</details>`
                     : '';
                 const quoteBody = c.no_ref_comment
-                    ? `<div class="quote-text" style="font-style: italic; color: var(--fg-muted);">${
-                        c.kind === 'confirmed'
-                            ? 'The coach spoke in the match coverage but made no comment about the referee.'
-                            : 'No referee-related comment found — presumed respectful.'
-                      }</div>`
+                    ? `<div class="quote-text" style="font-style: italic; color: var(--fg-muted);">${esc(
+                        c.kind === 'confirmed' ? t('silence_confirmed') : t('silence_presumed')
+                      )}</div>`
                     : `<div class="quote-text">«${esc(c.quote)}»</div>`;
                 return `
                     <div class="quote-card" data-date="${esc(date)}">
                         <div class="quote-meta">
-                            <span class="matchup">${esc(matchup)}</span>
+                            <span class="matchup">${matchup}</span>
                             <span>${esc(date)}</span>
                             ${scoreBadge(c.score)}
                             ${graderBadge(c.graded_by)}
@@ -1423,20 +1857,23 @@
         }
 
         const pendingNote = pendingForCoach.length
-            ? `<div class="notice warning" style="display: block;">${pendingForCoach.length} game(s) for this coach are still pending collection and will be retried on the next run. <a href="#" onclick="switchTab('coverage'); return false;">See coverage status</a></div>`
+            ? `<div class="notice warning" style="display: block;">${t(
+                  pendingForCoach.length === 1 ? 'pending_note_coach_one' : 'pending_note_coach_many',
+                  { n: pendingForCoach.length }
+              )} <a href="#" onclick="switchTab('coverage'); return false;">${esc(t('see_coverage'))}</a></div>`
             : '';
 
         panel.innerHTML = `
             <div class="detail-header">
                 <img src="${esc(logoFor(teamData))}" alt="" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='${esc(localBadgeFor(teamData))}';}else{this.onerror=null;this.src='assets/teams/default.svg';}">
                 <h2>${esc(coach)} — ${esc(teamName)}</h2>
-                <button class="detail-close" onclick="hideCoachDetail()" aria-label="Close detail panel">Close ✕</button>
+                <button class="detail-close" onclick="hideCoachDetail()" aria-label="${esc(t('aria_close'))}">${esc(t('close_panel'))}</button>
             </div>
             ${summaryLine}
             ${pendingNote}
             ${weekFilter}
             ${cards}
-            <div class="detail-sub" style="margin-top: 12px;">Click a leaderboard row to switch coach.</div>
+            <div class="detail-sub" style="margin-top: 12px;">${esc(t('switch_coach_hint'))}</div>
         `;
         panel.hidden = false;
         panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1467,7 +1904,7 @@
             const notice = document.getElementById('grading-notice');
             if (heuristic > 0) {
                 notice.style.display = 'block';
-                notice.textContent = `Data quality: ${heuristic} of ${DATA.comments.length} quotes were graded by the low-confidence heuristic fallback (${llm} by LLM). Treat those scores with caution.`;
+                notice.textContent = t('grading_notice', { h: heuristic, total: DATA.comments.length, llm });
             }
 
             const silence = DATA.comments.filter(c => c.no_ref_comment).length;
@@ -1490,7 +1927,10 @@
             body.innerHTML = '';
             if (active.length > 0) {
                 summary.style.display = 'block';
-                summary.textContent = `Collection incomplete: ${active.length} coach/game pair(s) still pending and will be retried on the next run.`;
+                summary.textContent = t(
+                    active.length === 1 ? 'pending_summary_active_one' : 'pending_summary_active_many',
+                    { n: active.length }
+                );
                 section.style.display = 'block';
                 active.forEach(p => {
                     const row = document.createElement('tr');
@@ -1505,12 +1945,17 @@
                 });
             } else {
                 summary.style.display = 'block';
-                summary.textContent = 'Collection is complete: no pending coach/game pairs. New games appear here after each matchday.';
+                summary.textContent = t('pending_summary_done');
             }
         } catch (e) {
             console.warn('Could not load notices:', e);
         }
     }
+
+    // Apply the detected/saved language to the static markup right
+    // away (the script sits at the end of <body>, so the DOM is
+    // already parsed — no English flash for es/ca visitors).
+    applyI18n();
 
     window.onload = () => {
         syncThemeButton();
