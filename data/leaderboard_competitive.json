@@ -14,14 +14,14 @@
   {
     "coach": "Iñigo Pérez",
     "team": "Villarreal",
-    "points": 12,
+    "points": 10,
     "games_played": 8,
     "home_points": 3,
-    "away_points": 9,
-    "quoted_games": 1,
-    "quoted_points": 3,
-    "measured_games": 4,
-    "measured_points": 8
+    "away_points": 7,
+    "quoted_games": 0,
+    "quoted_points": 0,
+    "measured_games": 3,
+    "measured_points": 5
   },
   {
     "coach": "Luis Miguel Ramis",
@@ -46,18 +46,6 @@
     "quoted_points": 0,
     "measured_games": 6,
     "measured_points": 8
-  },
-  {
-    "coach": "Quique Sánchez Flores",
-    "team": "Alavés",
-    "points": 10,
-    "games_played": 8,
-    "home_points": 7,
-    "away_points": 3,
-    "quoted_games": 2,
-    "quoted_points": 4,
-    "measured_games": 2,
-    "measured_points": 4
   },
   {
     "coach": "Claudio Giráldez",
@@ -132,6 +120,18 @@
     "measured_points": 8
   },
   {
+    "coach": "José Alberto López",
+    "team": "Racing Santander",
+    "points": 8,
+    "games_played": 7,
+    "home_points": 3,
+    "away_points": 5,
+    "quoted_games": 1,
+    "quoted_points": 0,
+    "measured_games": 4,
+    "measured_points": 3
+  },
+  {
     "coach": "Juan Francisco Funes",
     "team": "Málaga",
     "points": 8,
@@ -156,6 +156,18 @@
     "measured_points": 6
   },
   {
+    "coach": "Quique Sánchez Flores",
+    "team": "Alavés",
+    "points": 8,
+    "games_played": 8,
+    "home_points": 5,
+    "away_points": 3,
+    "quoted_games": 1,
+    "quoted_points": 1,
+    "measured_games": 2,
+    "measured_points": 2
+  },
+  {
     "coach": "Carlos Corberán",
     "team": "Valencia",
     "points": 7,
@@ -168,16 +180,16 @@
     "measured_points": 4
   },
   {
-    "coach": "José Alberto López",
-    "team": "Racing Santander",
+    "coach": "José Bordalás",
+    "team": "Getafe",
     "points": 7,
-    "games_played": 7,
-    "home_points": 2,
-    "away_points": 5,
-    "quoted_games": 2,
+    "games_played": 8,
+    "home_points": 3,
+    "away_points": 4,
+    "quoted_games": 1,
     "quoted_points": 0,
     "measured_games": 4,
-    "measured_points": 2
+    "measured_points": 3
   },
   {
     "coach": "Luís Castro",
@@ -186,8 +198,8 @@
     "games_played": 6,
     "home_points": 2,
     "away_points": 5,
-    "quoted_games": 3,
-    "quoted_points": 4,
+    "quoted_games": 2,
+    "quoted_points": 1,
     "measured_games": 4,
     "measured_points": 5
   },
@@ -214,18 +226,6 @@
     "quoted_points": 1,
     "measured_games": 5,
     "measured_points": 5
-  },
-  {
-    "coach": "José Bordalás",
-    "team": "Getafe",
-    "points": 6,
-    "games_played": 8,
-    "home_points": 3,
-    "away_points": 3,
-    "quoted_games": 2,
-    "quoted_points": 0,
-    "measured_games": 5,
-    "measured_points": 3
   },
   {
     "coach": "José Mourinho",

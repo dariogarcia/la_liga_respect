@@ -12,6 +12,18 @@
     "measured_points": 24
   },
   {
+    "coach": "Iñigo Pérez",
+    "team": "Villarreal",
+    "points": 24,
+    "games_played": 8,
+    "home_points": 9,
+    "away_points": 15,
+    "quoted_games": 0,
+    "quoted_points": 0,
+    "measured_games": 3,
+    "measured_points": 9
+  },
+  {
     "coach": "Martín Anselmi",
     "team": "Elche",
     "points": 24,
@@ -36,12 +48,12 @@
     "measured_points": 19
   },
   {
-    "coach": "Iñigo Pérez",
-    "team": "Villarreal",
+    "coach": "José Bordalás",
+    "team": "Getafe",
     "points": 22,
     "games_played": 8,
-    "home_points": 9,
-    "away_points": 13,
+    "home_points": 10,
+    "away_points": 12,
     "quoted_games": 1,
     "quoted_points": 1,
     "measured_games": 4,
@@ -54,8 +66,8 @@
     "games_played": 8,
     "home_points": 13,
     "away_points": 9,
-    "quoted_games": 2,
-    "quoted_points": 4,
+    "quoted_games": 1,
+    "quoted_points": 1,
     "measured_games": 2,
     "measured_points": 4
   },
@@ -120,15 +132,15 @@
     "measured_points": 10
   },
   {
-    "coach": "José Bordalás",
-    "team": "Getafe",
+    "coach": "José Alberto López",
+    "team": "Racing Santander",
     "points": 19,
-    "games_played": 8,
-    "home_points": 10,
-    "away_points": 9,
-    "quoted_games": 2,
+    "games_played": 7,
+    "home_points": 9,
+    "away_points": 10,
+    "quoted_games": 1,
     "quoted_points": 1,
-    "measured_games": 5,
+    "measured_games": 4,
     "measured_points": 10
   },
   {
@@ -180,26 +192,14 @@
     "measured_points": 14
   },
   {
-    "coach": "José Alberto López",
-    "team": "Racing Santander",
-    "points": 16,
-    "games_played": 7,
-    "home_points": 6,
-    "away_points": 10,
-    "quoted_games": 2,
-    "quoted_points": 1,
-    "measured_games": 4,
-    "measured_points": 7
-  },
-  {
     "coach": "Luís Castro",
     "team": "Levante",
     "points": 16,
     "games_played": 6,
     "home_points": 6,
     "away_points": 10,
-    "quoted_games": 3,
-    "quoted_points": 7,
+    "quoted_games": 2,
+    "quoted_points": 4,
     "measured_games": 4,
     "measured_points": 10
   },

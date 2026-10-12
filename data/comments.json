@@ -1,53 +1,5 @@
 [
   {
-    "game_id": "1",
-    "coach": "Quique Sánchez Flores",
-    "quote": "Hoy lo quiero más que ayer. Se lo he dicho",
-    "score": 3,
-    "graded_by": "llm",
-    "justification": "The quote expresses affection and appreciation ('Hoy lo quiero más que ayer. Se lo he dicho' - 'Today I love him more than yesterday. I've told him'), which, if directed at the referee, constitutes praise rather than criticism. There is no blame, aggression, or implication of bias, so it falls on the respectful end of the scale."
-  },
-  {
-    "game_id": "1",
-    "coach": "José Bordalás",
-    "quote": "No nos tratan de la misma manera pero no podemos hacer nada",
-    "score": 0,
-    "graded_by": "llm",
-    "justification": "The quote ('They don't treat us the same way but we can't do anything about it') implies the referee is biased against the speaker's team, suggesting unequal or unfair treatment. This constitutes an accusation of bias, even if expressed with resignation rather than aggression, which falls under the disrespectful category."
-  },
-  {
-    "game_id": "2",
-    "coach": "Manolo González",
-    "quote": "Era importante empezar ganando y estoy muy contento por la imagen del equipo",
-    "score": 1,
-    "graded_by": "llm",
-    "justification": "The quote makes no mention of the referee or officiating at all; it focuses entirely on the team's performance and the importance of winning. Since it neither praises nor criticizes the referee, it is neutral with no aggressive or disrespectful content."
-  },
-  {
-    "game_id": "2",
-    "coach": "Luís Castro",
-    "quote": "El partido no tiene discusión, ellos han merecido ganar. Lo han querido más que nosotros",
-    "score": 3,
-    "graded_by": "llm",
-    "justification": "The coach does not mention or blame the referee at all, instead taking responsibility by admitting the opponent deserved to win and wanted it more. By attributing the result to his own team's performance rather than the officiating, he avoids blaming the referee for the outcome, which meets the criteria for a respectful quote."
-  },
-  {
-    "game_id": "3",
-    "coach": "José Alberto López",
-    "quote": "No quiero excusar absolutamente nada de lo que ha ocurrido con el tema arbitral, pero creo que hay dos cosas que no se pueden pasar por alto. Una es la disparidad en el criterio... y luego la falta de respeto hacia mi equipo",
-    "score": 0,
-    "graded_by": "llm",
-    "justification": "Although the coach frames it with 'I don't want to excuse anything,' the quote openly criticizes the officiating by pointing out a 'disparity in criteria' and accusing the referee of showing 'a lack of respect toward my team.' Claiming the officials disrespected his team is an aggressive accusation that goes beyond neutral disagreement, implying improper conduct or bias by the referee."
-  },
-  {
-    "game_id": "3",
-    "coach": "Iñigo Pérez",
-    "quote": "No me preocupa ese tipo de errores... sobre los árbitros, he cambiado de equipo, pero la idea es la misma.",
-    "score": 1,
-    "graded_by": "llm",
-    "justification": "The coach mentions referee errors but explicitly states they are not worried about them, avoiding blame for the result. The cryptic remark about changing teams 'but the idea is the same' is ambiguous and could hint at a critical stance, but contains no aggression, accusations of bias, or calls for sanctions. This is neutral disagreement at most."
-  },
-  {
     "game_id": "espn-401882865",
     "coach": "Diego Simeone",
     "quote": "No opiné  en las otras jugadas. El jefe de los árbitros ya nos dijo que este tipo de jugadas como la del Cuti no eran expulsión. Ahora si nos queremos detener en eso, pues vale, juguemos, Pero el partido lo ganamos",
@@ -2565,5 +2517,109 @@
     "source_name": "mundodeportivo.com",
     "published_at": "2026-10-11T14:36:56",
     "retrieved_at": "2026-10-11T15:33:48.025480"
+  },
+  {
+    "game_id": "1",
+    "coach": "Quique Sánchez Flores",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/alaves/20260815/1004216408/bronca-monumental-quique-sanchez-flores-angel-perez-cambio.html",
+      "https://www.mundodeportivo.com/futbol/alaves/20260815/1004216438/quique-buena-version-mariano-no-entraria-opciones-mercado.html",
+      "https://www.estadiodeportivo.com/futbol/alaves/mariano-diaz-angel-perez-quique-sanchez-flores-tiene-para-todos-20260816-544560.html",
+      "https://www.marca.com/hemeroteca/2026/08/16/index_m.html"
+    ],
+    "source_url": "https://www.mundodeportivo.com/futbol/alaves/20260815/1004216408/bronca-monumental-quique-sanchez-flores-angel-perez-cambio.html",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-08-15T19:11:22",
+    "retrieved_at": "2026-10-12T14:33:57.934991"
+  },
+  {
+    "game_id": "1",
+    "coach": "José Bordalás",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "presumed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "No referee-related comment found within 14 days of the game; presumed respectful.",
+    "sources": [],
+    "source_url": null,
+    "source_name": null,
+    "published_at": null,
+    "retrieved_at": "2026-10-12T14:34:33.286525"
+  },
+  {
+    "game_id": "2",
+    "coach": "Manolo González",
+    "quote": "Le dio un puñetazo a la pantalla del VAR - que hubo un precedente que no fue sancionado - y hemos tratado de batallar hasta el final la sanción. No se cumplió el año pa",
+    "source_url": "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260816/1004216727/manolo-fenomenal-empezar-asi.html",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260816/1004216727/manolo-fenomenal-empezar-asi.html",
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20260816/1004216520/once-espanyol-debut-liguero.html",
+      "https://www.marca.com/futbol/espanyol/2026/08/16/manolo-gonzalez-importante-empezar-ganando-contento-imagen-equipo.html",
+      "https://www.marca.com/hemeroteca/2026/08/16/index_m.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20260816/1004216686/espanyol-estrena-grande-doblete-roberto.html"
+    ],
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-08-16T10:46:02",
+    "retrieved_at": "2026-10-12T14:35:05.137514",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The quote expresses disagreement with officiating decisions and sanctions, noting a precedent that was not punished and mentioning a punch to the VAR screen. However, it does not contain direct accusations of bias against the referee, aggressive language directed at officials, or calls for sanctions. It reads as a neutral-to-mildly-frustrated account of an incident and an inconsistent precedent, warranting a neutral score."
+  },
+  {
+    "game_id": "2",
+    "coach": "Luís Castro",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.estadiodeportivo.com/futbol/levante/luis-castro-contundente-tras-flojo-estreno-del-levante-hemos-estado-altura-20260816-544606.html",
+      "https://www.marca.com/hemeroteca/2026/08/16/index_m.html"
+    ],
+    "source_url": "https://www.estadiodeportivo.com/futbol/levante/luis-castro-contundente-tras-flojo-estreno-del-levante-hemos-estado-altura-20260816-544606.html",
+    "source_name": "estadiodeportivo.com",
+    "published_at": "2026-08-16T10:46:02",
+    "retrieved_at": "2026-10-12T14:35:35.751967"
+  },
+  {
+    "game_id": "3",
+    "coach": "José Alberto López",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/racing-santander/20260816/1004216691/jose-alberto-no-satisfecho-resultado-me-hubiera-gustado-ganar.html"
+    ],
+    "source_url": "https://www.mundodeportivo.com/futbol/racing-santander/20260816/1004216691/jose-alberto-no-satisfecho-resultado-me-hubiera-gustado-ganar.html",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-08-16T18:40:12",
+    "retrieved_at": "2026-10-12T14:35:53.058112"
+  },
+  {
+    "game_id": "3",
+    "coach": "Iñigo Pérez",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "presumed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "No referee-related comment found within 14 days of the game; presumed respectful.",
+    "sources": [],
+    "source_url": null,
+    "source_name": null,
+    "published_at": null,
+    "retrieved_at": "2026-10-12T14:36:17.531968"
   }
 ]
