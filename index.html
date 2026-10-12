@@ -1688,8 +1688,10 @@
             document.getElementById('mode-explainer').innerHTML = t(mode === 'separate' ? 'mode_blurb_season' : 'mode_blurb_h2h');
 
             // Keep an open drill-down panel coherent when the mode
-            // changes (Season Total vs Head-to-Head scoring).
-            if (STATE.detailCoach) showCoachDetail(STATE.detailCoach);
+            // changes (Season Total vs Head-to-Head scoring). No
+            // scroll: the user is looking at the leaderboard, not
+            // asking to jump to the detail panel.
+            if (STATE.detailCoach) showCoachDetail(STATE.detailCoach, false);
         } catch (e) {
             console.error('Error loading data:', e);
         }
@@ -1786,7 +1788,7 @@
         return game ? game.date : (c.published_at || '').slice(0, 10) || 'unknown date';
     }
 
-    function showCoachDetail(coach) {
+    function showCoachDetail(coach, scroll = true) {
         const panel = document.getElementById('coach-detail');
         const teamData = DATA.teams.find(t => t.coach === coach);
         const teamName = teamData ? teamData.team : 'Unknown Team';
@@ -1917,7 +1919,10 @@
             <div class="detail-sub" style="margin-top: 12px;">${esc(t('switch_coach_hint'))}</div>
         `;
         panel.hidden = false;
-        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        // Only scroll when the panel was opened by a user action
+        // (row click); re-renders on mode/language switch must not
+        // move the viewport.
+        if (scroll) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     function onWeekFilterChange(value) {
