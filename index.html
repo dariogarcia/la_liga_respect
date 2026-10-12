@@ -606,7 +606,24 @@
         .quote-justification { font-size: 0.82rem; color: var(--fg-muted); }
         .quote-justification summary { cursor: pointer; color: var(--link); }
         .quote-sources { font-size: 0.8rem; margin-top: 8px; color: var(--fg-muted); }
-        .quote-sources a { color: var(--link); margin-right: 12px; }
+        .quote-sources a { color: var(--link); margin-right: 6px; }
+        .opponent-side {
+            margin-top: 12px;
+            padding: 8px 12px;
+            background: var(--surface-alt);
+            border: 1px solid var(--border-soft);
+            border-left: 3px solid var(--rule-soft);
+            border-radius: 4px;
+        }
+        .opponent-side-head {
+            font-size: 0.78rem;
+            font-weight: bold;
+            color: var(--fg-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .opponent-side .quote-text { font-size: 0.88rem; color: var(--fg-muted); margin: 4px 0 6px 0; }
         /* --- Footer --- */
         .attribution {
             max-width: 960px;
@@ -982,6 +999,7 @@
             "source_label": "Source: ",
             "source_not_recorded": "Source: not recorded",
             "source_published": " · published {date}",
+            "opponent_side": "Opponent's side — {coach}:",
             "prev_coach": " <span class=\"prev-coach\">(prev: {coach})</span>",
             "detail_summary_season": "<strong>Season Total</strong> — every game scores <strong>3</strong> respectful · <strong>1</strong> neutral · <strong>0</strong> disrespectful; a game without a referee comment counts as respectful silence (3). {coach} has <strong>{pts} points</strong> from {games}.",
             "detail_summary_h2h": "<strong>Head-to-Head</strong> — each game is a duel between the two coaches on the touchline: the more respectful takes <strong>3 duel points</strong>, the other 0, a tie gives 1 each (respect scores: 3 respectful silence or quote · 1 neutral · 0 disrespectful). {coach} has <strong>{pts} duel points</strong> from {games} (won {w} · drawn {d} · lost {l}). Respect scores per game are shown alongside.",
@@ -1106,6 +1124,7 @@
             "source_label": "Fuente: ",
             "source_not_recorded": "Fuente: no registrada",
             "source_published": " · publicado el {date}",
+            "opponent_side": "El lado del rival — {coach}:",
             "prev_coach": " <span class=\"prev-coach\">(ant.: {coach})</span>",
             "detail_summary_season": "<strong>Total temporada</strong> — cada partido puntúa <strong>3</strong> respetuoso · <strong>1</strong> neutral · <strong>0</strong> irrespetuoso; un partido sin comentario sobre el árbitro cuenta como silencio respetuoso (3). {coach} tiene <strong>{pts} puntos</strong> de {games}.",
             "detail_summary_h2h": "<strong>Cara a cara</strong> — cada partido es un duelo entre los dos entrenadores del banquillo: el más respetuoso se lleva <strong>3 puntos de duelo</strong>, el otro 0, y un empate da 1 a cada uno (puntuaciones de respeto: 3 silencio o cita respetuosa · 1 neutral · 0 irrespetuosa). {coach} tiene <strong>{pts} puntos de duelo</strong> de {games} (ganados {w} · empatados {d} · perdidos {l}). Las puntuaciones de respeto por partido se muestran al lado.",
@@ -1230,6 +1249,7 @@
             "source_label": "Font: ",
             "source_not_recorded": "Font: no registrada",
             "source_published": " · publicat el {date}",
+            "opponent_side": "El costat del rival — {coach}:",
             "prev_coach": " <span class=\"prev-coach\">(ant.: {coach})</span>",
             "detail_summary_season": "<strong>Total temporada</strong> — cada partit puntua <strong>3</strong> respectuós · <strong>1</strong> neutral · <strong>0</strong> irrespectuós; un partit sense comentari sobre l'àrbitre compta com a silenci respectuós (3). {coach} té <strong>{pts} punts</strong> de {games}.",
             "detail_summary_h2h": "<strong>Cara a cara</strong> — cada partit és un duel entre els dos entrenadors de la banqueta: el més respectuós s'emporta <strong>3 punts de duel</strong>, l'altre 0, i un empat dona 1 a cadascun (puntuacions de respecte: 3 silenci o cita respectuosa · 1 neutral · 0 irrespectuosa). {coach} té <strong>{pts} punts de duel</strong> de {games} (guanyats {w} · empatats {d} · perduts {l}). Les puntuacions de respecte per partit es mostren al costat.",
@@ -1759,7 +1779,7 @@
         }).filter(Boolean);
         if (!links.length) return `<div class="quote-sources">${esc(t('source_not_recorded'))}</div>`;
         const pub = comment.published_at ? t('source_published', { date: esc(comment.published_at.slice(0, 10)) }) : '';
-        return `<div class="quote-sources">${esc(t('source_label'))}${links.join('')}${pub}</div>`;
+        return `<div class="quote-sources">${esc(t('source_label'))}${links.join('<span aria-hidden="true"> · </span>')}${pub}</div>`;
     }
 
     function quoteCardDate(c, game) {
@@ -1836,6 +1856,22 @@
                     ? t('matchup', { home: esc(game.home_team), away: esc(game.away_team) })
                     : esc(c.game_id);
                 const duel = h2h ? duelFor(game, coach) : null;
+                // H2H: show the opponent's comment for this game so the
+                // duel outcome (why 3 beat 1, or a quote beat silence)
+                // is self-explanatory on the card itself.
+                const oppComment = duel && !duel.solo
+                    ? DATA.comments.find(x => x.game_id === c.game_id && x.coach === duel.opponent && x.score !== undefined)
+                    : null;
+                const oppBlock = oppComment ? `
+                        <div class="opponent-side">
+                            <div class="opponent-side-head">${esc(t('opponent_side', { coach: esc(duel.opponent) }))} ${scoreBadge(oppComment.score)}</div>
+                            ${oppComment.no_ref_comment
+                                ? `<div class="quote-text">${esc(
+                                      oppComment.kind === 'confirmed' ? t('silence_confirmed') : t('silence_presumed')
+                                  )}</div>`
+                                : `<div class="quote-text">«${esc(oppComment.quote)}»</div>`}
+                            ${sourceLinks(oppComment)}
+                        </div>` : '';
                 const justification = c.justification
                     ? `<details class="quote-justification"><summary>${esc(t('justification_summary'))}</summary>${esc(c.justification)}</details>`
                     : '';
@@ -1856,6 +1892,7 @@
                         ${quoteBody}
                         ${justification}
                         ${sourceLinks(c)}
+                        ${oppBlock}
                     </div>`;
             }).join('');
         }
