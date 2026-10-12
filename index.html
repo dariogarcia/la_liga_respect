@@ -885,7 +885,8 @@
         },
         competitive: {
             blurb: '<strong>Head-to-Head</strong> — each game is a duel between the two coaches: the more '
-                 + 'respectful one takes 3 points, the other 0, a tie gives 1 each. A league table built '
+                 + 'respectful one takes 3 points, the other 0, a tie gives 1 each (respect scores: '
+                 + '3 respectful silence or quote · 1 neutral · 0 disrespectful). A league table built '
                  + 'from respect instead of goals.',
         },
     };
@@ -1270,9 +1271,10 @@
         const opp = others.slice().sort((a, b) => b.score - a.score)[0];
         const sMe = Number(mine.score) || 0;
         const sOpp = Number(opp.score) || 0;
-        if (sMe > sOpp) return { solo: false, opponent: opp.coach, points: 3, outcome: 'won' };
-        if (sMe < sOpp) return { solo: false, opponent: opp.coach, points: 0, outcome: 'lost' };
-        return { solo: false, opponent: opp.coach, points: 1, outcome: 'drew' };
+        const base = { solo: false, opponent: opp.coach, sMe, sOpp };
+        if (sMe > sOpp) return { ...base, points: 3, outcome: 'won' };
+        if (sMe < sOpp) return { ...base, points: 0, outcome: 'lost' };
+        return { ...base, points: 1, outcome: 'drew' };
     }
 
     function duelChip(duel) {
@@ -1280,13 +1282,20 @@
         if (duel.solo) {
             return `<span class="duel-chip duel-drew" title="No graded opponent comment in this game — duel incomplete, raw respect score kept">⚔ no opponent</span>`;
         }
-        const labels = { won: `⚔ won the duel`, drew: `⚔ drew the duel`, lost: `⚔ lost the duel` };
-        const titles = {
-            won: `More respectful than ${duel.opponent} — 3 duel points`,
-            drew: `Level with ${duel.opponent} — 1 duel point each`,
-            lost: `Less respectful than ${duel.opponent} — 0 duel points`,
+        // Respect scores are shown so a silence beating a quote (or
+        // vice versa) is self-explanatory: 3 = respectful silence or
+        // quote, 1 = neutral, 0 = disrespectful.
+        const labels = {
+            won: `⚔ won the duel vs ${duel.opponent} · respect ${duel.sMe}–${duel.sOpp}`,
+            drew: `⚔ drew the duel vs ${duel.opponent} · respect ${duel.sMe}–${duel.sOpp}`,
+            lost: `⚔ lost the duel vs ${duel.opponent} · respect ${duel.sMe}–${duel.sOpp}`,
         };
-        return `<span class="duel-chip duel-${duel.outcome}" title="${esc(titles[duel.outcome])}">${labels[duel.outcome]}</span>`;
+        const titles = {
+            won: `Respect scores: ${duel.sMe} (mine) vs ${duel.sOpp} (${duel.opponent}). The more respectful coach takes the 3 duel points.`,
+            drew: `Both coaches scored ${duel.sMe} on respect — 1 duel point each.`,
+            lost: `Respect scores: ${duel.sMe} (mine) vs ${duel.sOpp} (${duel.opponent}). The more respectful coach takes the 3 duel points.`,
+        };
+        return `<span class="duel-chip duel-${duel.outcome}" title="${esc(titles[duel.outcome])}">${esc(labels[duel.outcome])}</span>`;
     }
 
     function graderBadge(gradedBy) {
@@ -1348,7 +1357,8 @@
                 <div class="detail-sub">
                     <strong>Head-to-Head</strong> — each game is a duel between the two coaches on the
                     touchline: the more respectful takes <strong>3 duel points</strong>, the other 0, a
-                    tie gives 1 each. ${esc(coach)} has <strong>${pts} duel points</strong> from
+                    tie gives 1 each (respect scores: 3 respectful silence or quote · 1 neutral ·
+                    0 disrespectful). ${esc(coach)} has <strong>${pts} duel points</strong> from
                     ${duels.length} game${duels.length === 1 ? '' : 's'}
                     (${w} won · ${d} drawn · ${l} lost). Respect scores per game are shown alongside.
                 </div>`;
