@@ -187,5 +187,33 @@ class TestI18n(unittest.TestCase):
         self.assertIn("setLang('ca')", self.html)
 
 
+class TestProjectedSeasonOnly(unittest.TestCase):
+    """Projected is a Season-Total-only view.
+
+    Duel points depend on the opponent, so scaling a measured-duel
+    average to games played has no valid meaning in Head-to-Head
+    (a coach scoring the maximum respect 3 can still only draw those
+    duels). The metric toggle must therefore be hidden and the pergame
+    metric disabled in competitive mode.
+    """
+
+    def setUp(self):
+        self.html = (ROOT / "index.html").read_text(encoding="utf-8")
+
+    def test_metric_switch_is_addressable(self):
+        self.assertIn('id="metric-switch"', self.html)
+
+    def test_metric_switch_hidden_in_competitive_mode(self):
+        self.assertIn(
+            "metricSwitch.style.display = mode === 'competitive' ? 'none' : ''",
+            self.html,
+        )
+
+    def test_set_metric_rejects_pergame_in_competitive_mode(self):
+        self.assertIn(
+            "STATE.mode === 'competitive' && metric === 'pergame'", self.html
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

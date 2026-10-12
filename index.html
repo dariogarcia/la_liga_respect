@@ -725,7 +725,7 @@
                 <button id="btn-separate" class="mode-btn active" aria-pressed="true" onclick="loadLeaderboard('separate')" data-i18n="mode_season">Season Total</button>
                 <button id="btn-competitive" class="mode-btn" aria-pressed="false" onclick="loadLeaderboard('competitive')" data-i18n="mode_h2h">Head-to-Head</button>
             </div>
-            <div class="mode-switch metric-switch" role="group" data-i18n-aria="aria_metric" aria-label="Points display">
+            <div id="metric-switch" class="mode-switch metric-switch" role="group" data-i18n-aria="aria_metric" aria-label="Points display">
                 <button id="btn-total" class="mode-btn active" aria-pressed="true" onclick="setMetric('total')" data-i18n="metric_total">Total Points</button>
                 <button id="btn-pergame" class="mode-btn" aria-pressed="false" onclick="setMetric('pergame')" data-i18n="metric_projected" data-i18n-title="btn_projected_title" title="Average points per measured game (quote or confirmed press silence), scaled to games played — league-table magnitude. Not directly comparable across coaches.">Projected*</button>
             </div>
@@ -1604,6 +1604,9 @@
     // (average per quoted game scaled to games played).
     function setMetric(metric) {
         if (STATE.metric === metric) return;
+        // Projected does not exist in Head-to-Head mode (see
+        // loadLeaderboard).
+        if (STATE.mode === 'competitive' && metric === 'pergame') return;
         STATE.metric = metric;
         for (const m of ['total', 'pergame']) {
             const btn = document.getElementById('btn-' + m);
@@ -1676,6 +1679,22 @@
             )).json();
 
             STATE.mode = mode;
+            // Projected is a Season-Total-only view: duel points
+            // depend on the opponent, so scaling a measured-duel
+            // average to games played has no valid meaning in
+            // Head-to-Head (a coach scoring the maximum 3 can still
+            // only draw those duels). Hide the toggle there and fall
+            // back to Total Points.
+            const metricSwitch = document.getElementById('metric-switch');
+            if (metricSwitch) metricSwitch.style.display = mode === 'competitive' ? 'none' : '';
+            if (mode === 'competitive' && STATE.metric !== 'total') {
+                STATE.metric = 'total';
+                for (const m of ['total', 'pergame']) {
+                    const btn = document.getElementById('btn-' + m);
+                    btn.classList.toggle('active', m === 'total');
+                    btn.setAttribute('aria-pressed', String(m === 'total'));
+                }
+            }
             STATE.entries = leaderboard;
             renderLeaderboard();
 
