@@ -6,6 +6,7 @@ only accepts quotes published within 48h of the match, these sitemaps are a
 reliable, search-engine-free way to discover fresh press-conference articles
 on trusted domains.
 """
+import re
 import unicodedata
 import xml.etree.ElementTree as ET
 from typing import List, Optional
@@ -32,9 +33,21 @@ NEWS_SITEMAPS = {
 }
 
 # Terms that make an article more likely to contain referee-related quotes.
+# Matched against normalized (accent-stripped, lowercase) titles as
+# word-start prefixes so plurals and inflections still match ("rojas",
+# "expulsado", "penaltis"). Catalan forms are included for the trusted
+# outlets that publish in Catalan ("targeta").
 REFEREE_TERMS = (
     "arbitro", "arbitraje", "arbitral", "penalti", "pitido",
     "rueda de prensa", "prensa", "declaraciones", "directo",
+    "roja", "tarjeta", "targeta", "amarilla", "expuls", "amonestacion",
+)
+# Terms that must match as whole words: as prefixes they would hit
+# common unrelated words ("varios", "variedad").
+REFEREE_WHOLE_TERMS = ("var",)
+_REFEREE_TERM_RE = re.compile(
+    r"\b(?:" + "|".join(REFEREE_TERMS) + r")"
+    r"|\b(?:" + "|".join(REFEREE_WHOLE_TERMS) + r")\b"
 )
 
 MAX_ARTICLES_PER_COACH = 6
@@ -143,7 +156,7 @@ def find_coach_articles(
         if not title or surname not in title:
             continue
         token_hits = sum(1 for t in tokens if t in title)
-        referee_bonus = 1 if any(term in title for term in REFEREE_TERMS) else 0
+        referee_bonus = 1 if _REFEREE_TERM_RE.search(title) else 0
         score = token_hits + 2 * referee_bonus
         scored.append((score, entry))
 

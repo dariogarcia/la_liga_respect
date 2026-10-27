@@ -15,7 +15,13 @@ from .search import get_search_provider, SearchProviderError
 from .sitemap import fetch_sitemap_entries, find_coach_articles
 from .filtering import is_allowed_source
 from .fetcher import ArticleFetcher
-from .extractor import get_extractor, is_candidate_document, batch_enabled, mentions_coach
+from .extractor import (
+    get_extractor,
+    is_candidate_document,
+    batch_enabled,
+    mentions_coach,
+    REFEREE_RE,
+)
 from .validation import validate_extractions
 from .deduplication import deduplicate_quotes
 
@@ -178,6 +184,17 @@ def collect_comments_for_coach(
     if batches is not None:
         for doc, extracted in zip(candidate_docs, batches):
             quotes.extend(validate_extractions(extracted, doc))
+        # Referee-titled documents are the high-value case for this
+        # product: their title explicitly promises officiating content.
+        # Batched extraction truncates documents (BATCH_DOC_CHARS) and
+        # has been observed to silently miss their quote — partially or
+        # completely (2026-10-25 Clásico) — so each one also gets a
+        # dedicated full-length extraction call. Duplicates are removed
+        # by deduplication below.
+        for doc in candidate_docs:
+            if REFEREE_RE.search(doc.title or ""):
+                extracted = extractor.extract(coach, game["game_id"], doc)
+                quotes.extend(validate_extractions(extracted, doc))
     else:
         for doc in candidate_docs:
             extracted = extractor.extract(coach, game["game_id"], doc)

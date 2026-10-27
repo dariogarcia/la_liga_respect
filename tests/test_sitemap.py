@@ -80,6 +80,35 @@ class TestFindCoachArticles(unittest.TestCase):
         results = find_coach_articles(entries, "Diego Simeone")
         self.assertEqual(results[0].url, "https://www.as.com/a2")
 
+    def test_incident_terms_rank_first(self):
+        # Regression (Clásico 2026-10-25): a post-match article about a
+        # missed red card and the VAR must outrank generic coverage even
+        # when its title has no classic referee wording.
+        entries = [
+            SearchResult(url=f"https://www.as.com/g{i}", title=f"Simeone tras el partido, análisis {i}", snippet="")
+            for i in range(6)
+        ]
+        entries.append(
+            SearchResult(
+                url="https://www.estadiodeportivo.com/var",
+                title="Simeone también se acuerda del VAR en la victoria: «Era tarjeta roja clara»",
+                snippet="",
+            )
+        )
+        results = find_coach_articles(entries, "Diego Simeone")
+        self.assertEqual(results[0].url, "https://www.estadiodeportivo.com/var")
+
+    def test_var_whole_word_only(self):
+        # "varios" must not trigger the VAR bonus: without another
+        # referee term the generic article stays score 1 and the
+        # árbitro article wins the ranking.
+        entries = [
+            SearchResult(url="https://www.as.com/a1", title="Simeone habla de varios temas", snippet=""),
+            SearchResult(url="https://www.as.com/a2", title="Simeone critique al árbitro", snippet=""),
+        ]
+        results = find_coach_articles(entries, "Diego Simeone")
+        self.assertEqual(results[0].url, "https://www.as.com/a2")
+
     def test_accents_and_case_normalized(self):
         entries = [
             SearchResult(url="https://www.as.com/a1", title="GARCÍA PIMIENTA recela del árbitro", snippet=""),

@@ -47,14 +47,15 @@ class FailingSearchProvider:
 
 
 class FakeFetcher:
-    def __init__(self, published_at=None, text=None):
+    def __init__(self, published_at=None, text=None, title=None):
         self.published_at = published_at
         self.text = text
+        self.title = title
 
     def fetch(self, url):
         return SourceDocument(
             url=url,
-            title="t",
+            title=self.title or "t",
             text=self.text or (
                 "Coach A compareció tras el partido. "
                 "«El árbitro lo hizo bien, fue un trabajo complicado»"
@@ -220,12 +221,13 @@ class TestCollectCommentsForCoach(unittest.TestCase):
 class TestBatchWiring(unittest.TestCase):
     """T2: batched extraction happy path and fallbacks."""
 
-    def _run(self, extractor):
+    def _run(self, extractor, fetcher=None):
         provider = FakeSearchProvider([
             SearchResult("https://www.as.com/a", "t", "s"),
             SearchResult("https://www.marca.com/b", "t", "s"),
         ])
-        fetcher = FakeFetcher(published_at=datetime(2026, 8, 16, 8, 0))
+        if fetcher is None:
+            fetcher = FakeFetcher(published_at=datetime(2026, 8, 16, 8, 0))
         return collect_comments_for_coach(
             GAME, "Coach A", provider, fetcher, extractor
         )
@@ -279,6 +281,90 @@ class TestBatchWiring(unittest.TestCase):
         merged, reason = self._run(ExplodingExtractor())
         self.assertIsNone(reason)
         self.assertIn("árbitro", merged["text"])
+
+    def test_degenerate_batch_retried_when_title_promises_referee_content(self):
+        # Regression (Clásico 2026-10-25): a flaky endpoint returned an
+        # empty batch response even though a document titled "…del VAR…
+        # tarjeta roja…" held a referee quote. The per-document retry
+        # must recover it instead of resolving as respectful silence.
+        quote = {"text": "El árbitro lo hizo bien, fue un trabajo complicado",
+                 "referee_related": True}
+        calls = []
+
+        class DegenerateBatchExtractor:
+            def extract_batch(self, coach, game_id, docs):
+                calls.append("batch")
+                return [[] for _ in docs]
+
+            def extract(self, coach, game_id, doc):
+                calls.append("single")
+                return [dict(quote)]
+
+        fetcher = FakeFetcher(
+            published_at=datetime(2026, 8, 16, 8, 0),
+            title="Coach A también se acuerda del VAR: «Era tarjeta roja clara»",
+        )
+        merged, reason = self._run(DegenerateBatchExtractor(), fetcher)
+        self.assertIsNone(reason)
+        self.assertIn("árbitro", merged["text"])
+        self.assertEqual(calls, ["batch", "single", "single"])
+
+    def test_referee_titled_doc_gets_dedicated_extraction_despite_batch_hit(self):
+        # Regression (Clásico 2026-10-25, second failure mode): the batch
+        # returned one quote but silently missed the VAR quote in a
+        # referee-titled document. The dedicated per-document call must
+        # run anyway and its extra quote must survive deduplication.
+        q1 = {"text": "El árbitro lo hizo bien, fue un trabajo complicado",
+              "referee_related": True}
+        q2 = {"text": "Un VAR que estaba dormido, es una clara tarjeta roja",
+              "referee_related": True}
+        calls = []
+
+        class PartialBatchExtractor:
+            def extract_batch(self, coach, game_id, docs):
+                calls.append("batch")
+                return [[dict(q1)] for _ in docs]
+
+            def extract(self, coach, game_id, doc):
+                calls.append("single")
+                return [dict(q1), dict(q2)]
+
+        fetcher = FakeFetcher(
+            published_at=datetime(2026, 8, 16, 8, 0),
+            title="Coach A también se acuerda del VAR: «Era tarjeta roja clara»",
+            text=(
+                "Coach A compareció tras el partido. "
+                "«El árbitro lo hizo bien, fue un trabajo complicado» "
+                "«Un VAR que estaba dormido, es una clara tarjeta roja»"
+            ),
+        )
+        merged, reason = self._run(PartialBatchExtractor(), fetcher)
+        self.assertIsNone(reason)
+        self.assertIn("árbitro", merged["text"])
+        self.assertIn("tarjeta roja", merged["text"])
+        self.assertEqual(calls, ["batch", "single", "single"])
+
+    def test_degenerate_batch_not_retried_without_referee_title(self):
+        # Without a referee-titled document an empty batch stays empty:
+        # no extra LLM calls for ordinary coverage.
+        calls = []
+
+        class DegenerateBatchExtractor:
+            def extract_batch(self, coach, game_id, docs):
+                calls.append("batch")
+                return [[] for _ in docs]
+
+            def extract(self, coach, game_id, doc):
+                calls.append("single")
+                return []
+
+            def assess_coverage(self, coach, documents):
+                return True
+
+        merged, reason = self._run(DegenerateBatchExtractor())
+        self.assertIsNone(reason)
+        self.assertEqual(calls, ["batch"])
+        self.assertEqual(merged["clean"], KIND_CONFIRMED_CLEAN)
 
 
 class TestQuerySelection(unittest.TestCase):

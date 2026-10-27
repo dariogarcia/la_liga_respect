@@ -218,14 +218,14 @@
   {
     "coach": "José Mourinho",
     "team": "Real Madrid",
-    "points": 19,
+    "points": 17,
     "games_played": 10,
     "home_points": 9,
-    "away_points": 10,
-    "quoted_games": 6,
-    "quoted_points": 7,
+    "away_points": 8,
+    "quoted_games": 7,
+    "quoted_points": 8,
     "measured_games": 10,
-    "measured_points": 19
+    "measured_points": 17
   },
   {
     "coach": "Luis Miguel Ramis",

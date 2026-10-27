@@ -26,6 +26,21 @@ class TestValidation(unittest.TestCase):
         quotes = [{"text": "espaciones raros y mayúsculas"}]
         self.assertEqual(len(validate_extractions(quotes, doc)), 1)
 
+    def test_linebreak_before_punctuation(self):
+        # Regression (Clásico 2026-10-25): the article body wrapped lines
+        # mid-sentence ("minuto 60\n,"), which made a verbatim quote ending
+        # at that break fail the substring check after whitespace
+        # collapsing ("60 ," vs "60,"). Punctuation must be reattached.
+        doc = make_doc(
+            "un VAR que creo que estaba dormido en el minuto 60\n"
+            ", es una clara tarjeta roja de Joao Cancelo a Diomande"
+        )
+        quotes = [{
+            "text": "un VAR que creo que estaba dormido en el minuto 60, "
+                    "es una clara tarjeta roja de Joao Cancelo a Diomande"
+        }]
+        self.assertEqual(len(validate_extractions(quotes, doc)), 1)
+
     def test_invented_quote_rejected(self):
         doc = make_doc("El entrenador habló del árbitro.")
         quotes = [{"text": "cita inventada que no está en el documento"}]

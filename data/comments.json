@@ -3038,26 +3038,6 @@
     "retrieved_at": "2026-10-27T14:08:02.249961"
   },
   {
-    "game_id": "espn-401882832",
-    "coach": "José Mourinho",
-    "quote": "",
-    "no_ref_comment": true,
-    "kind": "confirmed",
-    "score": 3,
-    "graded_by": "coverage",
-    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
-    "sources": [
-      "https://www.estadiodeportivo.com/futbol/barcelona/mourinho-advierte-barcelona-clasico-mensaje-directo-lamine-yamal-20261025-549333.html",
-      "https://www.mundodeportivo.com/futbol/real-madrid/20261026/1004243509/mourinho-lider-espiritual-primera-etapa.html",
-      "https://www.mundodeportivo.com/futbol/real-madrid/20261026/1004243504/nuevos-dan-razon-mourinho.html",
-      "https://www.mundodeportivo.com/futbol/fc-barcelona/20261026/1004243411/barca-peor-mourinho-ancelotti-xabi-alonso.html"
-    ],
-    "source_url": "https://www.estadiodeportivo.com/futbol/barcelona/mourinho-advierte-barcelona-clasico-mensaje-directo-lamine-yamal-20261025-549333.html",
-    "source_name": "estadiodeportivo.com",
-    "published_at": "2026-10-25T19:10:16",
-    "retrieved_at": "2026-10-27T14:08:14.653469"
-  },
-  {
     "game_id": "espn-401882833",
     "coach": "Claudio Giráldez",
     "quote": "",
@@ -3149,5 +3129,23 @@
     "source_name": "mundodeportivo.com",
     "published_at": "2026-10-26T11:00:00",
     "retrieved_at": "2026-10-27T14:10:00.398253"
+  },
+  {
+    "game_id": "espn-401882832",
+    "coach": "José Mourinho",
+    "quote": "con un árbitro que creo que ha hecho un gran partido y un VAR que creo que estaba dormido en el minuto 60, es una clara tarjeta roja de Joao Cancelo a Diomande, pero gran partido, gran victoria",
+    "source_url": "https://www.estadiodeportivo.com/futbol/real-madrid/mourinho-tambien-acuerda-del-var-victoria-del-real-madrid-ante-barca-era-tarjeta-roja-clara-20261025-549346.html",
+    "sources": [
+      "https://www.estadiodeportivo.com/futbol/real-madrid/mourinho-tambien-acuerda-del-var-victoria-del-real-madrid-ante-barca-era-tarjeta-roja-clara-20261025-549346.html",
+      "https://www.estadiodeportivo.com/futbol/barcelona/mourinho-advierte-barcelona-clasico-mensaje-directo-lamine-yamal-20261025-549333.html",
+      "https://www.mundodeportivo.com/futbol/real-madrid/20261026/1004243509/mourinho-lider-espiritual-primera-etapa.html",
+      "https://www.mundodeportivo.com/futbol/real-madrid/20261026/1004243504/nuevos-dan-razon-mourinho.html"
+    ],
+    "source_name": "estadiodeportivo.com",
+    "published_at": "2026-10-25T19:10:16",
+    "retrieved_at": "2026-10-27T16:12:32.164453",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach praises the referee's performance ('ha hecho un gran partido'), but simultaneously criticizes the VAR with dismissive language ('estaba dormido' - was asleep), expressing clear disagreement over a missed red card. While not accusing bias or calling for sanctions, the 'asleep' characterization is a mildly aggressive jab rather than neutral disagreement, so the quote falls between respectful praise and disrespectful criticism."
   }
 ]

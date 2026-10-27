@@ -12,6 +12,18 @@
     "measured_points": 17
   },
   {
+    "coach": "Hansi Flick",
+    "team": "Barcelona",
+    "points": 14,
+    "games_played": 10,
+    "home_points": 7,
+    "away_points": 7,
+    "quoted_games": 0,
+    "quoted_points": 0,
+    "measured_games": 10,
+    "measured_points": 14
+  },
+  {
     "coach": "Martín Anselmi",
     "team": "Elche",
     "points": 14,
@@ -45,18 +57,6 @@
     "quoted_games": 3,
     "quoted_points": 1,
     "measured_games": 8,
-    "measured_points": 12
-  },
-  {
-    "coach": "Hansi Flick",
-    "team": "Barcelona",
-    "points": 12,
-    "games_played": 10,
-    "home_points": 5,
-    "away_points": 7,
-    "quoted_games": 0,
-    "quoted_points": 0,
-    "measured_games": 10,
     "measured_points": 12
   },
   {
@@ -156,18 +156,6 @@
     "measured_points": 4
   },
   {
-    "coach": "José Mourinho",
-    "team": "Real Madrid",
-    "points": 9,
-    "games_played": 10,
-    "home_points": 5,
-    "away_points": 4,
-    "quoted_games": 6,
-    "quoted_points": 5,
-    "measured_games": 10,
-    "measured_points": 9
-  },
-  {
     "coach": "Quique Sánchez Flores",
     "team": "Alavés",
     "points": 9,
@@ -214,6 +202,18 @@
     "quoted_points": 0,
     "measured_games": 5,
     "measured_points": 4
+  },
+  {
+    "coach": "José Mourinho",
+    "team": "Real Madrid",
+    "points": 8,
+    "games_played": 10,
+    "home_points": 5,
+    "away_points": 3,
+    "quoted_games": 7,
+    "quoted_points": 5,
+    "measured_games": 10,
+    "measured_points": 8
   },
   {
     "coach": "Carlos Corberán",
