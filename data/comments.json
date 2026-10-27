@@ -2621,5 +2621,533 @@
     "source_name": null,
     "published_at": null,
     "retrieved_at": "2026-10-12T14:36:17.531968"
+  },
+  {
+    "game_id": "espn-401882844",
+    "coach": "Luís Castro",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/laliga/20261016/1004239127/deportivo-levante-objetivo-volver-ganar.html",
+      "https://www.mundodeportivo.com/futbol/levante/20261016/1004239660/luis-castro-no-contento-resultado-evolucion-equipo.html",
+      "https://www.marca.com/hemeroteca/2026/10/17/index_n.html"
+    ],
+    "source_url": "https://www.mundodeportivo.com/futbol/laliga/20261016/1004239127/deportivo-levante-objetivo-volver-ganar.html",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-16T05:00:00",
+    "retrieved_at": "2026-10-27T13:48:04.200427"
+  },
+  {
+    "game_id": "espn-401882837",
+    "coach": "Martín Anselmi",
+    "quote": "El agarrón existe, pero desconozco la intensidad",
+    "source_url": "https://www.cope.es/programas/tiempo-de-juego/noticias/ironico-mensaje-elche-penalti-anulado-villarreal-puedes-hacerte-camiseta-roy-revivo-20261017_3457655.html",
+    "sources": [
+      "https://www.cope.es/programas/tiempo-de-juego/noticias/ironico-mensaje-elche-penalti-anulado-villarreal-puedes-hacerte-camiseta-roy-revivo-20261017_3457655.html",
+      "https://www.mundodeportivo.com/videos/futbol/20261018/1004240261/imagen-viral-dia-agua-tibia-arbitro-esto-anular-partido.html",
+      "https://www.mundodeportivo.com/videos/futbol/20261018/1004240171/rueda-prensa-luis-garcia-plaza.html"
+    ],
+    "source_name": "cope.es",
+    "published_at": "2026-10-17T20:03:21",
+    "retrieved_at": "2026-10-27T13:48:53.104559",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach acknowledges a possible holding foul ('el agarrón existe') but immediately qualifies it by saying he doesn't know its intensity. This is a neutral observation about a refereeing decision — expressing uncertainty rather than blaming the referee, accusing bias, or using aggressive language. It neither praises the officiating nor criticizes it."
+  },
+  {
+    "game_id": "espn-401882843",
+    "coach": "Manolo González",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20261017/1004239894/manolo-gonzalez-paso-pacheco-joan-garcia.html",
+      "https://www.cope.es/programas/tiempo-de-juego/noticias/rajadon-pellegrini-arbitraje-burgos-bengoetxea-betis-barca-senala-lamine-yamal-expulsion-facundo-bernal-empuja-provoca-le-pego-buen-empujon-respondio-20261017_3457650.html",
+      "https://www.marca.com/hemeroteca/2026/10/17/index_n.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-10-19/page-2",
+      "https://www.mundodeportivo.com/futbol/laliga/20261017/1004239611/examen-crucial.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20261017/1004239950/tebas-responde-uribes-presidente-csd-presidencia-debe-esperar-rigor-imparcialidad-coherencia.html"
+    ],
+    "source_url": "https://www.mundodeportivo.com/futbol/rcd-espanyol/20261017/1004239894/manolo-gonzalez-paso-pacheco-joan-garcia.html",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-17T05:00:00",
+    "retrieved_at": "2026-10-27T13:50:13.149620"
+  },
+  {
+    "game_id": "espn-401882843",
+    "coach": "Diego Simeone",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.marca.com/hemeroteca/2026/10/17/index_n.html",
+      "https://www.marca.com/hemeroteca/2026/10/17/index_t.html",
+      "https://www.marca.com/hemeroteca/2026/10/18/index_m.html",
+      "https://www.marca.com/hemeroteca/2026/10/18/index_n.html",
+      "https://www.mundodeportivo.com/futbol/atletico-madrid/20261018/1004240166/sorloth-deja-solucion.html",
+      "https://www.mundodeportivo.com/futbol/laliga/20261017/1004239611/examen-crucial.html"
+    ],
+    "source_url": "https://www.marca.com/hemeroteca/2026/10/17/index_n.html",
+    "source_name": "marca.com",
+    "published_at": "2026-10-17T05:00:00",
+    "retrieved_at": "2026-10-27T13:50:53.510462"
+  },
+  {
+    "game_id": "espn-401882846",
+    "coach": "Manuel Pellegrini",
+    "quote": "Dos equipos que se dedican a jugar, no hacen faltas ni provocaciones Está bien, le pega en la mano, pero fue producto del empujón. En el otro gol, el pie del jugador de Barcelona está a la altura de la cabeza y no hubo jugada peligrosa ni llamada al VAR Lamine Yamal provoca y el otro respondió, por supuesto Cualquier árbitro con criterio futbolístico llama a los dos jugadores, habla con ellos, le muestra amarilla a cada uno. Pero no puede perjudicar a un jugador porque respondió una agresión Eso existe, estuvo muy mal en responder, pero la agresión viene del otro jugador. Ahí se terminó el partido",
+    "source_url": "https://chile.as.com/futbol/pellegrini-estalla-tras-la-goleada-ante-el-barcelona-actuacion-lamentable-f202610-n/",
+    "sources": [
+      "https://chile.as.com/futbol/pellegrini-estalla-tras-la-goleada-ante-el-barcelona-actuacion-lamentable-f202610-n/",
+      "https://www.marca.com/hemeroteca/2026/10/17/index_n.html",
+      "https://www.marca.com/hemeroteca/2026/10/18/index_m.html",
+      "https://www.marca.com/hemeroteca/2026/10/18/index_t.html",
+      "https://www.marca.com/hemeroteca/2026/10/18/index_n.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-10-19/page-2"
+    ],
+    "source_name": "chile.as.com",
+    "published_at": "2026-10-17T21:29:06",
+    "retrieved_at": "2026-10-27T13:52:43.693970",
+    "score": 0,
+    "graded_by": "llm",
+    "justification": "The coach openly criticizes the referee's judgment, stating that 'any referee with football criteria' would have handled the situation differently and that the official 'cannot disadvantage a player' for responding to aggression. He also questions the lack of a VAR review on another play. While he doesn't accuse bias explicitly or use aggressive language, the quote constitutes open criticism of the referee's decisions and competence rather than neutral disagreement."
+  },
+  {
+    "game_id": "espn-401882846",
+    "coach": "Hansi Flick",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.marca.com/futbol/barcelona/2026/10/17/hansi-flick-evidente-teniamos-cambiar-lamine-yamal.html",
+      "https://www.marca.com/futbol/barcelona/2026/10/17/tarde-movida-lamine.html",
+      "https://www.marca.com/futbol/barcelona/2026/10/17/eric-garcia-duda-psg-clasico.html",
+      "https://www.marca.com/hemeroteca/2026/10/17/index_n.html",
+      "https://www.marca.com/hemeroteca/2026/10/18/index_m.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-10-19/page-3"
+    ],
+    "source_url": "https://www.marca.com/futbol/barcelona/2026/10/17/hansi-flick-evidente-teniamos-cambiar-lamine-yamal.html",
+    "source_name": "marca.com",
+    "published_at": "2026-10-17T19:01:38",
+    "retrieved_at": "2026-10-27T13:53:27.991332"
+  },
+  {
+    "game_id": "espn-401882839",
+    "coach": "José Mourinho",
+    "quote": "Mourinho: \"He pedido las imágenes de lo de Güler y no las hay; no entiendo la obsesión\"",
+    "source_url": "https://www.marca.com/radio/2026/10/19/hay-voces-dicen-mourinho-banquillo-solucionar-situacion.html",
+    "sources": [
+      "https://www.marca.com/radio/2026/10/19/hay-voces-dicen-mourinho-banquillo-solucionar-situacion.html",
+      "https://www.marca.com/radio/dsf/2026/10/19/libreta-gaal-mourinho-alta-tension.html",
+      "https://www.marca.com/hemeroteca/2026/10/19/index_t.html",
+      "https://www.marca.com/hemeroteca/2026/10/18/index_n.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-10-20/page-3",
+      "https://www.mundodeportivo.com/futbol/laliga/20261019/1004240420/rajada-pellegrini-betis-barca-apunta-dura-sancion.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-10-18T21:47:32",
+    "retrieved_at": "2026-10-27T13:54:24.552475",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "Mourinho expresses confusion and disagreement about the lack of footage regarding the Güler incident, but does so without aggression, insults, or accusations of bias against the referee. He questions the situation ('no entiendo la obsesión') rather than attacking the official directly, which fits the neutral category of expressing disagreement without hostility."
+  },
+  {
+    "game_id": "espn-401882839",
+    "coach": "Luis García",
+    "quote": "Quizás no se le ha llamado desde el VAR porque irían a nueve puntos antes del Clásico si ganamos Teníamos que jugar 11 contra 10 del minuto 25 No lo sé. Quizás porque irían a 9 puntos antes del Clásico si ganamos Nos han privado de jugar otro partido es otro partido que se tenía que haber jugado 11 contra 10 durante mucho tiempo y no hemos podido jugarlo Me han dicho que no se ha visto la jugada de Rubi en televisión Quiz� no le llaman del VAR para que no lleguen al Cl�sico a 9 puntos",
+    "source_url": "https://www.cope.es/programas/tiempo-de-juego/noticias/luis-garcia-plaza-quizas-no-le-llamado-var-irian-nueve-puntos-clasico-ganamos-20261018_3457829.amp.html",
+    "sources": [
+      "https://www.cope.es/programas/tiempo-de-juego/noticias/luis-garcia-plaza-quizas-no-le-llamado-var-irian-nueve-puntos-clasico-ganamos-20261018_3457829.amp.html",
+      "https://www.marca.com/hemeroteca/2026/10/18/index_n.html",
+      "https://www.marca.com/radio/dsf/2026/10/19/libreta-gaal-mourinho-alta-tension.html",
+      "https://www.marca.com/hemeroteca/2026/10/19/index_t.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-10-19/page-3",
+      "https://www.mundodeportivo.com/videos/futbol/20261018/1004240171/rueda-prensa-luis-garcia-plaza.html"
+    ],
+    "source_name": "cope.es",
+    "published_at": "2026-10-18T11:26:38",
+    "retrieved_at": "2026-10-27T13:55:24.989678",
+    "score": 0,
+    "graded_by": "llm",
+    "justification": "The coach implies bias in the officiating, suggesting the VAR deliberately did not intervene ('Quizás no se le ha llamado desde el VAR porque irían a nueve puntos antes del Clásico') — insinuating that officials favored a rival team to affect the standings before the Clásico. Repeatedly claiming the team was 'deprived' of playing 11 against 10 and insinuating a deliberate non-review constitutes an accusation of bias, warranting 0 points."
+  },
+  {
+    "game_id": "espn-401882840",
+    "coach": "José Alberto López",
+    "quote": "Han tenido intensidad, pero ha habido muchos condicionantes externos que han afectado en el resultado del partido, como el primer penalti. Antes de ese penalti hay un gol anulado que el VAR lo señala a nuestro favor y todo eso va condicionando. Han hecho 21 faltas, nosotros 9, y tenemos tres tarjetas. Hay condicionantes que te afectan mucho, empiezas con 1-0 en una acción que  ha habido mil en este partido que no se ha pitado ni falta",
+    "source_url": "https://www.marca.com/futbol/racing-santander/2026/10/18/jose-alberto-habido-condicionantes-externos-han-afectado-resultado.html",
+    "sources": [
+      "https://www.marca.com/futbol/racing-santander/2026/10/18/jose-alberto-habido-condicionantes-externos-han-afectado-resultado.html",
+      "https://www.marca.com/radio/dsf/2026/10/19/libreta-gaal-mourinho-alta-tension.html",
+      "https://www.marca.com/hemeroteca/2026/10/18/index_m.html",
+      "https://www.marca.com/hemeroteca/2026/10/19/index_n.html",
+      "https://www.marca.com/hemeroteca/2026/10/19/index_t.html"
+    ],
+    "source_name": "marca.com",
+    "published_at": "2026-10-18T10:47:31",
+    "retrieved_at": "2026-10-27T13:56:19.829960",
+    "score": 0,
+    "graded_by": "llm",
+    "justification": "The coach openly criticizes the referee's decisions, blaming them for affecting the result ('condicionantes externos que han afectado en el resultado del partido, como el primer penalti'). He questions the consistency of the officiating by pointing out the foul and card imbalance (21 fouls vs. 9, three cards) and sarcastically notes the penalty was given in 'a action that happened a thousand times in this match without being whistled.' While not aggressive or explicitly alleging bias, this is direct criticism of the referee's performance as decisive to the outcome, which falls under disrespectful per the criteria."
+  },
+  {
+    "game_id": "espn-401882841",
+    "coach": "Pellegrino Matarazzo",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.cope.es/emisoras/pais-vasco/deportes-guipuzcoa/noticias/real-desata-malaga-claves-2-5-hoy-vestuario-20261019_3458025.html"
+    ],
+    "source_url": "https://www.cope.es/emisoras/pais-vasco/deportes-guipuzcoa/noticias/real-desata-malaga-claves-2-5-hoy-vestuario-20261019_3458025.html",
+    "source_name": "cope.es",
+    "published_at": "2026-10-19T10:15:45",
+    "retrieved_at": "2026-10-27T13:56:57.443815"
+  },
+  {
+    "game_id": "espn-401882845",
+    "coach": "Claudio Giráldez",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.cope.es/emisoras/galicia/pontevedra-provincia/vigo/deportes-vigo/noticias/claudio-giraldez-entrenador-celta-alivio-autocritica-no-me-contento-partido-20261019_3458251.html",
+      "https://www.estadiodeportivo.com/futbol/celta/giraldez-muerde-lengua-pese-victoria-del-celta-tenemos-que-asumir-que-muy-complicado-mantener-nivel-20261018-548848.html"
+    ],
+    "source_url": "https://www.cope.es/emisoras/galicia/pontevedra-provincia/vigo/deportes-vigo/noticias/claudio-giraldez-entrenador-celta-alivio-autocritica-no-me-contento-partido-20261019_3458251.html",
+    "source_name": "cope.es",
+    "published_at": "2026-10-18T18:58:27",
+    "retrieved_at": "2026-10-27T13:57:18.358611"
+  },
+  {
+    "game_id": "espn-401882845",
+    "coach": "Quique Sánchez Flores",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/laliga/20261018/1004240288/quique-sanchez-flores-hemos-pagado-nuestra-falta-contundencia.html"
+    ],
+    "source_url": "https://www.mundodeportivo.com/futbol/laliga/20261018/1004240288/quique-sanchez-flores-hemos-pagado-nuestra-falta-contundencia.html",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-18T17:32:48",
+    "retrieved_at": "2026-10-27T13:57:37.037922"
+  },
+  {
+    "game_id": "espn-401882870",
+    "coach": "Luís Castro",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.cope.es/emisoras/comunidad-valenciana/valencia-provincia/valencia/deportes-cope-valencia/noticias/liderazgo-luis-castro-actuacion-requena-polemica-horarios-laliga-debate-deportes-cope-20261022_3460980.html",
+      "https://www.marca.com/hemeroteca/2026/10/22/index_t.html"
+    ],
+    "source_url": "https://www.cope.es/emisoras/comunidad-valenciana/valencia-provincia/valencia/deportes-cope-valencia/noticias/liderazgo-luis-castro-actuacion-requena-polemica-horarios-laliga-debate-deportes-cope-20261022_3460980.html",
+    "source_name": "cope.es",
+    "published_at": "2026-10-22T15:12:22",
+    "retrieved_at": "2026-10-27T14:00:40.734521"
+  },
+  {
+    "game_id": "espn-401882836",
+    "coach": "Juan Francisco Funes",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/temas/noticias/2026-10-24"
+    ],
+    "source_url": "https://www.mundodeportivo.com/temas/noticias/2026-10-24",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-24T00:00:00",
+    "retrieved_at": "2026-10-27T14:01:56.500692"
+  },
+  {
+    "game_id": "espn-401882827",
+    "coach": "Iñigo Pérez",
+    "quote": "Me mantengo al margen de cualquier decisión arbitral",
+    "source_url": "https://www.estadiodeportivo.com/futbol/villarreal/inigo-perez-reivindica-remontada-del-villarreal-mestalla-creo-suerte-futbol-20261024-549274.html",
+    "sources": [
+      "https://www.estadiodeportivo.com/futbol/villarreal/inigo-perez-reivindica-remontada-del-villarreal-mestalla-creo-suerte-futbol-20261024-549274.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-10-24/page-3"
+    ],
+    "source_name": "estadiodeportivo.com",
+    "published_at": "2026-10-24T00:00:00",
+    "retrieved_at": "2026-10-27T14:02:44.707669",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach explicitly declines to comment on refereeing decisions ('I stay out of any refereeing decision'). This is a neutral stance — it neither praises the officiating nor acknowledges the referee's difficulty, but it also contains no criticism, aggression, or accusation of bias."
+  },
+  {
+    "game_id": "espn-401882830",
+    "coach": "Martín Anselmi",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/laliga/20261024/1004242676/pena-maxima-rayo-alegria-elche.html",
+      "https://www.mundodeportivo.com/videos/futbol/20261024/1004242758/manolo-hablo-derrota-espanyol-racing-santander.html"
+    ],
+    "source_url": "https://www.mundodeportivo.com/futbol/laliga/20261024/1004242676/pena-maxima-rayo-alegria-elche.html",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-24T14:03:28",
+    "retrieved_at": "2026-10-27T14:04:08.338659"
+  },
+  {
+    "game_id": "espn-401882831",
+    "coach": "José Alberto López",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.estadiodeportivo.com/futbol/barcelona/fermin-lopez-momento-mas-dificil-llegue-limite-mucha-frustracion-20261025-549342.html",
+      "https://www.mundodeportivo.com/futbol/racing-santander/20261024/1004242764/disfrutar-zabiri-marcar-epoca.html",
+      "https://www.mundodeportivo.com/futbol/el-clasico-barca-real-madrid/20261025/1004243151/barca-real-madrid-clasico-imagenes.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-10-24/page-3"
+    ],
+    "source_url": "https://www.estadiodeportivo.com/futbol/barcelona/fermin-lopez-momento-mas-dificil-llegue-limite-mucha-frustracion-20261025-549342.html",
+    "source_name": "estadiodeportivo.com",
+    "published_at": "2026-10-24T00:00:00",
+    "retrieved_at": "2026-10-27T14:04:43.152613"
+  },
+  {
+    "game_id": "espn-401882831",
+    "coach": "Manolo González",
+    "quote": "No es un tema arbitral, es un tema nuestro y el partido se nos ha escapado No quiero halar de los árbitros. No es un tema del penalti, es jun tema de que te pones por delante jugando y llagando bien en el primer tiempo. No quiero hablar de los árbitros, pero igualmente no es un tema del penalti. Ya he dicho que no, este año no quería hablar de los árbitros, a menos que sea una cosa como el tema de Mallorca el año pasado.",
+    "source_url": "https://www.cope.es/programas/tiempo-de-juego/noticias/manolo-gonzalez-deja-abierta-puerta-posible-salida-espanyol-no-hablare-tema-decision-tome-club-comprensible-20261024_3462177.html",
+    "sources": [
+      "https://www.cope.es/programas/tiempo-de-juego/noticias/manolo-gonzalez-deja-abierta-puerta-posible-salida-espanyol-no-hablare-tema-decision-tome-club-comprensible-20261024_3462177.html",
+      "https://www.marca.com/futbol/espanyol/2026/10/24/manolo-gonzalez-club-quiere-hablar-sentaremos-haremos.html",
+      "https://www.mundodeportivo.com/futbol/rcd-espanyol/20261024/1004242738/manolo-gonzalez-borde-precipicio-tendre-hablar-monchi.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-10-24/page-3",
+      "https://www.mundodeportivo.com/futbol/fc-barcelona/20261025/1004242994/nueve-arbitros-clasico.html",
+      "https://www.mundodeportivo.com/videos/20261026/1004243225/asi-vivimos-clasico-mundo-deportivo-ambiente-camp-nou-analisis-final.html"
+    ],
+    "source_name": "cope.es",
+    "published_at": "2026-10-24T00:00:00",
+    "retrieved_at": "2026-10-27T14:05:52.650165",
+    "score": 3,
+    "graded_by": "llm",
+    "justification": "The coach explicitly refuses to blame the referee, stating 'No es un tema arbitral, es un tema nuestro' (It's not a refereeing issue, it's our own issue) and repeatedly declines to discuss the officials. He takes responsibility for the result by pointing to his team's performance, which fits the criteria for a respectful quote."
+  },
+  {
+    "game_id": "espn-401882834",
+    "coach": "Diego Simeone",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/videos/atletico-madrid/20261025/1004242880/rueda-prensa-simeone-victoria-depor.html?facet=amp",
+      "https://www.mundodeportivo.com/videos/atletico-madrid/20261025/1004242880/rueda-prensa-simeone-victoria-depor.html",
+      "https://www.mundodeportivo.com/temas/noticias/2026-10-24/page-3"
+    ],
+    "source_url": "https://www.mundodeportivo.com/videos/atletico-madrid/20261025/1004242880/rueda-prensa-simeone-victoria-depor.html?facet=amp",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-24T00:00:00",
+    "retrieved_at": "2026-10-27T14:06:18.656888"
+  },
+  {
+    "game_id": "espn-401882829",
+    "coach": "Pellegrino Matarazzo",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/real-sociedad/20261025/1004243135/matarazzo-feliz-ganar-ocasiones-control-paso-adelante-maduros.html",
+      "https://www.estadiodeportivo.com/futbol/real-sociedad/matarazzo-claro-conciso-ganamos-jugamos-bien-pudimos-meter-mas-20261025-549339.html",
+      "https://www.mundodeportivo.com/futbol/real-sociedad/20261026/1004243287/doble-regreso-venezolano-real-superar-problemas-fisicos-estuvieron-solidos.html?facet=amp"
+    ],
+    "source_url": "https://www.mundodeportivo.com/futbol/real-sociedad/20261025/1004243135/matarazzo-feliz-ganar-ocasiones-control-paso-adelante-maduros.html",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-25T20:04:50",
+    "retrieved_at": "2026-10-27T14:07:19.259030"
+  },
+  {
+    "game_id": "espn-401882829",
+    "coach": "Luís Castro",
+    "quote": "Yo no puedo hablar, porque siempre que hablo es peor. La respuesta está en tu propia pregunta",
+    "source_url": "https://www.mundodeportivo.com/futbol/levante/20261025/1004243169/luis-castro-sobre-oyarzabal-mejores-laliga.html",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/levante/20261025/1004243169/luis-castro-sobre-oyarzabal-mejores-laliga.html",
+      "https://www.mundodeportivo.com/futbol/real-sociedad/20261025/1004243145/luis-castro-rinde-nivel-real-oyarzabal-han-acertados.html",
+      "https://www.estadiodeportivo.com/futbol/levante/luis-castro-oyarzabal-derrota-levante-mejor-laliga-20261025-549343.html"
+    ],
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-25T20:32:45",
+    "retrieved_at": "2026-10-27T14:07:42.909243",
+    "score": 1,
+    "graded_by": "llm",
+    "justification": "The coach avoids directly criticizing the referee, saying 'I can't speak because whenever I speak it's worse.' While this implies veiled disagreement with the officiating and hints at past consequences for speaking out, it contains no aggressive language, no explicit accusations of bias, and no call for sanctions. It is a passive, indirect expression of disagreement rather than open disrespect, so it falls into the neutral category."
+  },
+  {
+    "game_id": "espn-401882832",
+    "coach": "Hansi Flick",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/videos/fc-barcelona/20261026/1004243212/rueda-prensa-hansi-flick-derrota-clasico.html",
+      "https://www.mundodeportivo.com/futbol/fc-barcelona/20261026/1004243475/soluciones-flick-cantera.html"
+    ],
+    "source_url": "https://www.mundodeportivo.com/videos/fc-barcelona/20261026/1004243212/rueda-prensa-hansi-flick-derrota-clasico.html",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-25T23:15:26",
+    "retrieved_at": "2026-10-27T14:08:02.249961"
+  },
+  {
+    "game_id": "espn-401882832",
+    "coach": "José Mourinho",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.estadiodeportivo.com/futbol/barcelona/mourinho-advierte-barcelona-clasico-mensaje-directo-lamine-yamal-20261025-549333.html",
+      "https://www.mundodeportivo.com/futbol/real-madrid/20261026/1004243509/mourinho-lider-espiritual-primera-etapa.html",
+      "https://www.mundodeportivo.com/futbol/real-madrid/20261026/1004243504/nuevos-dan-razon-mourinho.html",
+      "https://www.mundodeportivo.com/futbol/fc-barcelona/20261026/1004243411/barca-peor-mourinho-ancelotti-xabi-alonso.html"
+    ],
+    "source_url": "https://www.estadiodeportivo.com/futbol/barcelona/mourinho-advierte-barcelona-clasico-mensaje-directo-lamine-yamal-20261025-549333.html",
+    "source_name": "estadiodeportivo.com",
+    "published_at": "2026-10-25T19:10:16",
+    "retrieved_at": "2026-10-27T14:08:14.653469"
+  },
+  {
+    "game_id": "espn-401882833",
+    "coach": "Claudio Giráldez",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.estadiodeportivo.com/futbol/celta/giraldez-coincide-con-pellegrini-reconoce-que-hay-cambio-suyo-que-nos-hizo-dano-20261025-549334.html"
+    ],
+    "source_url": "https://www.estadiodeportivo.com/futbol/celta/giraldez-coincide-con-pellegrini-reconoce-que-hay-cambio-suyo-que-nos-hizo-dano-20261025-549334.html",
+    "source_name": "estadiodeportivo.com",
+    "published_at": "2026-10-25T19:38:51",
+    "retrieved_at": "2026-10-27T14:08:32.148028"
+  },
+  {
+    "game_id": "espn-401882833",
+    "coach": "Manuel Pellegrini",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/betis/20261025/1004243074/pellegrini-queda-disgusto-ocasion-descuento.html"
+    ],
+    "source_url": "https://www.mundodeportivo.com/futbol/betis/20261025/1004243074/pellegrini-queda-disgusto-ocasion-descuento.html",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-25T17:43:09",
+    "retrieved_at": "2026-10-27T14:08:43.192704"
+  },
+  {
+    "game_id": "espn-401882835",
+    "coach": "Edin Terzić",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/athletic-bilbao/20261025/1004242918/terzic.html",
+      "https://www.mundodeportivo.com/futbol/athletic-bilbao/20261025/1004243005/aaa.html",
+      "https://www.estadiodeportivo.com/futbol/athletic-club-bilbao/terzic-celebra-goleada-del-athletic-reivindica-lezama-han-sido-regalos-20261025-549320.html"
+    ],
+    "source_url": "https://www.mundodeportivo.com/futbol/athletic-bilbao/20261025/1004242918/terzic.html",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-25T15:10:13",
+    "retrieved_at": "2026-10-27T14:09:21.390685"
+  },
+  {
+    "game_id": "espn-401882835",
+    "coach": "José Bordalás",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/futbol/getafe/20261025/1004243041/bordalas-hemos-tocado-manera-fondo.html",
+      "https://www.mundodeportivo.com/futbol/athletic-bilbao/20261025/1004243005/aaa.html",
+      "https://www.estadiodeportivo.com/futbol/primera-division/athletic-getafe-los-leones-dejan-muy-malherido-bordalas-20261025-549308.html"
+    ],
+    "source_url": "https://www.mundodeportivo.com/futbol/getafe/20261025/1004243041/bordalas-hemos-tocado-manera-fondo.html",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-25T15:10:13",
+    "retrieved_at": "2026-10-27T14:09:43.391096"
+  },
+  {
+    "game_id": "espn-401882828",
+    "coach": "Luis García",
+    "quote": "",
+    "no_ref_comment": true,
+    "kind": "confirmed",
+    "score": 3,
+    "graded_by": "coverage",
+    "justification": "The coach was quoted in the match coverage but made no comment about the referee.",
+    "sources": [
+      "https://www.mundodeportivo.com/otros-deportes/20261027/1004243821/marta-garcia-octava-arrancada-49-kilos.html",
+      "https://www.mundodeportivo.com/ocio/20261027/1004243808/ines-garcia-acompana-lamine-yamal-gala-balon-oro-total-look-negro.html",
+      "https://www.mundodeportivo.com/futbol/sevilla/20261027/1004243650/garcia-plaza-aun-alucina-fofana-nivel-no-esperabamos.html",
+      "https://www.mundodeportivo.com/elotromundo/television/20261026/1004243582/eleccion-septima-mananas-presentadora-competira-jesus-cintora-nacho-abad-antonio-garcia-ferreras-dct.html",
+      "https://www.mundodeportivo.com/ufc/20261026/1004243294/ander-sanchez-da-sorpresa-vence-borja-garcia-batalla-reinado-norte-wow-33.html"
+    ],
+    "source_url": "https://www.mundodeportivo.com/otros-deportes/20261027/1004243821/marta-garcia-octava-arrancada-49-kilos.html",
+    "source_name": "mundodeportivo.com",
+    "published_at": "2026-10-26T11:00:00",
+    "retrieved_at": "2026-10-27T14:10:00.398253"
   }
 ]
