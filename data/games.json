@@ -758,5 +758,77 @@
     "away_team": "Osasuna",
     "home_coach": "Luis García",
     "away_coach": "Luis Miguel Ramis"
+  },
+  {
+    "game_id": "espn-401882817",
+    "date": "2026-10-30",
+    "home_team": "Villarreal",
+    "away_team": "Espanyol",
+    "home_coach": "Iñigo Pérez",
+    "away_coach": "Manolo González"
+  },
+  {
+    "game_id": "espn-401882818",
+    "date": "2026-10-31",
+    "home_team": "Rayo Vallecano",
+    "away_team": "Celta Vigo",
+    "home_coach": "Beñat San José",
+    "away_coach": "Claudio Giráldez"
+  },
+  {
+    "game_id": "espn-401882820",
+    "date": "2026-10-31",
+    "home_team": "Levante",
+    "away_team": "Atlético Madrid",
+    "home_coach": "Luís Castro",
+    "away_coach": "Diego Simeone"
+  },
+  {
+    "game_id": "espn-401882822",
+    "date": "2026-10-31",
+    "home_team": "Barcelona",
+    "away_team": "Alavés",
+    "home_coach": "Hansi Flick",
+    "away_coach": "Quique Sánchez Flores"
+  },
+  {
+    "game_id": "espn-401882825",
+    "date": "2026-10-31",
+    "home_team": "Real Betis",
+    "away_team": "Málaga",
+    "home_coach": "Manuel Pellegrini",
+    "away_coach": "Juan Francisco Funes"
+  },
+  {
+    "game_id": "espn-401882819",
+    "date": "2026-11-01",
+    "home_team": "Racing Santander",
+    "away_team": "Real Madrid",
+    "home_coach": "José Alberto López",
+    "away_coach": "José Mourinho"
+  },
+  {
+    "game_id": "espn-401882821",
+    "date": "2026-11-01",
+    "home_team": "Getafe",
+    "away_team": "Sevilla",
+    "home_coach": "José Bordalás",
+    "away_coach": "Luis García"
+  },
+  {
+    "game_id": "espn-401882823",
+    "date": "2026-11-01",
+    "home_team": "Elche",
+    "away_team": "Valencia",
+    "home_coach": "Martín Anselmi",
+    "away_coach": "Carlos Corberán"
+  },
+  {
+    "game_id": "espn-401882826",
+    "date": "2026-11-01",
+    "home_team": "Athletic Bilbao",
+    "away_team": "Real Sociedad",
+    "home_coach": "Edin Terzić",
+    "away_coach": "Pellegrino Matarazzo"
   }
 ]
