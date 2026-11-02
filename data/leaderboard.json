@@ -1,5 +1,17 @@
 [
   {
+    "coach": "Hansi Flick",
+    "team": "Barcelona",
+    "points": 33,
+    "games_played": 11,
+    "home_points": 18,
+    "away_points": 15,
+    "quoted_games": 0,
+    "quoted_points": 0,
+    "measured_games": 10,
+    "measured_points": 30
+  },
+  {
     "coach": "Claudio Giráldez",
     "team": "Celta Vigo",
     "points": 31,
@@ -24,6 +36,18 @@
     "measured_points": 13
   },
   {
+    "coach": "José Bordalás",
+    "team": "Getafe",
+    "points": 31,
+    "games_played": 11,
+    "home_points": 16,
+    "away_points": 15,
+    "quoted_games": 2,
+    "quoted_points": 4,
+    "measured_games": 6,
+    "measured_points": 16
+  },
+  {
     "coach": "Martín Anselmi",
     "team": "Elche",
     "points": 31,
@@ -36,16 +60,28 @@
     "measured_points": 25
   },
   {
-    "coach": "Hansi Flick",
-    "team": "Barcelona",
+    "coach": "Quique Sánchez Flores",
+    "team": "Alavés",
+    "points": 31,
+    "games_played": 11,
+    "home_points": 16,
+    "away_points": 15,
+    "quoted_games": 1,
+    "quoted_points": 1,
+    "measured_games": 4,
+    "measured_points": 10
+  },
+  {
+    "coach": "Carlos Corberán",
+    "team": "Valencia",
     "points": 30,
     "games_played": 10,
-    "home_points": 15,
-    "away_points": 15,
+    "home_points": 18,
+    "away_points": 12,
     "quoted_games": 0,
     "quoted_points": 0,
-    "measured_games": 10,
-    "measured_points": 30
+    "measured_games": 4,
+    "measured_points": 12
   },
   {
     "coach": "Juan Francisco Funes",
@@ -60,28 +96,16 @@
     "measured_points": 20
   },
   {
-    "coach": "José Bordalás",
-    "team": "Getafe",
+    "coach": "Beñat San José",
+    "team": "Rayo Vallecano",
     "points": 28,
     "games_played": 10,
-    "home_points": 13,
-    "away_points": 15,
-    "quoted_games": 2,
-    "quoted_points": 4,
-    "measured_games": 6,
-    "measured_points": 16
-  },
-  {
-    "coach": "Quique Sánchez Flores",
-    "team": "Alavés",
-    "points": 28,
-    "games_played": 10,
-    "home_points": 13,
-    "away_points": 15,
+    "home_points": 15,
+    "away_points": 13,
     "quoted_games": 1,
     "quoted_points": 1,
-    "measured_games": 4,
-    "measured_points": 10
+    "measured_games": 5,
+    "measured_points": 13
   },
   {
     "coach": "Diego Simeone",
@@ -120,16 +144,16 @@
     "measured_points": 20
   },
   {
-    "coach": "Carlos Corberán",
-    "team": "Valencia",
-    "points": 24,
-    "games_played": 8,
-    "home_points": 15,
-    "away_points": 9,
-    "quoted_games": 0,
-    "quoted_points": 0,
-    "measured_games": 4,
-    "measured_points": 12
+    "coach": "Antonio Hidalgo",
+    "team": "Deportivo A Coruña",
+    "points": 25,
+    "games_played": 9,
+    "home_points": 13,
+    "away_points": 12,
+    "quoted_games": 1,
+    "quoted_points": 1,
+    "measured_games": 5,
+    "measured_points": 13
   },
   {
     "coach": "Luís Castro",
@@ -156,6 +180,18 @@
     "measured_points": 14
   },
   {
+    "coach": "Luis Miguel Ramis",
+    "team": "Osasuna",
+    "points": 23,
+    "games_played": 9,
+    "home_points": 13,
+    "away_points": 10,
+    "quoted_games": 2,
+    "quoted_points": 2,
+    "measured_games": 6,
+    "measured_points": 14
+  },
+  {
     "coach": "Manolo González",
     "team": "Espanyol",
     "points": 23,
@@ -166,30 +202,6 @@
     "quoted_points": 8,
     "measured_games": 11,
     "measured_points": 23
-  },
-  {
-    "coach": "Antonio Hidalgo",
-    "team": "Deportivo A Coruña",
-    "points": 22,
-    "games_played": 8,
-    "home_points": 13,
-    "away_points": 9,
-    "quoted_games": 1,
-    "quoted_points": 1,
-    "measured_games": 5,
-    "measured_points": 13
-  },
-  {
-    "coach": "Beñat San José",
-    "team": "Rayo Vallecano",
-    "points": 22,
-    "games_played": 8,
-    "home_points": 12,
-    "away_points": 10,
-    "quoted_games": 1,
-    "quoted_points": 1,
-    "measured_games": 5,
-    "measured_points": 13
   },
   {
     "coach": "Pellegrino Matarazzo",
@@ -213,18 +225,6 @@
     "quoted_games": 4,
     "quoted_points": 2,
     "measured_games": 8,
-    "measured_points": 14
-  },
-  {
-    "coach": "Luis Miguel Ramis",
-    "team": "Osasuna",
-    "points": 20,
-    "games_played": 8,
-    "home_points": 13,
-    "away_points": 7,
-    "quoted_games": 2,
-    "quoted_points": 2,
-    "measured_games": 6,
     "measured_points": 14
   },
   {
