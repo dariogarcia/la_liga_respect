@@ -12,6 +12,18 @@
     "measured_points": 28
   },
   {
+    "coach": "Iñigo Pérez",
+    "team": "Villarreal",
+    "points": 31,
+    "games_played": 11,
+    "home_points": 15,
+    "away_points": 16,
+    "quoted_games": 1,
+    "quoted_points": 1,
+    "measured_games": 5,
+    "measured_points": 13
+  },
+  {
     "coach": "Martín Anselmi",
     "team": "Elche",
     "points": 31,
@@ -46,18 +58,6 @@
     "quoted_points": 5,
     "measured_games": 8,
     "measured_points": 20
-  },
-  {
-    "coach": "Iñigo Pérez",
-    "team": "Villarreal",
-    "points": 28,
-    "games_played": 10,
-    "home_points": 12,
-    "away_points": 16,
-    "quoted_games": 1,
-    "quoted_points": 1,
-    "measured_games": 5,
-    "measured_points": 13
   },
   {
     "coach": "José Bordalás",
@@ -108,6 +108,18 @@
     "measured_points": 12
   },
   {
+    "coach": "Edin Terzić",
+    "team": "Athletic Bilbao",
+    "points": 26,
+    "games_played": 10,
+    "home_points": 16,
+    "away_points": 10,
+    "quoted_games": 3,
+    "quoted_points": 5,
+    "measured_games": 8,
+    "measured_points": 20
+  },
+  {
     "coach": "Carlos Corberán",
     "team": "Valencia",
     "points": 24,
@@ -130,18 +142,6 @@
     "quoted_points": 6,
     "measured_games": 8,
     "measured_points": 18
-  },
-  {
-    "coach": "Edin Terzić",
-    "team": "Athletic Bilbao",
-    "points": 23,
-    "games_played": 9,
-    "home_points": 16,
-    "away_points": 7,
-    "quoted_games": 3,
-    "quoted_points": 5,
-    "measured_games": 8,
-    "measured_points": 20
   },
   {
     "coach": "José Alberto López",
@@ -207,12 +207,12 @@
     "coach": "Luis García",
     "team": "Sevilla",
     "points": 20,
-    "games_played": 9,
+    "games_played": 10,
     "home_points": 13,
     "away_points": 7,
-    "quoted_games": 3,
+    "quoted_games": 4,
     "quoted_points": 2,
-    "measured_games": 7,
+    "measured_games": 8,
     "measured_points": 14
   },
   {

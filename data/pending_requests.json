@@ -1,98 +1,74 @@
 [
   {
-    "game_id": "espn-401882837",
-    "coach": "Iñigo Pérez",
-    "date": "2026-10-17",
-    "attempts": 1,
-    "last_attempt": "2026-11-02T14:58:16.803704",
-    "reason": "publication_window_filtered"
-  },
-  {
-    "game_id": "espn-401882838",
-    "coach": "Edin Terzić",
-    "date": "2026-10-17",
-    "attempts": 1,
-    "last_attempt": "2026-11-02T14:58:59.886644",
-    "reason": "publication_window_filtered"
-  },
-  {
     "game_id": "espn-401882842",
     "coach": "José Bordalás",
     "date": "2026-10-19",
-    "attempts": 1,
-    "last_attempt": "2026-11-02T15:00:32.752949",
+    "attempts": 2,
+    "last_attempt": "2026-11-02T16:18:17.141757",
     "reason": "no_quotes_extracted"
   },
   {
     "game_id": "espn-401882842",
     "coach": "Beñat San José",
     "date": "2026-10-19",
-    "attempts": 1,
-    "last_attempt": "2026-11-02T15:01:13.123050",
+    "attempts": 2,
+    "last_attempt": "2026-11-02T16:18:40.922606",
     "reason": "no_quotes_extracted"
   },
   {
     "game_id": "espn-401882836",
     "coach": "Quique Sánchez Flores",
     "date": "2026-10-23",
-    "attempts": 1,
-    "last_attempt": "2026-11-02T15:02:19.371625",
+    "attempts": 3,
+    "last_attempt": "2026-11-02T16:48:20.070122",
     "reason": "no_quotes_extracted"
   },
   {
     "game_id": "espn-401882827",
     "coach": "Carlos Corberán",
     "date": "2026-10-24",
-    "attempts": 1,
-    "last_attempt": "2026-11-02T15:02:35.598252",
+    "attempts": 3,
+    "last_attempt": "2026-11-02T16:48:36.996496",
     "reason": "fetch_failed"
   },
   {
     "game_id": "espn-401882834",
     "coach": "Antonio Hidalgo",
     "date": "2026-10-24",
-    "attempts": 1,
-    "last_attempt": "2026-11-02T15:03:20.442776",
+    "attempts": 3,
+    "last_attempt": "2026-11-02T16:48:59.816069",
     "reason": "fetch_failed"
   },
   {
     "game_id": "espn-401882828",
     "coach": "Luis Miguel Ramis",
     "date": "2026-10-26",
-    "attempts": 1,
-    "last_attempt": "2026-11-02T15:03:38.355470",
+    "attempts": 3,
+    "last_attempt": "2026-11-02T16:49:16.143896",
     "reason": "no_search_results"
   },
   {
     "game_id": "espn-401882818",
     "coach": "Beñat San José",
     "date": "2026-10-31",
-    "attempts": 1,
-    "last_attempt": "2026-11-02T15:05:35.339051",
+    "attempts": 4,
+    "last_attempt": "2026-11-02T16:49:25.360821",
     "reason": "no_quotes_extracted"
   },
   {
     "game_id": "espn-401882822",
     "coach": "Hansi Flick",
     "date": "2026-10-31",
-    "attempts": 1,
-    "last_attempt": "2026-11-02T15:07:49.338952",
+    "attempts": 4,
+    "last_attempt": "2026-11-02T16:49:25.508649",
     "reason": "publication_window_filtered"
-  },
-  {
-    "game_id": "espn-401882821",
-    "coach": "Luis García",
-    "date": "2026-11-01",
-    "attempts": 1,
-    "last_attempt": "2026-11-02T15:17:50.048227",
-    "reason": "fetch_failed"
   },
   {
     "game_id": "espn-401882823",
     "coach": "Carlos Corberán",
     "date": "2026-11-01",
-    "attempts": 1,
-    "last_attempt": "2026-11-02T15:18:27.480022",
+    "attempts": 4,
+    "last_attempt": "2026-11-02T16:49:41.718933",
     "reason": "no_trusted_sources"
   }
 ]
